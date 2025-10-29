@@ -1,13 +1,15 @@
 # **Formalities** {-}
 
 
-The course consists of six meetings <font color="red">held on Thursdays at 18:10</font> on Kantemirovskaya. Each lesson will include a lecture followed by a practical coding workshop. Students are expected to attend class, actively participate in discussions, and engage in coding activities. The content of the last meeting (12.12) is flexible and can be changed to match the students' requests.
+The course consists of six meetings held on Mondays or Tuesdays (depending on your study group, check the schedule [here](https://spb.hse.ru/ma/data-analytics/timetable?fromdate=2025.10.27&todate=2025.11.01&groupoid=41180&receiverType=3&timetable-courses=1&timetable-groups=41180){style="color: #0000EE;"}) at 18:10 on Kantemirovskaya. Each session includes a lecture followed by a practical coding workshop. Students are expected to attend classes, participate actively in discussions, and engage in coding activities. The content of the final meeting (on December 8th or 16th, the gap is due to the holiday on November 4th) is flexible and can be adjusted based on student requests.
+
+
 
 
 Your mark for the course consists of:
 
 
-  **-	homework assignments: **60% (5 assignments in total; the average of your 3 highest scores will be used)
+  **-	homework assignments:** 60% (5 assignments in total; the average of 3 highest scores)
   
   
   **-	final exam:** 40% (individual or group project)
@@ -23,7 +25,7 @@ All assignments and projects should be submitted via email to ensure timely revi
 There will be 5 homework assignments throughout the course, but only your best 3 scores will be used to calculate your final grade. This means you can choose to complete all the homework or just 3 without it affecting your final mark. For the homework component, I will simply average your 3 highest grades. However, I strongly recommend reviewing each assignment, as completing them will better prepare you for the final project.
 
 
-Homework assignments are due before the start of the next class (the exact time <font color="red">is 18:10, Thursday,</font> each week). If you submit an assignment within the following week, you can still earn up to 8 points.
+Homework assignments are due before the start of the next class (the exact time <font color="red">is 18:10, either Monday or Tuesday,</font> each week). If you submit an assignment within the following week, you can still earn up to 8 points.
 
 
 
@@ -58,14 +60,17 @@ Formulate 2–3 research questions (preferably interconnected) and explain why t
   Present your findings — for example, this could be in the form of a table with network values. However, it is important to also provide interpretations of these results, explaining what they mean in the context of your research.
 
 
+
 Don’t hesitate to explore and experiment with the tools, as the goal is to learn through hands-on experience. Feel free to change the structure (e.g., data collection and description, research questions, methodology/inspiration/etc., results) if you feel it does not align with the type of work you are doing. The project format is flexible to suit different research interests and approaches.
 
 
 In an ideal scenario, you should start thinking about your final project around the second meeting. Having ideas early will allow you to benefit more from class discussions and ask questions that specifically relate to your project.
 
 
-The main purpose of the exam is to assess whether you are familiar with the basic logic of network analysis and whether you can apply some of the methods covered in the course. While the quality of your analysis is important, the focus will also be on your effort, reflection, and interpretation. Even if your technical analysis is not perfect, what matters most is your understanding of the principles of network analysis and your ability to critically reflect on your process. Network analysis can be challenging, and working with real data often presents unexpected difficulties, so the evaluation will not be overly strict. The deadline for the exam report is <font color="red">19th December</font> (by the end of the day), which is one week after our final meeting.
+The main purpose of the exam is to assess whether you are familiar with the basic logic of network analysis and whether you can apply some of the methods covered in the course. While the quality of your analysis is important, the focus will also be on your effort, reflection, and interpretation. Even if your technical analysis is not perfect, what matters most is your understanding of the principles of network analysis and your ability to critically reflect on your process. Network analysis can be challenging, and working with real data often presents unexpected difficulties, so the evaluation will not be overly strict. **The deadline for the exam report is 19th December (by the end of the day) for both groups.**
 
+
+**Important note:** last year some students decided to present their work during the last seminar, and I freed from writing this report (they got their exam marks for their in-class presentation). If there would be any volunteers, we can arrange similar activities during the final sessions this year.
 
 
 ## **Evaluation** {-}

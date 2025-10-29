@@ -1,7 +1,7 @@
 # (PART\*) **Seminars** {-}
 
 
-# **Seminar 1 - Intro** {-}
+# **1 - Intro** {-}
 
 
 The notes below accompany the first lecture of the course. It might be a good idea to consult the [lecture slides]{style="color: red;"} as well, as some technical details and examples are discussed there.

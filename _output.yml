@@ -2,5 +2,4 @@ bookdown::bs4_book:
   css: style.css
   theme:
     primary: "black"
-  repo: https://github.com/rstudio/bookdown-demo
-
+  repo: https://github.com/artpech23/sna-for-hse-master-students2025

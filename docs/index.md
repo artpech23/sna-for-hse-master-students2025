@@ -16,7 +16,7 @@ csl: chicago-fullnote-bibliography.csl
 
 
 
-# **Intro** {-}
+# **About** {-}
 
 
 
@@ -49,7 +49,7 @@ My name is Arthur Pecherskikh, I am a second-year PhD student at European Univer
 </div>
 
 
-This is the second time I teach networks at the master program "Data Analytics for Business and Economics" (Higher School of Economics, St. Petersburg), and the last-year course page at HSE website is available [here](https://spb.hse.ru/en/ma/data-analytics/courses/904345939.html){style="color: #0000EE;"}. The organization and structure of this course have been heavily influenced by Maria Safonova eponymous lectures I took some years ago. In developing the course, I also consulted the syllabi created by Nadya Sokolova (2023), John Levi Martin (2008), Paul McLean (2021), Mark Mizruchi (2008), Chris Smith (2022), and Steve Borgatti (2004).
+This is the second time I teach networks at the master program "Data Analytics for Business and Economics" (Higher School of Economics, St. Petersburg), and the last-year course page at HSE website is available [here](https://spb.hse.ru/en/ma/data-analytics/courses/904345939.html){style="color: #0000EE;"}. The organization and structure of this course have been heavily influenced by [Maria Safonova eponymous lectures](https://www.hse.ru/en/edu/courses/339501077){style="color: #0000EE;"} I took some years ago. In developing the course, I also consulted the syllabi created by Nadya Sokolova (2023, delivered at Eurpean University at St. Petersburg), [John Levi Martin (2008)](https://home.uchicago.edu/jlmartin/Syllabus%20for%20social%20networks%20290.pdf){style="color: #0000EE;"}, [Paul McLean (2021)](https://sociology.rutgers.edu/images/syllabi/573_Social_Networks_Analysis_S2021.pdf){style="color: #0000EE;"}, Mark Mizruchi (2008), [Chris Smith (2022)](https://www.sociology.utoronto.ca/sites/sociology.utoronto.ca/files/SOC6108-2022-C.-Smith.pdf){style="color: #0000EE;"}, and [Steve Borgatti (2004)](http://www.analytictech.com/mb814/schedule.htm){style="color: #0000EE;"}.
 
 
 Whatever question about the course you have, please, contact me via corporate email ([aapecherskikh\@hse.ru](aapecherskikh\@hse.ru){style="color: blue;"}) or telegram (my nickname is [\@archibard]{style="color: blue;"}).
