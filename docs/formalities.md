@@ -25,7 +25,7 @@ All assignments and projects should be submitted via email to ensure timely revi
 There will be 5 homework assignments throughout the course, but only your best 3 scores will be used to calculate your final grade. This means you can choose to complete all the homework or just 3 without it affecting your final mark. For the homework component, I will simply average your 3 highest grades. However, I strongly recommend reviewing each assignment, as completing them will better prepare you for the final project.
 
 
-Homework assignments are due before the start of the next class (the exact time <font color="red">is 18:10, either Monday or Tuesday,</font> each week). If you submit an assignment within the following week, you can still earn up to 8 points.
+Homework assignments are due before the start of the next class (**the exact time is 18:10, either Monday or Tuesday,** each week). If you submit an assignment within the following week, you can still earn up to 8 points.
 
 
 
