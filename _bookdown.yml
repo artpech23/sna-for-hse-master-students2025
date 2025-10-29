@@ -1,0 +1,21 @@
+book_filename: "sna-for-master-students2025"
+new_session: true
+before_chapter_script: _common.R
+delete_merged_file: true
+output_dir: "docs"
+language:
+  ui:
+    chapter_name: "Chapter "
+rmd_files: [
+  "index.Rmd",
+  
+  "formalities.Rmd",
+  "course-outline.Rmd",
+  
+  "chapter1.Rmd",
+  "chapter2.Rmd",
+  
+  "appendix-datasets.Rmd",
+  "appendix-scraping.Rmd",
+  "appendix-literature.Rmd"
+]

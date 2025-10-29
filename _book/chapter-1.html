@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 1 | yet another SNA coursebook</title>
+<meta name="author" content="Arthur Pecherskikh">
+<meta name="description" content='This is the first chapter. Hey!  0.1 Libraries # load missing packages: #install.packages("igraph") #install.packages("intergraph") #install.packages("manynet") library(tidyverse)  ## general...'>
+<meta name="generator" content="bookdown 0.45 with bs4_book()">
+<meta property="og:title" content="Chapter 1 | yet another SNA coursebook">
+<meta property="og:type" content="book">
+<meta property="og:description" content='This is the first chapter. Hey!  0.1 Libraries # load missing packages: #install.packages("igraph") #install.packages("intergraph") #install.packages("manynet") library(tidyverse)  ## general...'>
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 1 | yet another SNA coursebook">
+<meta name="twitter:description" content='This is the first chapter. Hey!  0.1 Libraries # load missing packages: #install.packages("igraph") #install.packages("intergraph") #install.packages("manynet") library(tidyverse)  ## general...'>
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">yet another SNA coursebook</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Intro</a></li>
+<li><a class="" href="formalities.html">Formalities</a></li>
+<li><a class="" href="course-outline.html">Course outline</a></li>
+<li class="book-part">Seminars</li>
+<li><a class="active" href="chapter-1.html">Chapter 1</a></li>
+<li><a class="" href="chapter-2.html">Chapter 2</a></li>
+<li class="book-part">Appendices</li>
+<li><a class="" href="available-datasets.html">Available datasets</a></li>
+<li><a class="" href="intro-to-web-scraping.html">Intro to web-scraping</a></li>
+<li><a class="" href="recommended-literature.html">Recommended literature</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/rstudio/bookdown-demo">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="chapter-1" class="section level1 unnumbered">
+<h1>
+<strong>Chapter 1</strong><a class="anchor" aria-label="anchor" href="#chapter-1"><i class="fas fa-link"></i></a>
+</h1>
+<p>This is the first chapter. Hey!</p>
+<div id="libraries" class="section level2" number="0.1">
+<h2>
+<span class="header-section-number">0.1</span> <strong>Libraries</strong><a class="anchor" aria-label="anchor" href="#libraries"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># load missing packages:</span></span>
+<span><span class="co">#install.packages("igraph")</span></span>
+<span><span class="co">#install.packages("intergraph")</span></span>
+<span><span class="co">#install.packages("manynet")</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>    <span class="co">## general package to work in R</span></span>
+<span><span class="co">#&gt; ── Attaching core tidyverse packages ──── tidyverse 2.0.0 ──</span></span>
+<span><span class="co">#&gt; ✔ dplyr     1.1.4     ✔ readr     2.1.5</span></span>
+<span><span class="co">#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.1</span></span>
+<span><span class="co">#&gt; ✔ ggplot2   3.5.1     ✔ tibble    3.2.1</span></span>
+<span><span class="co">#&gt; ✔ lubridate 1.9.4     ✔ tidyr     1.3.1</span></span>
+<span><span class="co">#&gt; ✔ purrr     1.0.4     </span></span>
+<span><span class="co">#&gt; ── Conflicts ────────────────────── tidyverse_conflicts() ──</span></span>
+<span><span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span></span>
+<span><span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span></span>
+<span><span class="co">#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/">igraph</a></span><span class="op">)</span>       <span class="co">## general package for network analysis</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Присоединяю пакет: 'igraph'</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Следующие объекты скрыты от 'package:lubridate':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     %--%, union</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Следующие объекты скрыты от 'package:dplyr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     as_data_frame, groups, union</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Следующие объекты скрыты от 'package:purrr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     compose, simplify</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Следующий объект скрыт от 'package:tidyr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     crossing</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Следующий объект скрыт от 'package:tibble':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     as_data_frame</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Следующие объекты скрыты от 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     decompose, spectrum</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Следующий объект скрыт от 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     union</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mbojan.github.io/intergraph/">intergraph</a></span><span class="op">)</span>   <span class="co">## convert from df to graph-objects and vice versa</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stocnet.github.io/manynet/">manynet</a></span><span class="op">)</span>      <span class="co">## datasets</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Присоединяю пакет: 'manynet'</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Следующие объекты скрыты от 'package:igraph':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     as_edgelist, is_acyclic, is_connected,</span></span>
+<span><span class="co">#&gt;     is_directed, is_weighted, print_all</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Следующий объект скрыт от 'package:purrr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     is_list</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>      <span class="co">## tidy approach to viz</span></span></code></pre></div>
+</div>
+<div id="presentation-pictures" class="section level2" number="0.2">
+<h2>
+<span class="header-section-number">0.2</span> <strong>Presentation pictures</strong><a class="anchor" aria-label="anchor" href="#presentation-pictures"><i class="fas fa-link"></i></a>
+</h2>
+<p>Friendship among 8 girls:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#png(</span></span>
+<span><span class="co">#  "presentation_pic1.png",</span></span>
+<span><span class="co">#  width     = 8,</span></span>
+<span><span class="co">#  height    = 4,</span></span>
+<span><span class="co">#  units     = "in",</span></span>
+<span><span class="co">#  res       = 800,</span></span>
+<span><span class="co">#  pointsize = 4</span></span>
+<span><span class="co">#)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">manynet</span><span class="fu">::</span><span class="va"><a href="https://stocnet.github.io/manynet/reference/ison_adolescents.html">ison_adolescents</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>       vertex.label.cex <span class="op">=</span> <span class="fl">4.2</span>,</span>
+<span>       edge.size <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>       vertex.label.color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter1_files/figure-html/unnamed-chunk-2-1.png" width="672"></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#dev.off()</span></span></code></pre></div>
+<p>Similar group, but with randomly generated directed ties:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#png(</span></span>
+<span><span class="co">#  "presentation_pic2.png",</span></span>
+<span><span class="co">#  width     = 8,</span></span>
+<span><span class="co">#  height    = 4,</span></span>
+<span><span class="co">#  units     = "in",</span></span>
+<span><span class="co">#  res       = 800,</span></span>
+<span><span class="co">#  pointsize = 4</span></span>
+<span><span class="co">#)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ison_adolescents</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_directed</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"random"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>       vertex.label.cex <span class="op">=</span> <span class="fl">4.2</span>,</span>
+<span>       edge.size <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>       vertex.label.color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter1_files/figure-html/unnamed-chunk-3-1.png" width="672"></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#dev.off()</span></span></code></pre></div>
+<p>Similar group, but with randomly generated weights for ties:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">ison_adolescents</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">ison_adolescents</span><span class="op">)</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">7</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#png(</span></span>
+<span><span class="co">#  "presentation_pic3.png",</span></span>
+<span><span class="co">#  width     = 8,</span></span>
+<span><span class="co">#  height    = 4,</span></span>
+<span><span class="co">#  units     = "in",</span></span>
+<span><span class="co">#  res       = 800,</span></span>
+<span><span class="co">#  pointsize = 4</span></span>
+<span><span class="co">#)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ison_adolescents</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>       vertex.label.cex <span class="op">=</span> <span class="fl">4.2</span>,</span>
+<span>       edge.size <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>       edge.width <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">ison_adolescents</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>       vertex.label.color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter1_files/figure-html/unnamed-chunk-4-1.png" width="672"></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  </span>
+<span><span class="co">#dev.off()</span></span></code></pre></div>
+<p>Guess the nature of the network:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## grey's anatomy tv show - 21 seasons!</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">fict_greys</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">fict_greys</span>, mode <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## low-firm</span></span>
+<span><span class="va">ison_lawfirm</span> <span class="op">&lt;-</span> <span class="va">ison_lawfirm</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span> <span class="co">#%&gt;% </span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">ison_lawfirm</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">ison_lawfirm</span>,</span>
+<span>                                        mode <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## karate:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">ison_karateka</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## drawing:</span></span>
+<span></span>
+<span><span class="co">#png(</span></span>
+<span><span class="co">#  "presentation_pic4.png",</span></span>
+<span><span class="co">#  width     = 8,</span></span>
+<span><span class="co">#  height    = 4,</span></span>
+<span><span class="co">#  units     = "in",</span></span>
+<span><span class="co">#  res       = 800,</span></span>
+<span><span class="co">#  pointsize = 4</span></span>
+<span><span class="co">#)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 1:</span></span>
+<span><span class="va">fict_greys</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">fict_greys</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span><span class="op">*</span><span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2:</span></span>
+<span><span class="va">ison_lawfirm</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">ison_lawfirm</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span><span class="op">/</span><span class="fl">5</span>,</span>
+<span>       edge.size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 3:</span></span>
+<span><span class="va">ison_karateka</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">ison_karateka</span><span class="op">)</span><span class="op">$</span><span class="va">allegiance</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">1</span>,</span>
+<span>                             <span class="st">"coral1"</span>,</span>
+<span>                             <span class="st">"black"</span><span class="op">)</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter1_files/figure-html/unnamed-chunk-5-1.png" width="672"></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="co">#dev.off()</span></span></code></pre></div>
+</div>
+<div id="practice" class="section level2" number="0.3">
+<h2>
+<span class="header-section-number">0.3</span> <strong>Practice</strong><a class="anchor" aria-label="anchor" href="#practice"><i class="fas fa-link"></i></a>
+</h2>
+<p>Data organization:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## you need to load manynet package to use this data</span></span>
+<span></span>
+<span><span class="co">## matrix:</span></span>
+<span><span class="va">ison_karateka</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_adj.html">as_adj</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `as_adj()` was deprecated in igraph 2.1.0.</span></span>
+<span><span class="co">#&gt; ℹ Please use `as_adjacency_matrix()` instead.</span></span>
+<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where</span></span>
+<span><span class="co">#&gt; this warning was generated.</span></span>
+<span><span class="co">#&gt; 34 x 34 sparse Matrix of class "dgCMatrix"</span></span>
+<span><span class="co">#&gt;   [[ suppressing 34 column names 'Mr Hi', '2', '3' ... ]]</span></span>
+<span><span class="co">#&gt;                                                           </span></span>
+<span><span class="co">#&gt; Mr Hi  . 1 1 1 1 1 1 1 1 . 1 1 1 1 . . . 1 . 1 . 1 . . . .</span></span>
+<span><span class="co">#&gt; 2      1 . 1 1 . . . 1 . . . . . 1 . . . 1 . 1 . 1 . . . .</span></span>
+<span><span class="co">#&gt; 3      1 1 . 1 . . . 1 1 1 . . . 1 . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 4      1 1 1 . . . . 1 . . . . 1 1 . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 5      1 . . . . . 1 . . . 1 . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 6      1 . . . . . 1 . . . 1 . . . . . 1 . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 7      1 . . . 1 1 . . . . . . . . . . 1 . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 8      1 1 1 1 . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 9      1 . 1 . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 10     . . 1 . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 11     1 . . . 1 1 . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 12     1 . . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 13     1 . . 1 . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 14     1 1 1 1 . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 15     . . . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 16     . . . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 17     . . . . . 1 1 . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 18     1 1 . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 19     . . . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 20     1 1 . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 21     . . . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 22     1 1 . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 23     . . . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 24     . . . . . . . . . . . . . . . . . . . . . . . . . 1</span></span>
+<span><span class="co">#&gt; 25     . . . . . . . . . . . . . . . . . . . . . . . . . 1</span></span>
+<span><span class="co">#&gt; 26     . . . . . . . . . . . . . . . . . . . . . . . 1 1 .</span></span>
+<span><span class="co">#&gt; 27     . . . . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 28     . . 1 . . . . . . . . . . . . . . . . . . . . 1 1 .</span></span>
+<span><span class="co">#&gt; 29     . . 1 . . . . . . . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 30     . . . . . . . . . . . . . . . . . . . . . . . 1 . .</span></span>
+<span><span class="co">#&gt; 31     . 1 . . . . . . 1 . . . . . . . . . . . . . . . . .</span></span>
+<span><span class="co">#&gt; 32     1 . . . . . . . . . . . . . . . . . . . . . . . 1 1</span></span>
+<span><span class="co">#&gt; 33     . . 1 . . . . . 1 . . . . . 1 1 . . 1 . 1 . 1 1 . .</span></span>
+<span><span class="co">#&gt; John A . . . . . . . . 1 1 . . . 1 1 1 . . 1 1 1 . 1 1 . .</span></span>
+<span><span class="co">#&gt;                       </span></span>
+<span><span class="co">#&gt; Mr Hi  . . . . . 1 . .</span></span>
+<span><span class="co">#&gt; 2      . . . . 1 . . .</span></span>
+<span><span class="co">#&gt; 3      . 1 1 . . . 1 .</span></span>
+<span><span class="co">#&gt; 4      . . . . . . . .</span></span>
+<span><span class="co">#&gt; 5      . . . . . . . .</span></span>
+<span><span class="co">#&gt; 6      . . . . . . . .</span></span>
+<span><span class="co">#&gt; 7      . . . . . . . .</span></span>
+<span><span class="co">#&gt; 8      . . . . . . . .</span></span>
+<span><span class="co">#&gt; 9      . . . . 1 . 1 1</span></span>
+<span><span class="co">#&gt; 10     . . . . . . . 1</span></span>
+<span><span class="co">#&gt; 11     . . . . . . . .</span></span>
+<span><span class="co">#&gt; 12     . . . . . . . .</span></span>
+<span><span class="co">#&gt; 13     . . . . . . . .</span></span>
+<span><span class="co">#&gt; 14     . . . . . . . 1</span></span>
+<span><span class="co">#&gt; 15     . . . . . . 1 1</span></span>
+<span><span class="co">#&gt; 16     . . . . . . 1 1</span></span>
+<span><span class="co">#&gt; 17     . . . . . . . .</span></span>
+<span><span class="co">#&gt; 18     . . . . . . . .</span></span>
+<span><span class="co">#&gt; 19     . . . . . . 1 1</span></span>
+<span><span class="co">#&gt; 20     . . . . . . . 1</span></span>
+<span><span class="co">#&gt; 21     . . . . . . 1 1</span></span>
+<span><span class="co">#&gt; 22     . . . . . . . .</span></span>
+<span><span class="co">#&gt; 23     . . . . . . 1 1</span></span>
+<span><span class="co">#&gt; 24     . 1 . 1 . . 1 1</span></span>
+<span><span class="co">#&gt; 25     . 1 . . . 1 . .</span></span>
+<span><span class="co">#&gt; 26     . . . . . 1 . .</span></span>
+<span><span class="co">#&gt; 27     . . . 1 . . . 1</span></span>
+<span><span class="co">#&gt; 28     . . . . . . . 1</span></span>
+<span><span class="co">#&gt; 29     . . . . . 1 . 1</span></span>
+<span><span class="co">#&gt; 30     1 . . . . . 1 1</span></span>
+<span><span class="co">#&gt; 31     . . . . . . 1 1</span></span>
+<span><span class="co">#&gt; 32     . . 1 . . . 1 1</span></span>
+<span><span class="co">#&gt; 33     . . . 1 1 1 . 1</span></span>
+<span><span class="co">#&gt; John A 1 1 1 1 1 1 1 .</span></span>
+<span></span>
+<span><span class="co">## edgelist:</span></span>
+<span><span class="va">ison_karateka</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_edgelist.html">as_edgelist</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 78 × 3</span></span>
+<span><span class="co">#&gt;    from  to    weight</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 Mr Hi 2          4</span></span>
+<span><span class="co">#&gt;  2 Mr Hi 3          5</span></span>
+<span><span class="co">#&gt;  3 2     3          6</span></span>
+<span><span class="co">#&gt;  4 Mr Hi 4          3</span></span>
+<span><span class="co">#&gt;  5 2     4          3</span></span>
+<span><span class="co">#&gt;  6 3     4          3</span></span>
+<span><span class="co">#&gt;  7 Mr Hi 5          3</span></span>
+<span><span class="co">#&gt;  8 Mr Hi 6          3</span></span>
+<span><span class="co">#&gt;  9 Mr Hi 7          3</span></span>
+<span><span class="co">#&gt; 10 5     7          2</span></span>
+<span><span class="co">#&gt; # ℹ 68 more rows</span></span>
+<span></span>
+<span><span class="co">## nodelist:</span></span>
+<span><span class="va">ison_karateka</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://stocnet.github.io/manynet/reference/manip_as.html">as_nodelist</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 34 × 2</span></span>
+<span><span class="co">#&gt;    name  allegiance</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 Mr Hi          1</span></span>
+<span><span class="co">#&gt;  2 2              1</span></span>
+<span><span class="co">#&gt;  3 3              1</span></span>
+<span><span class="co">#&gt;  4 4              1</span></span>
+<span><span class="co">#&gt;  5 5              1</span></span>
+<span><span class="co">#&gt;  6 6              1</span></span>
+<span><span class="co">#&gt;  7 7              1</span></span>
+<span><span class="co">#&gt;  8 8              1</span></span>
+<span><span class="co">#&gt;  9 9              2</span></span>
+<span><span class="co">#&gt; 10 10             2</span></span>
+<span><span class="co">#&gt; # ℹ 24 more rows</span></span></code></pre></div>
+<p><code>igraph</code> and <code>intergraph</code> syntax:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## load network:</span></span>
+<span><span class="va">karate</span> <span class="op">&lt;-</span> <span class="va">ison_karateka</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "mnet"      "tbl_graph" "igraph"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Classes 'mnet', 'tbl_graph', 'igraph'  hidden list of 10</span></span>
+<span><span class="co">#&gt;  $ : num 34</span></span>
+<span><span class="co">#&gt;  $ : logi FALSE</span></span>
+<span><span class="co">#&gt;  $ : num [1:78] 1 2 2 3 3 3 4 5 6 6 ...</span></span>
+<span><span class="co">#&gt;  $ : num [1:78] 0 0 1 0 1 2 0 0 0 4 ...</span></span>
+<span><span class="co">#&gt;  $ : NULL</span></span>
+<span><span class="co">#&gt;  $ : NULL</span></span>
+<span><span class="co">#&gt;  $ : NULL</span></span>
+<span><span class="co">#&gt;  $ : NULL</span></span>
+<span><span class="co">#&gt;  $ :List of 4</span></span>
+<span><span class="co">#&gt;   ..$ : num [1:3] 1 0 1</span></span>
+<span><span class="co">#&gt;   ..$ :List of 4</span></span>
+<span><span class="co">#&gt;   .. ..$ name : chr "Zachary's karate club network"</span></span>
+<span><span class="co">#&gt;   .. ..$ nodes: chr "club members"</span></span>
+<span><span class="co">#&gt;   .. ..$ ties : chr "association"</span></span>
+<span><span class="co">#&gt;   .. ..$ year : num 1977</span></span>
+<span><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ name      : chr [1:34] "Mr Hi" "2" "3" "4" ...</span></span>
+<span><span class="co">#&gt;   .. ..$ allegiance: num [1:34] 1 1 1 1 1 1 1 1 2 2 ...</span></span>
+<span><span class="co">#&gt;   ..$ :List of 1</span></span>
+<span><span class="co">#&gt;   .. ..$ weight: num [1:78] 4 5 6 3 3 3 3 3 3 2 ...</span></span>
+<span><span class="co">#&gt;  $ :&lt;environment: 0x000002f8c5845a78&gt; </span></span>
+<span><span class="co">#&gt;  - attr(*, "active")= chr "nodes"</span></span>
+<span></span>
+<span><span class="co">## convert to data frames</span></span>
+<span><span class="op">(</span><span class="va">karate</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $edges</span></span>
+<span><span class="co">#&gt;    V1 V2 weight</span></span>
+<span><span class="co">#&gt; 1   1  2      4</span></span>
+<span><span class="co">#&gt; 2   1  3      5</span></span>
+<span><span class="co">#&gt; 3   2  3      6</span></span>
+<span><span class="co">#&gt; 4   1  4      3</span></span>
+<span><span class="co">#&gt; 5   2  4      3</span></span>
+<span><span class="co">#&gt; 6   3  4      3</span></span>
+<span><span class="co">#&gt; 7   1  5      3</span></span>
+<span><span class="co">#&gt; 8   1  6      3</span></span>
+<span><span class="co">#&gt; 9   1  7      3</span></span>
+<span><span class="co">#&gt; 10  5  7      2</span></span>
+<span><span class="co">#&gt; 11  6  7      5</span></span>
+<span><span class="co">#&gt; 12  1  8      2</span></span>
+<span><span class="co">#&gt; 13  2  8      4</span></span>
+<span><span class="co">#&gt; 14  3  8      4</span></span>
+<span><span class="co">#&gt; 15  4  8      3</span></span>
+<span><span class="co">#&gt; 16  1  9      2</span></span>
+<span><span class="co">#&gt; 17  3  9      5</span></span>
+<span><span class="co">#&gt; 18  3 10      1</span></span>
+<span><span class="co">#&gt; 19  1 11      2</span></span>
+<span><span class="co">#&gt; 20  5 11      3</span></span>
+<span><span class="co">#&gt; 21  6 11      3</span></span>
+<span><span class="co">#&gt; 22  1 12      3</span></span>
+<span><span class="co">#&gt; 23  1 13      1</span></span>
+<span><span class="co">#&gt; 24  4 13      3</span></span>
+<span><span class="co">#&gt; 25  1 14      3</span></span>
+<span><span class="co">#&gt; 26  2 14      5</span></span>
+<span><span class="co">#&gt; 27  3 14      3</span></span>
+<span><span class="co">#&gt; 28  4 14      3</span></span>
+<span><span class="co">#&gt; 29  6 17      3</span></span>
+<span><span class="co">#&gt; 30  7 17      3</span></span>
+<span><span class="co">#&gt; 31  1 18      2</span></span>
+<span><span class="co">#&gt; 32  2 18      1</span></span>
+<span><span class="co">#&gt; 33  1 20      2</span></span>
+<span><span class="co">#&gt; 34  2 20      2</span></span>
+<span><span class="co">#&gt; 35  1 22      2</span></span>
+<span><span class="co">#&gt; 36  2 22      2</span></span>
+<span><span class="co">#&gt; 37 24 26      5</span></span>
+<span><span class="co">#&gt; 38 25 26      2</span></span>
+<span><span class="co">#&gt; 39  3 28      2</span></span>
+<span><span class="co">#&gt; 40 24 28      4</span></span>
+<span><span class="co">#&gt; 41 25 28      3</span></span>
+<span><span class="co">#&gt; 42  3 29      2</span></span>
+<span><span class="co">#&gt; 43 24 30      3</span></span>
+<span><span class="co">#&gt; 44 27 30      4</span></span>
+<span><span class="co">#&gt; 45  2 31      2</span></span>
+<span><span class="co">#&gt; 46  9 31      3</span></span>
+<span><span class="co">#&gt; 47  1 32      2</span></span>
+<span><span class="co">#&gt; 48 25 32      2</span></span>
+<span><span class="co">#&gt; 49 26 32      7</span></span>
+<span><span class="co">#&gt; 50 29 32      2</span></span>
+<span><span class="co">#&gt; 51  3 33      2</span></span>
+<span><span class="co">#&gt; 52  9 33      3</span></span>
+<span><span class="co">#&gt; 53 15 33      3</span></span>
+<span><span class="co">#&gt; 54 16 33      3</span></span>
+<span><span class="co">#&gt; 55 19 33      1</span></span>
+<span><span class="co">#&gt; 56 21 33      3</span></span>
+<span><span class="co">#&gt; 57 23 33      2</span></span>
+<span><span class="co">#&gt; 58 24 33      5</span></span>
+<span><span class="co">#&gt; 59 30 33      4</span></span>
+<span><span class="co">#&gt; 60 31 33      3</span></span>
+<span><span class="co">#&gt; 61 32 33      4</span></span>
+<span><span class="co">#&gt; 62  9 34      4</span></span>
+<span><span class="co">#&gt; 63 10 34      2</span></span>
+<span><span class="co">#&gt; 64 14 34      3</span></span>
+<span><span class="co">#&gt; 65 15 34      2</span></span>
+<span><span class="co">#&gt; 66 16 34      4</span></span>
+<span><span class="co">#&gt; 67 19 34      2</span></span>
+<span><span class="co">#&gt; 68 20 34      1</span></span>
+<span><span class="co">#&gt; 69 21 34      1</span></span>
+<span><span class="co">#&gt; 70 23 34      3</span></span>
+<span><span class="co">#&gt; 71 24 34      4</span></span>
+<span><span class="co">#&gt; 72 27 34      2</span></span>
+<span><span class="co">#&gt; 73 28 34      4</span></span>
+<span><span class="co">#&gt; 74 29 34      2</span></span>
+<span><span class="co">#&gt; 75 30 34      2</span></span>
+<span><span class="co">#&gt; 76 31 34      3</span></span>
+<span><span class="co">#&gt; 77 32 34      4</span></span>
+<span><span class="co">#&gt; 78 33 34      5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $vertexes</span></span>
+<span><span class="co">#&gt;    intergraph_id   name allegiance</span></span>
+<span><span class="co">#&gt; 1              1  Mr Hi          1</span></span>
+<span><span class="co">#&gt; 2              2      2          1</span></span>
+<span><span class="co">#&gt; 3              3      3          1</span></span>
+<span><span class="co">#&gt; 4              4      4          1</span></span>
+<span><span class="co">#&gt; 5              5      5          1</span></span>
+<span><span class="co">#&gt; 6              6      6          1</span></span>
+<span><span class="co">#&gt; 7              7      7          1</span></span>
+<span><span class="co">#&gt; 8              8      8          1</span></span>
+<span><span class="co">#&gt; 9              9      9          2</span></span>
+<span><span class="co">#&gt; 10            10     10          2</span></span>
+<span><span class="co">#&gt; 11            11     11          1</span></span>
+<span><span class="co">#&gt; 12            12     12          1</span></span>
+<span><span class="co">#&gt; 13            13     13          1</span></span>
+<span><span class="co">#&gt; 14            14     14          1</span></span>
+<span><span class="co">#&gt; 15            15     15          2</span></span>
+<span><span class="co">#&gt; 16            16     16          2</span></span>
+<span><span class="co">#&gt; 17            17     17          1</span></span>
+<span><span class="co">#&gt; 18            18     18          1</span></span>
+<span><span class="co">#&gt; 19            19     19          2</span></span>
+<span><span class="co">#&gt; 20            20     20          1</span></span>
+<span><span class="co">#&gt; 21            21     21          2</span></span>
+<span><span class="co">#&gt; 22            22     22          1</span></span>
+<span><span class="co">#&gt; 23            23     23          2</span></span>
+<span><span class="co">#&gt; 24            24     24          2</span></span>
+<span><span class="co">#&gt; 25            25     25          2</span></span>
+<span><span class="co">#&gt; 26            26     26          2</span></span>
+<span><span class="co">#&gt; 27            27     27          2</span></span>
+<span><span class="co">#&gt; 28            28     28          2</span></span>
+<span><span class="co">#&gt; 29            29     29          2</span></span>
+<span><span class="co">#&gt; 30            30     30          2</span></span>
+<span><span class="co">#&gt; 31            31     31          2</span></span>
+<span><span class="co">#&gt; 32            32     32          2</span></span>
+<span><span class="co">#&gt; 33            33     33          2</span></span>
+<span><span class="co">#&gt; 34            34 John A          2</span></span>
+<span></span>
+<span><span class="va">karate_edges</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">karate</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">edge</span></span>
+<span></span>
+<span><span class="va">karate_nodes</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">karate</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span></span>
+<span></span>
+<span><span class="co">## igraph output after graph creation:</span></span>
+<span><span class="va">karate_edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="co">#&gt; IGRAPH 7a7362e DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; + attr: name (v/c), weight (e/n)</span></span>
+<span><span class="co">#&gt; + edges from 7a7362e (vertex names):</span></span>
+<span><span class="co">#&gt;  [1] 1 -&gt;2  1 -&gt;3  2 -&gt;3  1 -&gt;4  2 -&gt;4  3 -&gt;4  1 -&gt;5  1 -&gt;6 </span></span>
+<span><span class="co">#&gt;  [9] 1 -&gt;7  5 -&gt;7  6 -&gt;7  1 -&gt;8  2 -&gt;8  3 -&gt;8  4 -&gt;8  1 -&gt;9 </span></span>
+<span><span class="co">#&gt; [17] 3 -&gt;9  3 -&gt;10 1 -&gt;11 5 -&gt;11 6 -&gt;11 1 -&gt;12 1 -&gt;13 4 -&gt;13</span></span>
+<span><span class="co">#&gt; [25] 1 -&gt;14 2 -&gt;14 3 -&gt;14 4 -&gt;14 6 -&gt;17 7 -&gt;17 1 -&gt;18 2 -&gt;18</span></span>
+<span><span class="co">#&gt; [33] 1 -&gt;20 2 -&gt;20 1 -&gt;22 2 -&gt;22 24-&gt;26 25-&gt;26 3 -&gt;28 24-&gt;28</span></span>
+<span><span class="co">#&gt; [41] 25-&gt;28 3 -&gt;29 24-&gt;30 27-&gt;30 2 -&gt;31 9 -&gt;31 1 -&gt;32 25-&gt;32</span></span>
+<span><span class="co">#&gt; [49] 26-&gt;32 29-&gt;32 3 -&gt;33 9 -&gt;33 15-&gt;33 16-&gt;33 19-&gt;33 21-&gt;33</span></span>
+<span><span class="co">#&gt; [57] 23-&gt;33 24-&gt;33 30-&gt;33 31-&gt;33 32-&gt;33 9 -&gt;34 10-&gt;34 14-&gt;34</span></span>
+<span><span class="co">#&gt; + ... omitted several edges</span></span>
+<span></span>
+<span><span class="co">## add vertices info:</span></span>
+<span><span class="va">karate_edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                        vertices <span class="op">=</span> <span class="va">karate_nodes</span><span class="op">)</span></span>
+<span><span class="co">#&gt; IGRAPH 7a744db DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; + attr: name (v/c), allegiance (v/n), weight (e/n)</span></span>
+<span><span class="co">#&gt; + edges from 7a744db (vertex names):</span></span>
+<span><span class="co">#&gt;  [1] Mr Hi-&gt;2  Mr Hi-&gt;3  2    -&gt;3  Mr Hi-&gt;4  2    -&gt;4 </span></span>
+<span><span class="co">#&gt;  [6] 3    -&gt;4  Mr Hi-&gt;5  Mr Hi-&gt;6  Mr Hi-&gt;7  5    -&gt;7 </span></span>
+<span><span class="co">#&gt; [11] 6    -&gt;7  Mr Hi-&gt;8  2    -&gt;8  3    -&gt;8  4    -&gt;8 </span></span>
+<span><span class="co">#&gt; [16] Mr Hi-&gt;9  3    -&gt;9  3    -&gt;10 Mr Hi-&gt;11 5    -&gt;11</span></span>
+<span><span class="co">#&gt; [21] 6    -&gt;11 Mr Hi-&gt;12 Mr Hi-&gt;13 4    -&gt;13 Mr Hi-&gt;14</span></span>
+<span><span class="co">#&gt; [26] 2    -&gt;14 3    -&gt;14 4    -&gt;14 6    -&gt;17 7    -&gt;17</span></span>
+<span><span class="co">#&gt; [31] Mr Hi-&gt;18 2    -&gt;18 Mr Hi-&gt;20 2    -&gt;20 Mr Hi-&gt;22</span></span>
+<span><span class="co">#&gt; [36] 2    -&gt;22 24   -&gt;26 25   -&gt;26 3    -&gt;28 24   -&gt;28</span></span>
+<span><span class="co">#&gt; + ... omitted several edges</span></span>
+<span></span>
+<span></span>
+<span><span class="co">## referring to:</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span> <span class="co">## edges</span></span>
+<span><span class="co">#&gt; + 78/78 edges from 9e17774 (vertex names):</span></span>
+<span><span class="co">#&gt;  [1] Mr Hi--2  Mr Hi--3  2    --3  Mr Hi--4  2    --4 </span></span>
+<span><span class="co">#&gt;  [6] 3    --4  Mr Hi--5  Mr Hi--6  Mr Hi--7  5    --7 </span></span>
+<span><span class="co">#&gt; [11] 6    --7  Mr Hi--8  2    --8  3    --8  4    --8 </span></span>
+<span><span class="co">#&gt; [16] Mr Hi--9  3    --9  3    --10 Mr Hi--11 5    --11</span></span>
+<span><span class="co">#&gt; [21] 6    --11 Mr Hi--12 Mr Hi--13 4    --13 Mr Hi--14</span></span>
+<span><span class="co">#&gt; [26] 2    --14 3    --14 4    --14 6    --17 7    --17</span></span>
+<span><span class="co">#&gt; [31] Mr Hi--18 2    --18 Mr Hi--20 2    --20 Mr Hi--22</span></span>
+<span><span class="co">#&gt; [36] 2    --22 24   --26 25   --26 3    --28 24   --28</span></span>
+<span><span class="co">#&gt; [41] 25   --28 3    --29 24   --30 27   --30 2    --31</span></span>
+<span><span class="co">#&gt; [46] 9    --31 Mr Hi--32 25   --32 26   --32 29   --32</span></span>
+<span><span class="co">#&gt; + ... omitted several edges</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span> <span class="co">## nodes</span></span>
+<span><span class="co">#&gt; + 34/34 vertices, named, from 9e17774:</span></span>
+<span><span class="co">#&gt;  [1] Mr Hi  2      3      4      5      6      7      8     </span></span>
+<span><span class="co">#&gt;  [9] 9      10     11     12     13     14     15     16    </span></span>
+<span><span class="co">#&gt; [17] 17     18     19     20     21     22     23     24    </span></span>
+<span><span class="co">#&gt; [25] 25     26     27     28     29     30     31     32    </span></span>
+<span><span class="co">#&gt; [33] 33     John A</span></span>
+<span></span>
+<span><span class="co">## assign values:</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">strength</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>, <span class="fl">34</span><span class="op">)</span></span></code></pre></div>
+<p>Simple vizualizations:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">karate</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter1_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">karate</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="st">"coral1"</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter1_files/figure-html/unnamed-chunk-8-2.png" width="672"></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">## use variables!!</span></span>
+<span><span class="va">karate</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">strength</span><span class="op">/</span><span class="fl">5</span>, <span class="co">## random strength</span></span>
+<span>       </span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">allegiance</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fl">1</span>,</span>
+<span>                             <span class="st">"coral1"</span>,</span>
+<span>                             <span class="st">"black"</span><span class="op">)</span>, <span class="co">## conflict side</span></span>
+<span>       </span>
+<span>       edge.color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter1_files/figure-html/unnamed-chunk-8-3.png" width="672"></div>
+<p>Degree centrality calculation (more on this and other measures in the next lecture):</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">karate</span>, mode <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   intergraph_id  name allegiance strength degree</span></span>
+<span><span class="co">#&gt; 1             1 Mr Hi          1        5     16</span></span>
+<span><span class="co">#&gt; 2             2     2          1       30      9</span></span>
+<span><span class="co">#&gt; 3             3     3          1       49     10</span></span>
+<span><span class="co">#&gt; 4             4     4          1       31      6</span></span>
+<span><span class="co">#&gt; 5             5     5          1       20      3</span></span>
+<span><span class="co">#&gt; 6             6     6          1       68      4</span></span></code></pre></div>
+<p>Let’s use it to describe our groups of karate-students:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## degree distribution:</span></span>
+<span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">degree</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"degree centrality distribution in karate network"</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"# of karate students"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with</span></span>
+<span><span class="co">#&gt; `binwidth`.</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter1_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">## who is the most central?</span></span>
+<span></span>
+<span><span class="co">## average values of degree centrality:</span></span>
+<span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">allegiance</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>mean_degree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">degree</span><span class="op">)</span>,<span class="fl">2</span><span class="op">)</span>,</span>
+<span>            mean_strength <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">strength</span><span class="op">)</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span><span class="co">#&gt;   allegiance mean_degree mean_strength</span></span>
+<span><span class="co">#&gt;        &lt;dbl&gt;       &lt;dbl&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1          1        4.75          48.3</span></span>
+<span><span class="co">#&gt; 2          2        4.44          59.3</span></span>
+<span></span>
+<span></span>
+<span><span class="co">## Is it correct to check for the statistically significant difference?</span></span>
+<span></span>
+<span><span class="co">## degree boxplots for parties:</span></span>
+<span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>allegiance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">allegiance</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>,</span>
+<span>                          <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"\n"</span>, <span class="va">name</span><span class="op">)</span>,</span>
+<span>                          <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">allegiance</span>, <span class="va">degree</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co">#geom_jitter() +</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html">scale_x_discrete</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr. Hi group"</span>, <span class="st">"John A group"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"degree centrality distribution in karate network"</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"degree"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">caption</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter1_files/figure-html/unnamed-chunk-10-2.png" width="672"></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">ison_lawfirm</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertexes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">office</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       office  n</span></span>
+<span><span class="co">#&gt; 1     Boston 48</span></span>
+<span><span class="co">#&gt; 2   Hartford 19</span></span>
+<span><span class="co">#&gt; 3 Providence  4</span></span></code></pre></div>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="course-outline.html">Course outline</a></div>
+<div class="next"><a href="chapter-2.html">Chapter 2</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#chapter-1">Chapter 1</a></li>
+<li><a class="nav-link" href="#libraries"><span class="header-section-number">0.1</span> Libraries</a></li>
+<li><a class="nav-link" href="#presentation-pictures"><span class="header-section-number">0.2</span> Presentation pictures</a></li>
+<li><a class="nav-link" href="#practice"><span class="header-section-number">0.3</span> Practice</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/rstudio/bookdown-demo/blob/master/chapter1.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/rstudio/bookdown-demo/edit/master/chapter1.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-10-21.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>
