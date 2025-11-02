@@ -17,7 +17,8 @@
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="libs/d3-4.9.1/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4.1/forceNetwork.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
@@ -251,7 +252,7 @@
 <span><span class="co">#&gt;   .. ..$ allegiance: num [1:34] 1 1 1 1 1 1 1 1 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ :List of 1</span></span>
 <span><span class="co">#&gt;   .. ..$ weight: num [1:78] 4 5 6 3 3 3 3 3 3 2 ...</span></span>
-<span><span class="co">#&gt;  $ :&lt;environment: 0x00000253619060d8&gt; </span></span>
+<span><span class="co">#&gt;  $ :&lt;environment: 0x0000027e875488e8&gt; </span></span>
 <span><span class="co">#&gt;  - attr(*, "active")= chr "nodes"</span></span></code></pre></div>
 <p>Next, we use the aforementioned <code><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF()</a></code> function to deconstruct a network object into two standard data frames: one for edges and one for nodes. You can re-assemble these data frames into a new igraph object using the <code><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame()</a></code> function from <code>igraph</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -270,9 +271,9 @@
 <span><span class="co">## now, as it is pure igraph, network is "printed" in a standard igraph-way:</span></span>
 <span></span>
 <span><span class="va">karate_recreated</span></span>
-<span><span class="co">#&gt; IGRAPH 5d9277f DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 313c1f9 DNW- 34 78 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), weight (e/n)</span></span>
-<span><span class="co">#&gt; + edges from 5d9277f (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 313c1f9 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1 -&gt;2  1 -&gt;3  2 -&gt;3  1 -&gt;4  2 -&gt;4  3 -&gt;4  1 -&gt;5  1 -&gt;6 </span></span>
 <span><span class="co">#&gt;  [9] 1 -&gt;7  5 -&gt;7  6 -&gt;7  1 -&gt;8  2 -&gt;8  3 -&gt;8  4 -&gt;8  1 -&gt;9 </span></span>
 <span><span class="co">#&gt; [17] 3 -&gt;9  3 -&gt;10 1 -&gt;11 5 -&gt;11 6 -&gt;11 1 -&gt;12 1 -&gt;13 4 -&gt;13</span></span>
@@ -290,9 +291,9 @@
 <span>                        vertices <span class="op">=</span> <span class="va">karate_nodes</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">karate_recreated</span></span>
-<span><span class="co">#&gt; IGRAPH 5d97983 DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 3141875 DNW- 34 78 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), allegiance (v/n), weight (e/n)</span></span>
-<span><span class="co">#&gt; + edges from 5d97983 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 3141875 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] Mr Hi-&gt;2  Mr Hi-&gt;3  2    -&gt;3  Mr Hi-&gt;4  2    -&gt;4 </span></span>
 <span><span class="co">#&gt;  [6] 3    -&gt;4  Mr Hi-&gt;5  Mr Hi-&gt;6  Mr Hi-&gt;7  5    -&gt;7 </span></span>
 <span><span class="co">#&gt; [11] 6    -&gt;7  Mr Hi-&gt;8  2    -&gt;8  3    -&gt;8  4    -&gt;8 </span></span>
@@ -473,7 +474,7 @@
 <span><span class="co">#&gt;   .. ..$ school   : chr [1:71] "Harvard/Yale" "Harvard/Yale" "Harvard/Yale" "Other" ...</span></span>
 <span><span class="co">#&gt;   ..$ :List of 1</span></span>
 <span><span class="co">#&gt;   .. ..$ type: chr [1:2571] "friends" "advice" "friends" "friends" ...</span></span>
-<span><span class="co">#&gt;  $ :&lt;environment: 0x000002535731a098&gt; </span></span>
+<span><span class="co">#&gt;  $ :&lt;environment: 0x0000027e7bf14e60&gt; </span></span>
 <span><span class="co">#&gt;  - attr(*, "active")= chr "nodes"</span></span></code></pre></div>
 <p>As you can see, the laoded object is already a network. Note how the data is structured:</p>
 <ol style="list-style-type: decimal">
@@ -518,11 +519,11 @@
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">lawfirm2</span></span>
-<span><span class="co">#&gt; IGRAPH 5e63658 DN-- 71 2571 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 3224f91 DN-- 71 2571 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), status (v/c), gender (v/c),</span></span>
 <span><span class="co">#&gt; | office (v/c), seniority (v/n), age (v/n), practice</span></span>
 <span><span class="co">#&gt; | (v/c), school (v/c), type (e/c)</span></span>
-<span><span class="co">#&gt; + edges from 5e63658 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 3224f91 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1-&gt;2  1-&gt;2  1-&gt;4  1-&gt;8  1-&gt;17 1-&gt;17 1-&gt;17 1-&gt;20 1-&gt;39</span></span>
 <span><span class="co">#&gt; [10] 1-&gt;40 1-&gt;41 1-&gt;56 1-&gt;57 2-&gt;1  2-&gt;6  2-&gt;7  2-&gt;10 2-&gt;16</span></span>
 <span><span class="co">#&gt; [19] 2-&gt;16 2-&gt;17 2-&gt;17 2-&gt;17 2-&gt;20 2-&gt;22 2-&gt;22 2-&gt;22 2-&gt;24</span></span>

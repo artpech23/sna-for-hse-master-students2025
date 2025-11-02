@@ -1,9 +1,6 @@
 # **Recommended literature** {-}
 
 
-> *<font color="red">work-in-progress: (1) literature will be re-arranged more logically, (2) literature will be added, (3) maybe network viz of citation relations between these sources (?). </span>*
-
-
 
 Although we have too little time to dive into the literature, you might want (or need) to consult some of the sources from below during the module. First, here are the technical guides which cover the basic concepts:
 
@@ -19,16 +16,18 @@ Although we have too little time to dive into the literature, you might want (or
   -	Wasserman, S. & Faust K. (1994) Social network analysis: Methods and applications. The Press Syndicate of the University of Cambridge.
 
 
-Additionally, the following list is a mixture of theoretical writings and empirical papers primarily from the field of sociology. It is also with some incline towards the sociology of science, as (1) the data on scientific activities is easily available for researchers and (2) I am interested in this subfield personally. When selecting from this list, consider both (1) the domain of inquiry (topics) that interests you and (2) the methods applied. The most exciting works (in my opinion) are marked in **bold**. The visualization below captures all of these references and citations among them. At least, this a network science course, so it might be inspiring for you to take a look. The data is taken from OpenAlex, and may be biased to some extent. The color of the nodes correspond to the literature sections on this page, and the nodes' size is a total degree centrality as derived for this set of nodes (81).
+Additionally, the following list is a mixture of theoretical writings and empirical papers primarily from the field of sociology. It is also with some incline towards the sociology of science, as (1) the data on scientific activities is easily available for researchers and (2) I am interested in this subfield personally. When selecting from this list, consider both (1) the domain of inquiry (topics) that interests you and (2) the methods applied. The most exciting works (in my opinion) are marked in **bold**.
 
 
-```{recho=FALSE, warning=F, message=F}
+The visualization below captures all of these references and citations among them. In the end of the day, we are having a network science course, so why not thinking about the literature from bibliometric perspective. The data comes from [OpenAlex](https://openalex.org/){style="color: #0000EE;"}, and may be biased to some extent. The color of the nodes correspond to the literature sections on this page, and the nodes' size is a total degree centrality as derived for this set of nodes (*81*).
+
+
+```{r echo=FALSE, warning=F, message=F}
 library(igraph)
 library(networkD3)
 library(htmlwidgets)
 
 g_oa <- readRDS("datasets/literature_oa.rds")
-?igraph_to_networkD3()
 gd3 <- igraph_to_networkD3(g_oa,
                            group = V(g_oa)$my_section)
 gd3$nodes$degree <- V(g_oa)$degree
@@ -54,7 +53,7 @@ forceNetwork(Links = gd3$links,
              linkWidth = 2,  # Increase from default (1-2)
              radiusCalculation = "d.nodesize",
              fontSize = 16, opacity = 0.8, 
-             zoom = F, legend = F)
+             zoom = T, legend = F)
 ```
 
 
@@ -222,7 +221,7 @@ Social network analysis is widely used in other social sciences. If you need rec
   -	Cárdenas, J. (2021). Networking among scientific journal editors. A network analysis among the top 100 sociology journals. Revista Española de Investigaciones Sociológicas (REIS), 175(175), 27–63.
 
 
-  -	Goyanes, M., & de-Marcos, L. (2020). Academic influence and invisible colleges through editorial board interlocking in communication sciences: A social network analysis of leading journals. Scientometrics, 123(2), 791–811. https://doi.org/10.1007/s11192-020-03401-z
+  -	Goyanes, M., & de-Marcos, L. (2020). Academic influence and invisible colleges through editorial board interlocking in communication sciences: A social network analysis of leading journals. Scientometrics, 123(2), 791–811.
 
 
   -	**Mizruchi, M. S. (1996). What Do Interlocks Do? An Analysis, Critique, and Assessment of Research on Interlocking Directorates. Annual Review of Sociology, 22(1), 271–298.**
@@ -283,7 +282,7 @@ Social network analysis is widely used in other social sciences. If you need rec
   -	Moody, J., & Light, R. (2006). A view from above: The evolving sociological landscape. The American Sociologist, 37(2), 67–86.
 
 
-  -	Barman, E. (2007). An Institutional Approach to Donor Control: From Dyadic Ties to a Field‐Level Analysis. American Journal of Sociology, 112(5), 1416–1457. https://doi.org/10.1086/511802
+  -	Barman, E. (2007). An Institutional Approach to Donor Control: From Dyadic Ties to a Field‐Level Analysis. American Journal of Sociology, 112(5), 1416–1457.
 
 
   -	**Bearman, P. S., Moody, J., & Stovel, K. (2004). Chains of Affection: The Structure of Adolescent Romantic and Sexual Networks. American Journal of Sociology, 110(1), 44–91.**
