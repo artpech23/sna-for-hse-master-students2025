@@ -19,7 +19,44 @@ Although we have too little time to dive into the literature, you might want (or
   -	Wasserman, S. & Faust K. (1994) Social network analysis: Methods and applications. The Press Syndicate of the University of Cambridge.
 
 
-Additionally, the following list is a mixture of theoretical writings and empirical papers primarily from the field of sociology. It is also with some incline towards the sociology of science, as (1) the data on scientific activities is easily available for researchers and (2) I am interested in this subfield personally. When selecting from this list, consider both (1) the domain of inquiry (topics) that interests you and (2) the methods applied. The most exciting works (in my opinion) are marked in **bold**.
+Additionally, the following list is a mixture of theoretical writings and empirical papers primarily from the field of sociology. It is also with some incline towards the sociology of science, as (1) the data on scientific activities is easily available for researchers and (2) I am interested in this subfield personally. When selecting from this list, consider both (1) the domain of inquiry (topics) that interests you and (2) the methods applied. The most exciting works (in my opinion) are marked in **bold**. The visualization below captures all of these references and citations among them. At least, this a network science course, so it might be inspiring for you to take a look. The data is taken from OpenAlex, and may be biased to some extent. The color of the nodes correspond to the literature sections on this page, and the nodes' size is a total degree centrality as derived for this set of nodes (81).
+
+
+```{recho=FALSE, warning=F, message=F}
+library(igraph)
+library(networkD3)
+library(htmlwidgets)
+
+g_oa <- readRDS("datasets/literature_oa.rds")
+?igraph_to_networkD3()
+gd3 <- igraph_to_networkD3(g_oa,
+                           group = V(g_oa)$my_section)
+gd3$nodes$degree <- V(g_oa)$degree
+gd3$nodes$title <- V(g_oa)$title
+gd3$nodes$cited_by_count <- V(g_oa)$cited_by_count
+gd3$nodes$year <- V(g_oa)$year
+gd3$nodes$author <- V(g_oa)$author
+
+#gd3$links$value = 10
+
+gd3$nodes$tooltip <- paste0(#substr(gd3$nodes$title, 1, 30),
+                            gd3$nodes$title,
+                            " (", gd3$nodes$year, ", ", gd3$nodes$author, ")")
+                               
+forceNetwork(Links = gd3$links,
+             Nodes = gd3$nodes, 
+             Source = 'source', Target = 'target', 
+             NodeID = 'tooltip',
+             Group = 'group', 
+             Nodesize = 'degree',
+             #Value = "value",
+             #arrows = T,
+             linkWidth = 2,  # Increase from default (1-2)
+             radiusCalculation = "d.nodesize",
+             fontSize = 16, opacity = 0.8, 
+             zoom = F, legend = F)
+```
+
 
 
 Social network analysis is widely used in other social sciences. If you need recommendations on literature for your specific interests, feel free to reach out to me during class or via email, and I will do my best to provide you with relevant and essential papers for your research.
@@ -40,16 +77,22 @@ Social network analysis is widely used in other social sciences. If you need rec
   -	Korom, P. (2015). Network analysis, history of. In International encyclopedia of the social & behavioral sciences (pp. 524-531). Elsevier.
 
 
-  -	Simmel, G. (2010). Conflict and the web of group affiliations. Simon and Schuster. 
-
-
-  -	Wolff, K. H. (1950). The sociology of Georg Simmel. Glencoe, Ill: Free Press.
+  -	Simmel, G. (1955). Conflict and The web of group-affiliations.
 
 
   -	Chayko, M. (2015). The first web theorist? Georg Simmel and the legacy of ‘The web of group-affiliations.’ Information, Communication & Society, 18(12), 1419–1422.
+  
+  
+  - Broćić, M., & Silver, D. (2021). The influence of simmel on American sociology since 1975. Annual Review of Sociology, 47(1), 87-108.
+  
+  
+  -	Hollstein, B. (2021). Georg simmel’s contribution to social network research. Personal networks: Classic readings and New directions in egocentric analysis, 44-59.
+  
+  
+  -	**Stoetzler, M. (2016). Intersectional Individuality: Georg Simmel’s Concept of “The Intersection of Social Circles” and the Emancipation of Women. Sociological Inquiry, 86(2), 216–240.**
 
 
-  -	Bott, E. (2014). Conjugal roles and social networks. In Family and Social Network (pp. 52–96). Routledge.
+  -	Bott, E. (1955). Urban families: Conjugal roles and social networks. Human relations, 8(4), 345-384.
 
 
   -	Moreno, J. L., Jennings, H. H., & Stockton, R. (1943). Sociometry in the classroom. Sociometry, 6(4), 425-428.
@@ -90,6 +133,9 @@ Social network analysis is widely used in other social sciences. If you need rec
 
 
   -	White, H. C. (1995). Social networks can resolve actor paradoxes in economics and in psychology. Journal of Institutional and Theoretical Economics (JITE)/Zeitschrift Für Die Gesamte Staatswissenschaft, 58–74.
+  
+  
+  - Feld, S. L. (1981). The focused organization of social ties. American journal of sociology, 86(5), 1015-1035.
 
 
   -	Mische, A., & White, H. (1998). Between conversation and situation: Public switching dynamics across network domains. Social Research, 695–724.
@@ -117,10 +163,13 @@ Social network analysis is widely used in other social sciences. If you need rec
   -	Watts, D. J. (1999). Networks, Dynamics, and the Small‐World Phenomenon. American Journal of Sociology, 105(2), 493–527.
 
 
+  - Blondel, V. D., Guillaume, J.-L., Lambiotte, R., & Lefebvre, E. (2008). Fast unfolding of communities in large networks. Journal of Statistical Mechanics: Theory and Experiment, 2008(10), P10008.
+  
+
   -	Blondel, V., Guillaume, J. L., & Lambiotte, R. (2024). Fast unfolding of communities in large networks: 15 years later. Journal of Statistical Mechanics: Theory and Experiment, 2024(10), 10R001.
 
 
-  -	Young, R. C., & Larson, O. F. (1965). A new approach to community structure. American Sociological Review, 30(6), 926-934.
+  -	Borgatti, S. P., & Everett, M. G. (2000). Models of core/periphery structures. Social Networks, 21(4), 375–395.
 
 
   -	**Guimerà, R., Uzzi, B., Spiro, J., & Amaral, L. A. N. (2005). Team Assembly Mechanisms Determine Collaboration Network Structure and Team Performance. Science, 308(5722), 697–702.**
@@ -128,6 +177,18 @@ Social network analysis is widely used in other social sciences. If you need rec
 
 
 ## **Network positions, centrality measures, and its consequences** {-}
+
+
+  -	Freeman, L. C. (1977). A set of measures of centrality based on betweenness. Sociometry, 35-41.
+  
+  
+  -	Freeman, L. C. (1978). Centrality in social networks conceptual clarification. Social networks, 1(3), 215-239.
+  
+  
+  -	Bonacich, P. (1987). Power and centrality: A family of measures. American journal of sociology, 92(5), 1170-1182.
+  
+  
+  -	Borgatti, S. P. (2005). Centrality and network flow. Social networks, 27(1), 55-71.
 
 
   -	Ahuja, G. (2000). Collaboration Networks, Structural Holes, and Innovation: A Longitudinal Study. Administrative Science Quarterly, 45(3), 425–455.
@@ -143,6 +204,9 @@ Social network analysis is widely used in other social sciences. If you need rec
 
 
   -	David Obstfeld, Stephen P. Borgatti, Jason Davis, (2014),"Brokerage as a Process: Decoupling Third Party Action from Social Network Structure", Research in the Sociology of Organizations, Vol. 40 pp. 135-159
+  
+  
+  -	Smith, N. R., Zivich, P. N., Frerichs, L. M., Moody, J., & Aiello, A. E. (2020). A guide for choosing community detection algorithms in social network studies: The question alignment approach. American journal of preventive medicine, 59(4), 597-605.
 
 
 
@@ -167,24 +231,45 @@ Social network analysis is widely used in other social sciences. If you need rec
   -	Mizruchi, M. S., & Stearns, L. B. (1988). A longitudinal study of the formation of interlocking directorates. Administrative Science Quarterly, 194–210.
 
 
-  -	<…>
+  -	Borgatti, S. P., & Everett, M. G. (1997). Network analysis of 2-mode data. Social networks, 19(3), 243-269.
+  
+  
+  -	Latapy, M., Magnien, C., & Del Vecchio, N. (2008). Basic notions for the analysis of large two-mode networks. Social networks, 30(1), 31-48. 
+  
+  
+  -	De Nooy, W. (2003). Fields and networks: correspondence analysis and social network analysis in the framework of field theory. Poetics, 31(5-6), 305-327. 
+  
+  
+  -	Godart, F. C. (2018). Culture, structure, and the market interface: Exploring the networks of stylistic elements and houses in fashion. Poetics, 68, 72-88.
+
 
 
 
 ## **Blockmodeling** {-}
 
-
-  -	**DiMaggio, P. (1986). Structural analysis of organizational fields: A blockmodel approach. Research on Organizational Behavior, S. Barry, LL Cummings (Eds.), 335–370.**
-  
   
   -	White, H. C., Boorman, S. A., & Breiger, R. L. (1976). Social Structure from Multiple Networks. I. Blockmodels of Roles and Positions. American Journal of Sociology, 81(4), 730–780.
   
   
-  -	<…>
+  -	Sailer, L. D. (1978). Structural equivalence: Meaning and definition, computation and application. Social networks, 1(1), 73-90.
+  
+  
+  -	Winship, C., & Mandel, M. (1983). Roles and positions: A critique and extension of the blockmodeling approach. Sociological methodology, 14, 314-344.
+  
+  
+  -	**Burt, R. S. (1990). Detecting role equivalence. Social networks, 12(1), 83-97.**
+  
+  
+  -	Faust, K., & Wasserman, S. (1992). Blockmodels: Interpretation and evaluation. Social networks, 14(1-2), 5-61.
+  
+  
+  -	**Bearman, P. (1997). Generalized exchange. American journal of sociology, 102(5), 1383-1415.**
 
 
 
-## **Network studies of academic world** {-}
+
+## **Applications of network analysis to various domains & intriguing articles** {-}
+
 
   -	**Burris, V. (2004). The Academic Caste System: Prestige Hierarchies in PhD Exchange Networks. American Sociological Review, 69(2), 239–264.**
 
@@ -196,13 +281,6 @@ Social network analysis is widely used in other social sciences. If you need rec
 
 
   -	Moody, J., & Light, R. (2006). A view from above: The evolving sociological landscape. The American Sociologist, 37(2), 67–86.
-
-
-  -	<…>
-
-
-
-## **Applications of network analysis to various domains & intriguing articles** {-}
 
 
   -	Barman, E. (2007). An Institutional Approach to Donor Control: From Dyadic Ties to a Field‐Level Analysis. American Journal of Sociology, 112(5), 1416–1457. https://doi.org/10.1086/511802
@@ -250,7 +328,7 @@ Social network analysis is widely used in other social sciences. If you need rec
   -	**McAndrew, S., & Everett, M. (2015). Music as Collective Invention: A Social Network Analysis of Composers. Cultural Sociology, 9(1), 56–80.**
 
 
-  -	Flache, A., & Macy, M. W. (2013). The weakness of strong ties: Collective action failure in a highly cohesive group. In Evolution of social networks (pp. 19–44). Routledge.
+  -	Flache, A., & Macy, M. W. (1996). The weakness of strong ties: Collective action failure in a highly cohesive group. Journal of Mathematical Sociology, 21(1-2), 3-28.
 
 
 

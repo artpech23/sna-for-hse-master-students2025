@@ -251,7 +251,7 @@
 <span><span class="co">#&gt;   .. ..$ allegiance: num [1:34] 1 1 1 1 1 1 1 1 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ :List of 1</span></span>
 <span><span class="co">#&gt;   .. ..$ weight: num [1:78] 4 5 6 3 3 3 3 3 3 2 ...</span></span>
-<span><span class="co">#&gt;  $ :&lt;environment: 0x000001dc60346ae0&gt; </span></span>
+<span><span class="co">#&gt;  $ :&lt;environment: 0x00000253619060d8&gt; </span></span>
 <span><span class="co">#&gt;  - attr(*, "active")= chr "nodes"</span></span></code></pre></div>
 <p>Next, we use the aforementioned <code><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF()</a></code> function to deconstruct a network object into two standard data frames: one for edges and one for nodes. You can re-assemble these data frames into a new igraph object using the <code><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame()</a></code> function from <code>igraph</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -270,9 +270,9 @@
 <span><span class="co">## now, as it is pure igraph, network is "printed" in a standard igraph-way:</span></span>
 <span></span>
 <span><span class="va">karate_recreated</span></span>
-<span><span class="co">#&gt; IGRAPH 7aca383 DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 5d9277f DNW- 34 78 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), weight (e/n)</span></span>
-<span><span class="co">#&gt; + edges from 7aca383 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 5d9277f (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1 -&gt;2  1 -&gt;3  2 -&gt;3  1 -&gt;4  2 -&gt;4  3 -&gt;4  1 -&gt;5  1 -&gt;6 </span></span>
 <span><span class="co">#&gt;  [9] 1 -&gt;7  5 -&gt;7  6 -&gt;7  1 -&gt;8  2 -&gt;8  3 -&gt;8  4 -&gt;8  1 -&gt;9 </span></span>
 <span><span class="co">#&gt; [17] 3 -&gt;9  3 -&gt;10 1 -&gt;11 5 -&gt;11 6 -&gt;11 1 -&gt;12 1 -&gt;13 4 -&gt;13</span></span>
@@ -290,9 +290,9 @@
 <span>                        vertices <span class="op">=</span> <span class="va">karate_nodes</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">karate_recreated</span></span>
-<span><span class="co">#&gt; IGRAPH 7acf375 DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 5d97983 DNW- 34 78 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), allegiance (v/n), weight (e/n)</span></span>
-<span><span class="co">#&gt; + edges from 7acf375 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 5d97983 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] Mr Hi-&gt;2  Mr Hi-&gt;3  2    -&gt;3  Mr Hi-&gt;4  2    -&gt;4 </span></span>
 <span><span class="co">#&gt;  [6] 3    -&gt;4  Mr Hi-&gt;5  Mr Hi-&gt;6  Mr Hi-&gt;7  5    -&gt;7 </span></span>
 <span><span class="co">#&gt; [11] 6    -&gt;7  Mr Hi-&gt;8  2    -&gt;8  3    -&gt;8  4    -&gt;8 </span></span>
@@ -473,7 +473,7 @@
 <span><span class="co">#&gt;   .. ..$ school   : chr [1:71] "Harvard/Yale" "Harvard/Yale" "Harvard/Yale" "Other" ...</span></span>
 <span><span class="co">#&gt;   ..$ :List of 1</span></span>
 <span><span class="co">#&gt;   .. ..$ type: chr [1:2571] "friends" "advice" "friends" "friends" ...</span></span>
-<span><span class="co">#&gt;  $ :&lt;environment: 0x000001dc54d067a0&gt; </span></span>
+<span><span class="co">#&gt;  $ :&lt;environment: 0x000002535731a098&gt; </span></span>
 <span><span class="co">#&gt;  - attr(*, "active")= chr "nodes"</span></span></code></pre></div>
 <p>As you can see, the laoded object is already a network. Note how the data is structured:</p>
 <ol style="list-style-type: decimal">
@@ -518,11 +518,11 @@
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">lawfirm2</span></span>
-<span><span class="co">#&gt; IGRAPH 7b83a77 DN-- 71 2571 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 5e63658 DN-- 71 2571 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), status (v/c), gender (v/c),</span></span>
 <span><span class="co">#&gt; | office (v/c), seniority (v/n), age (v/n), practice</span></span>
 <span><span class="co">#&gt; | (v/c), school (v/c), type (e/c)</span></span>
-<span><span class="co">#&gt; + edges from 7b83a77 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 5e63658 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1-&gt;2  1-&gt;2  1-&gt;4  1-&gt;8  1-&gt;17 1-&gt;17 1-&gt;17 1-&gt;20 1-&gt;39</span></span>
 <span><span class="co">#&gt; [10] 1-&gt;40 1-&gt;41 1-&gt;56 1-&gt;57 2-&gt;1  2-&gt;6  2-&gt;7  2-&gt;10 2-&gt;16</span></span>
 <span><span class="co">#&gt; [19] 2-&gt;16 2-&gt;17 2-&gt;17 2-&gt;17 2-&gt;20 2-&gt;22 2-&gt;22 2-&gt;22 2-&gt;24</span></span>
@@ -752,7 +752,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-10-29.</p>
+    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-11-02.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
