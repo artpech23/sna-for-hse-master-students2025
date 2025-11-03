@@ -19,18 +19,20 @@ Although we have too little time to dive into the literature, you might want (or
 Additionally, the following list is a mixture of theoretical writings and empirical papers primarily from the field of sociology. It is also with some incline towards the sociology of science, as (1) the data on scientific activities is easily available for researchers and (2) I am interested in this subfield personally. When selecting from this list, consider both (1) the domain of inquiry (topics) that interests you and (2) the methods applied. The most exciting works (in my opinion) are marked in **bold**.
 
 
-The visualization below captures all of these references and citations among them. In the end of the day, we are having a network science course, so why not thinking about the literature from bibliometric perspective. The data comes from [OpenAlex](https://openalex.org/){style="color: #0000EE;"}, and may be biased to some extent. The color of the nodes correspond to the literature sections on this page, and the nodes' size is a total degree centrality as derived for this set of nodes (*81*).
+The visualization below captures all of these references and citations among them. In the end of the day, we are having a network science course, so why not thinking about the literature from bibliometric perspective. The data comes from [OpenAlex](https://openalex.org/){style="color: #0000EE;"}, and may be biased to some extent. The color of the nodes correspond to the literature sections on this page, and the nodes' size is a number of incoming links ("indegree centrality") as derived for this set of nodes (*81*). There are some isolated nodes, which you may see after zooming out.
 
 
 ```{r echo=FALSE, warning=F, message=F}
 library(igraph)
 library(networkD3)
 library(htmlwidgets)
+library(scales)
 
 g_oa <- readRDS("datasets/literature_oa.rds")
+V(g_oa)$degree <- degree(g_oa, mode = "in")
 gd3 <- igraph_to_networkD3(g_oa,
                            group = V(g_oa)$my_section)
-gd3$nodes$degree <- V(g_oa)$degree
+gd3$nodes$degree <- rescale(V(g_oa)$degree, to = c(5,20))
 gd3$nodes$title <- V(g_oa)$title
 gd3$nodes$cited_by_count <- V(g_oa)$cited_by_count
 gd3$nodes$year <- V(g_oa)$year
@@ -41,6 +43,8 @@ gd3$nodes$author <- V(g_oa)$author
 gd3$nodes$tooltip <- paste0(#substr(gd3$nodes$title, 1, 30),
                             gd3$nodes$title,
                             " (", gd3$nodes$year, ", ", gd3$nodes$author, ")")
+
+set.seed(42)
                                
 forceNetwork(Links = gd3$links,
              Nodes = gd3$nodes, 
@@ -48,9 +52,12 @@ forceNetwork(Links = gd3$links,
              NodeID = 'tooltip',
              Group = 'group', 
              Nodesize = 'degree',
+             charge = -15,
+             #linkDistance = 70,
+             
              #Value = "value",
              #arrows = T,
-             linkWidth = 2,  # Increase from default (1-2)
+             linkWidth = 1,  # Increase from default (1-2)
              radiusCalculation = "d.nodesize",
              fontSize = 16, opacity = 0.8, 
              zoom = T, legend = F)

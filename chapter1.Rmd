@@ -4,7 +4,7 @@
 # **1 - Intro** {-}
 
 
-The notes below accompany the first lecture of the course. It might be a good idea to consult the [lecture slides]{style="color: red;"} as well, as some technical details and examples are discussed there.
+The notes below accompany the first lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1oyyUwEo9PstlD5-2DGyFILB-6poT0IdSI2AG3y592OU/edit?usp=drive_link){style="color: blue;"} as well, as some technical details and examples are discussed there.
 
 
 During today's meeting we are going to cover the very basics of doing network analysis in R. Relying on commonly used `igraph` package for data manipulation, we would learn about typical network data formats (edgelists, nodelists, and matrices) and how to convert them to (and from) typical tabular formats, and ways to manipulate and refer to edges and nodes of the constructed networks. We will also make our first attempts at analysis of the two exemplar datasets. After this session, you will be prepared for more concrete discussions of the network-related topics.
