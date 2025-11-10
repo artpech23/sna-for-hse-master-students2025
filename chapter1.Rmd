@@ -592,3 +592,27 @@ Articles mentioned in the text:
 
 
 
+## **Home assignment 1** {-}
+
+
+You need to write 0.5 page (preferably, in word) about hypothetical network research. Choose the topic of your interest (your master thesis idea, work routine, classroom routine, trade networks, etc.) and briefly discuss:
+  
+  - who are the actors,
+  
+  
+  - what are the relations (you may discuss multiple types of ties),
+  
+  
+  - what kinds of actors’ attributes you may need, 
+  
+  
+  - sampling,
+  
+  
+  - how to collect this data? (questionnaire, web scraping, etc.).
+
+
+Deadline - before your next class. 
+
+
+

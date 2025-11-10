@@ -18,7 +18,9 @@
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
-<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="libs/d3-4.9.1/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4.1/forceNetwork.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="libs/plotly-binding-4.10.4/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script><script src="libs/d3-4.9.1/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4.1/forceNetwork.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
@@ -252,7 +254,7 @@
 <span><span class="co">#&gt;   .. ..$ allegiance: num [1:34] 1 1 1 1 1 1 1 1 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ :List of 1</span></span>
 <span><span class="co">#&gt;   .. ..$ weight: num [1:78] 4 5 6 3 3 3 3 3 3 2 ...</span></span>
-<span><span class="co">#&gt;  $ :&lt;environment: 0x000001245ef433b0&gt; </span></span>
+<span><span class="co">#&gt;  $ :&lt;environment: 0x000001a852b18b90&gt; </span></span>
 <span><span class="co">#&gt;  - attr(*, "active")= chr "nodes"</span></span></code></pre></div>
 <p>Next, we use the aforementioned <code><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF()</a></code> function to deconstruct a network object into two standard data frames: one for edges and one for nodes. You can re-assemble these data frames into a new igraph object using the <code><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame()</a></code> function from <code>igraph</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -271,9 +273,9 @@
 <span><span class="co">## now, as it is pure igraph, network is "printed" in a standard igraph-way:</span></span>
 <span></span>
 <span><span class="va">karate_recreated</span></span>
-<span><span class="co">#&gt; IGRAPH 354d811 DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 312135a DNW- 34 78 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), weight (e/n)</span></span>
-<span><span class="co">#&gt; + edges from 354d811 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 312135a (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1 -&gt;2  1 -&gt;3  2 -&gt;3  1 -&gt;4  2 -&gt;4  3 -&gt;4  1 -&gt;5  1 -&gt;6 </span></span>
 <span><span class="co">#&gt;  [9] 1 -&gt;7  5 -&gt;7  6 -&gt;7  1 -&gt;8  2 -&gt;8  3 -&gt;8  4 -&gt;8  1 -&gt;9 </span></span>
 <span><span class="co">#&gt; [17] 3 -&gt;9  3 -&gt;10 1 -&gt;11 5 -&gt;11 6 -&gt;11 1 -&gt;12 1 -&gt;13 4 -&gt;13</span></span>
@@ -291,9 +293,9 @@
 <span>                        vertices <span class="op">=</span> <span class="va">karate_nodes</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">karate_recreated</span></span>
-<span><span class="co">#&gt; IGRAPH 355ae2c DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 3126251 DNW- 34 78 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), allegiance (v/n), weight (e/n)</span></span>
-<span><span class="co">#&gt; + edges from 355ae2c (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 3126251 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] Mr Hi-&gt;2  Mr Hi-&gt;3  2    -&gt;3  Mr Hi-&gt;4  2    -&gt;4 </span></span>
 <span><span class="co">#&gt;  [6] 3    -&gt;4  Mr Hi-&gt;5  Mr Hi-&gt;6  Mr Hi-&gt;7  5    -&gt;7 </span></span>
 <span><span class="co">#&gt; [11] 6    -&gt;7  Mr Hi-&gt;8  2    -&gt;8  3    -&gt;8  4    -&gt;8 </span></span>
@@ -474,7 +476,7 @@
 <span><span class="co">#&gt;   .. ..$ school   : chr [1:71] "Harvard/Yale" "Harvard/Yale" "Harvard/Yale" "Other" ...</span></span>
 <span><span class="co">#&gt;   ..$ :List of 1</span></span>
 <span><span class="co">#&gt;   .. ..$ type: chr [1:2571] "friends" "advice" "friends" "friends" ...</span></span>
-<span><span class="co">#&gt;  $ :&lt;environment: 0x0000012453f19bc8&gt; </span></span>
+<span><span class="co">#&gt;  $ :&lt;environment: 0x000001a848514220&gt; </span></span>
 <span><span class="co">#&gt;  - attr(*, "active")= chr "nodes"</span></span></code></pre></div>
 <p>As you can see, the laoded object is already a network. Note how the data is structured:</p>
 <ol style="list-style-type: decimal">
@@ -519,11 +521,11 @@
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">lawfirm2</span></span>
-<span><span class="co">#&gt; IGRAPH 3747b4e DN-- 71 2571 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 31df331 DN-- 71 2571 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), status (v/c), gender (v/c),</span></span>
 <span><span class="co">#&gt; | office (v/c), seniority (v/n), age (v/n), practice</span></span>
 <span><span class="co">#&gt; | (v/c), school (v/c), type (e/c)</span></span>
-<span><span class="co">#&gt; + edges from 3747b4e (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 31df331 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1-&gt;2  1-&gt;2  1-&gt;4  1-&gt;8  1-&gt;17 1-&gt;17 1-&gt;17 1-&gt;20 1-&gt;39</span></span>
 <span><span class="co">#&gt; [10] 1-&gt;40 1-&gt;41 1-&gt;56 1-&gt;57 2-&gt;1  2-&gt;6  2-&gt;7  2-&gt;10 2-&gt;16</span></span>
 <span><span class="co">#&gt; [19] 2-&gt;16 2-&gt;17 2-&gt;17 2-&gt;17 2-&gt;20 2-&gt;22 2-&gt;22 2-&gt;22 2-&gt;24</span></span>
@@ -724,6 +726,21 @@
 <li><p>Zachary, W. W. (1977). An information flow model for conflict and fission in small groups. Journal of anthropological research, 33(4), 452-473.</p></li>
 </ul>
 </div>
+<div id="home-assignment-1" class="section level2 unnumbered">
+<h2>
+<strong>Home assignment 1</strong><a class="anchor" aria-label="anchor" href="#home-assignment-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>You need to write 0.5 page (preferably, in word) about hypothetical network research. Choose the topic of your interest (your master thesis idea, work routine, classroom routine, trade networks, etc.) and briefly discuss:</p>
+<ul>
+<li><p>who are the actors,</p></li>
+<li><p>what are the relations (you may discuss multiple types of ties),</p></li>
+<li><p>what kinds of actors’ attributes you may need,</p></li>
+<li><p>sampling,</p></li>
+<li><p>how to collect this data? (questionnaire, web scraping, etc.).</p></li>
+</ul>
+<p>Deadline - before your next class.</p>
+
+</div>
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="course-outline.html">Course outline</a></div>
@@ -736,6 +753,7 @@
 <li><a class="nav-link" href="#common-data-structures-and-procedures">Common data structures and procedures</a></li>
 <li><a class="nav-link" href="#working-through-another-example">Working through another example</a></li>
 <li><a class="nav-link" href="#conclusion">Conclusion</a></li>
+<li><a class="nav-link" href="#home-assignment-1">Home assignment 1</a></li>
 </ul>
 
       <div class="book-extra">
@@ -753,7 +771,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-11-03.</p>
+    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-11-10.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
