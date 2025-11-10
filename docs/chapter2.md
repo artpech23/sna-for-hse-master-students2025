@@ -815,7 +815,7 @@ plot_ly(oa_network_and_biblio,
 ## **Home assignment 2** {-}
 
 
-You need to select a network dataset you like (check [Available datasets page](-#Available-datasets){style="color: blue;"}) and analyze the most central nodes in it. To do that,
+You need to select a network dataset you like (check [Available datasets page](#available-datasets.html){style="color: blue;"}) and analyze the most central nodes in it. To do that,
 
 
   - come up with 2-3 hypotheses about the central actors,
