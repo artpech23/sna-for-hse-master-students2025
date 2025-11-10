@@ -52,6 +52,7 @@
 <li class="book-part">Seminars</li>
 <li><a class="" href="intro.html">1 - Intro</a></li>
 <li><a class="active" href="centrality-measures.html">2 - Centrality measures</a></li>
+<li><a class="" href="topology-communities.html">3 - Topology &amp; communities</a></li>
 <li class="book-part">Appendices</li>
 <li><a class="" href="available-datasets.html">Available datasets</a></li>
 <li><a class="" href="intro-to-web-scraping.html">Intro to web-scraping</a></li>
@@ -67,12 +68,12 @@
 <h1>
 <strong>2 - Centrality measures</strong><a class="anchor" aria-label="anchor" href="#centrality-measures"><i class="fas fa-link"></i></a>
 </h1>
-<p>The notes below accompany the second lecture of the course. It might be a good idea to consult the <strong>lecture slides</strong> as well, as some technical details and examples are discussed there.</p>
+<p>The notes below accompany the second lecture of the course. It might be a good idea to consult the <a href="https://docs.google.com/presentation/d/1BN5NF57s3NlGqgtJPWgfsODK1aDe5_iPbMvSIrN56Os/edit?usp=sharing" style="color: blue;">lecture slides</a> as well, as some technical details and examples are discussed there.</p>
 <div id="definitions-of-centrality-measures-how-to-calculate-them" class="section level2 unnumbered">
 <h2>
 <strong>Definitions of centrality measures &amp; how to calculate them</strong><a class="anchor" aria-label="anchor" href="#definitions-of-centrality-measures-how-to-calculate-them"><i class="fas fa-link"></i></a>
 </h2>
-<p>Although there is <a href="http://www.centiserver.org/">a large variety of centrality measures out there</a>, today we will focus on 4 core measures we have covered in class. These are:</p>
+<p>Although there is <a href="http://www.centiserver.org/" style="color: blue;">a large variety of centrality measures out there</a>, today we will focus on 4 core measures we have covered in class. These are:</p>
 <ol style="list-style-type: decimal">
 <li><p>degree centrality,</p></li>
 <li><p>betweenness centrality,</p></li>
@@ -80,7 +81,7 @@
 <li><p>eigenvector centrality.</p></li>
 </ol>
 <p>The definitions are embedded in the following text as well.</p>
-<p>The picture below borrowed form <a href="https://bookdown.org/jdholster1/idsr/network-analysis.html">here</a> summarizes the differences between these measures:</p>
+<p>The picture below borrowed form <a href="https://bookdown.org/jdholster1/idsr/network-analysis.html" style="color: blue;">here</a> summarizes the differences between these measures:</p>
 <div align="center" class="inline-figure">
 <img src="https://bookdown.org/jdholster1/idsr/Centrality.png">
 </div>
@@ -389,9 +390,9 @@ Also, in directed graphs, we need to specify the <code>mode = "out"</code> argum
 <h2>
 <strong>Working through bibliometric example from OpenAlex data</strong><a class="anchor" aria-label="anchor" href="#working-through-bibliometric-example-from-openalex-data"><i class="fas fa-link"></i></a>
 </h2>
-<p>As the topic of centrality measures is relatively straightforward, I thought it might be of some interest for you if we pick a bibliometric database for the next example, so that you would (1) get your hands on freely available scientific literature metadata, suggested by <a href="https://openalex.org/">OpenAlex project</a>, and (2) relate the ideas on centrality to bibliometric analysis. Though there are many options for the literature search nowadays, ranging from simplistic google.scholar search field to the fancy AI-tools, it might be a good idea in concrete scenarios to study the literature formally with network analysis tools. It mostly applies to clustering / community detection techniques, which we are going to covert next week, but nothing prevents us from computing centrality measures on this sorts of data as well. Obviously, there are many specialized programs developed specifically for science mapping / literature reviews (e.g. <a href="https://www.vosviewer.com/">VOSviewer</a>, <a href="https://www.citnetexplorer.nl/">CitNetExplorer</a>, etc.), but loading, cleaning, and exploring the entire subset of literature you are interested in from R can be useful.</p>
-<p>Currently, it is hard to access Scopus/Web of Science data (these are commonly used sources of data for scientometric studies) from Russia due to restrictions from these companies (although you still can get some metadata if you create <a href="https://dev.elsevier.com/">an API key for Scopus</a> and utilize tools like <code>rscopus</code> package (read documentation <a href="https://cran.r-project.org/web/packages/rscopus/rscopus.pdf">here</a>), - but, remember, the output would be limited, and the speed/limits are present for this option). For this reason, we would rely on OpenAlex, - a comprehensive, freely accessible database of the global scholarly system, including millions of journal articles, authors, institutions, and research concepts. Its major advantage is that it provides a straightforward way to access and analyze citation networks and research trends for free, making it ideal for bibliometric analysis.</p>
-<p>For our ease, there is a wonderful package called <code>openalexR</code> (<a href="https://docs.ropensci.org/openalexR/index.html">documentation</a>). If you are interested in the topic, you can dive into <a href="https://docs.ropensci.org/openalexR/articles/Filters.html">the filters’ specifications</a>, or just follow the example suggested below. To put this simply, we need to make a search query by using multiple arguments of the function <code><a href="https://docs.ropensci.org/openalexR/reference/oa_fetch.html">oa_fetch()</a></code>, check whether we are satisfied with the output lengths, adjust our request if needed, and finally download the data.</p>
+<p>As the topic of centrality measures is relatively straightforward, I thought it might be of some interest for you if we pick a bibliometric database for the next example, so that you would (1) get your hands on freely available scientific literature metadata, suggested by <a href="https://openalex.org/" style="color: blue;">OpenAlex project</a>, and (2) relate the ideas on centrality to bibliometric analysis. Though there are many options for the literature search nowadays, ranging from simplistic google.scholar search field to the fancy AI-tools, it might be a good idea in concrete scenarios to study the literature formally with network analysis tools. It mostly applies to clustering / community detection techniques, which we are going to covert next week, but nothing prevents us from computing centrality measures on this sorts of data as well. Obviously, there are many specialized programs developed specifically for science mapping / literature reviews (e.g. <a href="https://www.vosviewer.com/" style="color: blue;">VOSviewer</a>, <a href="https://www.citnetexplorer.nl/" style="color: blue;">CitNetExplorer</a>, etc.), but loading, cleaning, and exploring the entire subset of literature you are interested in from R can be useful.</p>
+<p>Currently, it is hard to access Scopus/Web of Science data (these are commonly used sources of data for scientometric studies) from Russia due to restrictions from these companies (although you still can get some metadata if you create <a href="https://dev.elsevier.com/" style="color: blue;">an API key for Scopus</a> and utilize tools like <code>rscopus</code> package (read documentation <a href="https://cran.r-project.org/web/packages/rscopus/rscopus.pdf" style="color: blue;">here</a>), - but, remember, the output would be limited, and the speed/limits are present for this option). For this reason, we would rely on OpenAlex, - a comprehensive, freely accessible database of the global scholarly system, including millions of journal articles, authors, institutions, and research concepts. Its major advantage is that it provides a straightforward way to access and analyze citation networks and research trends for free, making it ideal for bibliometric analysis.</p>
+<p>For our ease, there is a wonderful package called <code>openalexR</code> (<a href="https://docs.ropensci.org/openalexR/index.html" style="color: blue;">documentation</a>). If you are interested in the topic, you can dive into <a href="https://docs.ropensci.org/openalexR/articles/Filters.html" style="color: blue;">the filters’ specifications</a>, or just follow the example suggested below. To put this simply, we need to make a search query by using multiple arguments of the function <code><a href="https://docs.ropensci.org/openalexR/reference/oa_fetch.html">oa_fetch()</a></code>, check whether we are satisfied with the output lengths, adjust our request if needed, and finally download the data.</p>
 <p>For example, we can search for the “works” (papers, books, reviews, etc.) that contain the phrase “Sustainable Business Models” in their titles, and request just the overall number of found publications by setting the “count_only” argument to TRUE:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/openalexR/reference/oa_fetch.html">oa_fetch</a></span><span class="op">(</span>entity <span class="op">=</span> <span class="st">"works"</span>,</span>
@@ -650,24 +651,21 @@ Also, in directed graphs, we need to specify the <code>mode = "out"</code> argum
 <h2>
 <strong>Home assignment 2</strong><a class="anchor" aria-label="anchor" href="#home-assignment-2"><i class="fas fa-link"></i></a>
 </h2>
-<p>You need to select a network dataset you like (check <a href="#Available-datasets">Available datasets page</a>) and analyze the most central nodes in it. To do that,</p>
+<p>You need to select a network dataset you like (check <a href="-#Available-datasets" style="color: blue;">Available datasets page</a>) and analyze the most central nodes in it. To do that,</p>
 <ul>
 <li><p>come up with 2-3 hypotheses about the central actors,</p></li>
 <li><p>match them with the certain centrality measures we discussed in class (types of degree centrality, betweenness, etc.),</p></li>
 <li><p>present and discuss the results the way you think is relevant. For example, you can draw the network highlighting the central nodes or present a table with various centrality scores (do not insert very large tables, include the nodes with the max./min. values or those nodes you think are important). Preferably, your hypotheses should include nodes’ variables not related to the network itself (gender, age, office, etc.). In the latter case, you can continue with distributions, scatterplots, or summary statistics table and simple regression modeling.</p></li>
 </ul>
 <p>Whatever analysis flow you choose, reflect on your steps, results, and difficulties in text. The work can be sumbitted in word/pdf/html format (just copy tables / visualizations in the first two scenarios and comment on them).</p>
-<p>If you want to revisit some theory, you can check the <a href="https://www.youtube.com/watch?v=RXohUeNCJiU&amp;list=PL2rR6Wa-StjYOW7v6J8_npck6EDOKEbCN&amp;index=7&amp;t=2s&amp;pp=iAQB0gcJCQMKAYcqIYzv">lecture by Lada Adamic</a> or <a href="https://inarwhal.github.io/NetworkAnalysisR-book/ch9-Network-Centrality-Hierarchy-R.html">this</a> or <a href="https://inarwhal.github.io/NetworkAnalysisR-book/ch9-Network-Centrality-Hierarchy-R.html">that</a> pages (with R!).</p>
+<p>If you want to revisit some theory, you can check the <a href="https://www.youtube.com/watch?v=RXohUeNCJiU&amp;list=PL2rR6Wa-StjYOW7v6J8_npck6EDOKEbCN&amp;index=7&amp;t=2s&amp;pp=iAQB0gcJCQMKAYcqIYzv" style="color: blue;">lecture by Lada Adamic</a> or <a href="https://inarwhal.github.io/NetworkAnalysisR-book/ch9-Network-Centrality-Hierarchy-R.html" style="color: blue;">this</a> or <a href="https://inarwhal.github.io/NetworkAnalysisR-book/ch9-Network-Centrality-Hierarchy-R.html" style="color: blue;">that</a> pages (with R!).</p>
 <p>Deadline - before your next class.</p>
 
 </div>
 </div>
-
-
-
   <div class="chapter-nav">
 <div class="prev"><a href="intro.html">1 - Intro</a></div>
-<div class="next"><a href="available-datasets.html">Available datasets</a></div>
+<div class="next"><a href="topology-communities.html">3 - Topology &amp; communities</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">

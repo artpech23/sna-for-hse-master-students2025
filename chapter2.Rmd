@@ -10,13 +10,13 @@ knitr::opts_chunk$set(echo = TRUE,
 ```
 
 
-The notes below accompany the second lecture of the course. It might be a good idea to consult the **lecture slides** as well, as some technical details and examples are discussed there.
+The notes below accompany the second lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1BN5NF57s3NlGqgtJPWgfsODK1aDe5_iPbMvSIrN56Os/edit?usp=sharing){style="color: blue;"} as well, as some technical details and examples are discussed there.
 
 
 ## **Definitions of centrality measures & how to calculate them**  {-}
 
 
-Although there is [a large variety of centrality measures out there](http://www.centiserver.org/), today we will focus on 4 core measures we have covered in class. These are:
+Although there is [a large variety of centrality measures out there](http://www.centiserver.org/){style="color: blue;"}, today we will focus on 4 core measures we have covered in class. These are:
 
 
   1. degree centrality,
@@ -33,7 +33,7 @@ Although there is [a large variety of centrality measures out there](http://www.
   
 The definitions are embedded in the following text as well.
 
-The picture below borrowed form [here](https://bookdown.org/jdholster1/idsr/network-analysis.html) summarizes the differences between these measures:
+The picture below borrowed form [here](https://bookdown.org/jdholster1/idsr/network-analysis.html){style="color: blue;"} summarizes the differences between these measures:
 
 
 
@@ -376,13 +376,13 @@ rm(list = ls())
 ## **Working through bibliometric example from OpenAlex data**  {-}
 
 
-As the topic of centrality measures is relatively straightforward, I thought it might be of some interest for you if we pick a bibliometric database for the next example, so that you would (1) get your hands on freely available scientific literature metadata, suggested by [OpenAlex project](https://openalex.org/), and (2) relate the ideas on centrality to bibliometric analysis. Though there are many options for the literature search nowadays, ranging from simplistic google.scholar search field to the fancy AI-tools, it might be a good idea in concrete scenarios to study the literature formally with network analysis tools. It mostly applies to clustering / community detection techniques, which we are going to covert next week, but nothing prevents us from computing centrality measures on this sorts of data as well. Obviously, there are many specialized programs developed specifically for science mapping / literature reviews (e.g. [VOSviewer](https://www.vosviewer.com/), [CitNetExplorer](https://www.citnetexplorer.nl/), etc.), but loading, cleaning, and exploring the entire subset of literature you are interested in from R can be useful.
+As the topic of centrality measures is relatively straightforward, I thought it might be of some interest for you if we pick a bibliometric database for the next example, so that you would (1) get your hands on freely available scientific literature metadata, suggested by [OpenAlex project](https://openalex.org/){style="color: blue;"}, and (2) relate the ideas on centrality to bibliometric analysis. Though there are many options for the literature search nowadays, ranging from simplistic google.scholar search field to the fancy AI-tools, it might be a good idea in concrete scenarios to study the literature formally with network analysis tools. It mostly applies to clustering / community detection techniques, which we are going to covert next week, but nothing prevents us from computing centrality measures on this sorts of data as well. Obviously, there are many specialized programs developed specifically for science mapping / literature reviews (e.g. [VOSviewer](https://www.vosviewer.com/){style="color: blue;"}, [CitNetExplorer](https://www.citnetexplorer.nl/){style="color: blue;"}, etc.), but loading, cleaning, and exploring the entire subset of literature you are interested in from R can be useful.
 
 
-Currently, it is hard to access Scopus/Web of Science data (these are commonly used sources of data for scientometric studies) from Russia due to restrictions from these companies (although you still can get some metadata if you create [an API key for Scopus](https://dev.elsevier.com/) and utilize tools like `rscopus` package (read documentation [here](https://cran.r-project.org/web/packages/rscopus/rscopus.pdf)), - but, remember, the output would be limited, and the speed/limits are present for this option). For this reason, we would rely on OpenAlex, - a comprehensive, freely accessible database of the global scholarly system, including millions of journal articles, authors, institutions, and research concepts. Its major advantage is that it provides a straightforward way to access and analyze citation networks and research trends for free, making it ideal for bibliometric analysis.
+Currently, it is hard to access Scopus/Web of Science data (these are commonly used sources of data for scientometric studies) from Russia due to restrictions from these companies (although you still can get some metadata if you create [an API key for Scopus](https://dev.elsevier.com/){style="color: blue;"} and utilize tools like `rscopus` package (read documentation [here](https://cran.r-project.org/web/packages/rscopus/rscopus.pdf){style="color: blue;"}), - but, remember, the output would be limited, and the speed/limits are present for this option). For this reason, we would rely on OpenAlex, - a comprehensive, freely accessible database of the global scholarly system, including millions of journal articles, authors, institutions, and research concepts. Its major advantage is that it provides a straightforward way to access and analyze citation networks and research trends for free, making it ideal for bibliometric analysis.
 
 
-For our ease, there is a wonderful package called `openalexR` ([documentation](https://docs.ropensci.org/openalexR/index.html)). If you are interested in the topic, you can dive into [the filters' specifications](https://docs.ropensci.org/openalexR/articles/Filters.html), or just follow the example suggested below. To put this simply, we need to make a search query by using multiple arguments of the function `oa_fetch()`, check whether we are satisfied with the output lengths, adjust our request if needed, and finally download the data. 
+For our ease, there is a wonderful package called `openalexR` ([documentation](https://docs.ropensci.org/openalexR/index.html){style="color: blue;"}). If you are interested in the topic, you can dive into [the filters' specifications](https://docs.ropensci.org/openalexR/articles/Filters.html){style="color: blue;"}, or just follow the example suggested below. To put this simply, we need to make a search query by using multiple arguments of the function `oa_fetch()`, check whether we are satisfied with the output lengths, adjust our request if needed, and finally download the data. 
 
 
 For example, we can search for the "works" (papers, books, reviews, etc.) that contain the phrase "Sustainable Business Models" in their titles, and request just the overall number of found publications by setting the "count_only" argument to TRUE:
@@ -650,7 +650,7 @@ plot_ly(oa_network_and_biblio,
 ## **Home assignment 2** {-}
 
 
-You need to select a network dataset you like (check [Available datasets page](#Available-datasets)) and analyze the most central nodes in it. To do that,
+You need to select a network dataset you like (check [Available datasets page](-#Available-datasets){style="color: blue;"}) and analyze the most central nodes in it. To do that,
 
 
   - come up with 2-3 hypotheses about the central actors,
@@ -665,7 +665,7 @@ You need to select a network dataset you like (check [Available datasets page](#
 Whatever analysis flow you choose, reflect on your steps, results, and difficulties in text. The work can be sumbitted in word/pdf/html format (just copy tables / visualizations in the first two scenarios and comment on them).
 
 
-If you want to revisit some theory, you can check the [lecture by Lada Adamic](https://www.youtube.com/watch?v=RXohUeNCJiU&list=PL2rR6Wa-StjYOW7v6J8_npck6EDOKEbCN&index=7&t=2s&pp=iAQB0gcJCQMKAYcqIYzv) or [this](https://inarwhal.github.io/NetworkAnalysisR-book/ch9-Network-Centrality-Hierarchy-R.html) or [that](https://inarwhal.github.io/NetworkAnalysisR-book/ch9-Network-Centrality-Hierarchy-R.html) pages (with R!).
+If you want to revisit some theory, you can check the [lecture by Lada Adamic](https://www.youtube.com/watch?v=RXohUeNCJiU&list=PL2rR6Wa-StjYOW7v6J8_npck6EDOKEbCN&index=7&t=2s&pp=iAQB0gcJCQMKAYcqIYzv){style="color: blue;"} or [this](https://inarwhal.github.io/NetworkAnalysisR-book/ch9-Network-Centrality-Hierarchy-R.html){style="color: blue;"} or [that](https://inarwhal.github.io/NetworkAnalysisR-book/ch9-Network-Centrality-Hierarchy-R.html){style="color: blue;"} pages (with R!).
 
 
 Deadline - before your next class. 
