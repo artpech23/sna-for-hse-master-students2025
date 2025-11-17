@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>3 - Topology &amp; communities | yet another SNA coursebook</title>
 <meta name="author" content="Arthur Pecherskikh">
-<meta name="description" content="work-in-progress">
+<meta name="description" content="The notes below accompany the second lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. During this...">
 <meta name="generator" content="bookdown 0.45 with bs4_book()">
 <meta property="og:title" content="3 - Topology &amp; communities | yet another SNA coursebook">
 <meta property="og:type" content="book">
-<meta property="og:description" content="work-in-progress">
+<meta property="og:description" content="The notes below accompany the second lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. During this...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="3 - Topology &amp; communities | yet another SNA coursebook">
-<meta name="twitter:description" content="work-in-progress">
+<meta name="twitter:description" content="The notes below accompany the second lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. During this...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -68,10 +68,965 @@
 <h1>
 <strong>3 - Topology &amp; communities</strong><a class="anchor" aria-label="anchor" href="#topology-communities"><i class="fas fa-link"></i></a>
 </h1>
+<p>The notes below accompany the second lecture of the course. It might be a good idea to consult the <a href="https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing">lecture slides</a> as well, as some technical details and examples are discussed there. During this session, we will:</p>
+<ul>
+<li><p>take a look at graph-level characheristics of the networks,</p></li>
+<li><p>community detection algorithms,</p></li>
+<li><p>and learn how to export network data to environments outside R and visualize it. The final section of this page contains notes on sources (we would cover <a href="https://gephi.org/">Gephi</a>, <a href="https://graphcommons.com/">GraphCommons</a>, and <a href="https://cosmograph.app/">Cosmograph</a>) and code to prepare your data for the export (mainly, column renaming).</p></li>
+</ul>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>    </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/">igraph</a></span><span class="op">)</span>       </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mbojan.github.io/intergraph/">intergraph</a></span><span class="op">)</span>   </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stocnet.github.io/manynet/">manynet</a></span><span class="op">)</span>      </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/schochastics/netUtils/">netUtils</a></span><span class="op">)</span>   <span class="co">## for core/periphery</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mbojan.github.io/netseg/">netseg</a></span><span class="op">)</span>     <span class="co">## for homphily computation</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jeroen.r-universe.dev/jsonlite">jsonlite</a></span><span class="op">)</span>   <span class="co">## to read hson files</span></span>
+<span></span>
+<span><span class="co">#devtools::install_github("alextkalinka/linkcomm")</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://alextkalinka.github.io/linkcomm/">linkcomm</a></span><span class="op">)</span>   <span class="co">## overlapping communities</span></span>
+<span></span>
+<span><span class="co"># for `networkdata` package:</span></span>
+<span><span class="co">#install.packages("remotes")</span></span>
+<span><span class="co">#remotes::install_github("schochastics/networkdata")</span></span>
+<span><span class="co">## exteremely large library! install if you have 5-7 minutes</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/schochastics/networkdata">networkdata</a></span><span class="op">)</span>  </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>      </span></code></pre></div>
+<div id="graph-level-indicators" class="section level2 unnumbered">
+<h2>
+<strong>Graph-level indicators</strong><a class="anchor" aria-label="anchor" href="#graph-level-indicators"><i class="fas fa-link"></i></a>
+</h2>
+<p>For this time, we once again will analyze the lawfirm studied by Lazega (2001) available from <code>manynet</code> package. I stack to this example, because it is already familiar to you. Towards the end of this class, we will take a look at other networks.</p>
 <blockquote>
-<p><em><font color="red">work-in-progress</font></em></p>
+<p>One-mode network dataset collected by Lazega (2001) on the relations between partners in a corporate law firm called SG&amp;R in New England 1988-1991. This particular subset includes the 36 partners among the 71 attorneys of this firm. Nodal attributes include seniority, formal status, office in which they work, gender, lawschool they attended, their age, and how many years they had been at the firm.</p>
 </blockquote>
+<p>As usual, we load data and split the network into 3 separate networks devoted to the special types of ties:</p>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lawfirm</span> <span class="op">&lt;-</span> <span class="va">ison_lawfirm</span></span>
+<span></span>
+<span><span class="va">nodelist</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">lawfirm</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>               <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertexes</span></span>
+<span><span class="va">edgelist</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">lawfirm</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>               <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">edge</span></span>
+<span></span>
+<span><span class="co">## advice network:</span></span>
+<span><span class="va">g.advice</span> <span class="op">&lt;-</span> <span class="va">edgelist</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"advice"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>vertices <span class="op">=</span> <span class="va">nodelist</span>,</span>
+<span>                        directed <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## cowork network:</span></span>
+<span><span class="va">g.cowork</span> <span class="op">&lt;-</span> <span class="va">edgelist</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"cowork"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>vertices <span class="op">=</span> <span class="va">nodelist</span>,</span>
+<span>                        directed <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## friendship network:</span></span>
+<span><span class="va">g.friends</span> <span class="op">&lt;-</span> <span class="va">edgelist</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"friends"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>vertices <span class="op">=</span> <span class="va">nodelist</span>,</span>
+<span>                        directed <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<p>First, we cover the basic measures to describe the networks.</p>
+<p>To explain the diameter measure, I shortly return to <code>karateka</code> network from <code>manynet</code> package to highlight what the measures compute.</p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">karate</span> <span class="op">&lt;-</span> <span class="va">ison_karateka</span></span></code></pre></div>
+<p><strong>Diameter</strong> is the largest shortest path in the network, the approximate measure of the network’s size. It can be computed with:</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/diameter.html">get_diameter</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></span>
+<span><span class="co">#&gt; + 6/34 vertices, named, from 9e17774:</span></span>
+<span><span class="co">#&gt; [1] 16     John A 20     Mr Hi  6      17</span></span></code></pre></div>
+<p>Here is a (complicated to code) viz of this path:</p>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">karate.vertex</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">karate</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>diameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">intergraph_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span></span>
+<span>                             <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/diameter.html">get_diameter</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                           <span class="fl">1</span>,</span>
+<span>                           <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">karate.edge</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">karate</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">edge</span></span>
+<span></span>
+<span><span class="va">karate.edge</span> <span class="op">&lt;-</span> <span class="va">karate.edge</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>edge_couple <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="va">V1</span>, <span class="st">"-"</span>, <span class="va">V2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>diameter_edge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">edge_couple</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"16-34"</span>,</span>
+<span>                                                   <span class="co">#"34-20",</span></span>
+<span>                                                   <span class="st">"20-34"</span>,</span>
+<span>                                                   <span class="co">#"20-1",</span></span>
+<span>                                                   <span class="st">"1-20"</span>,</span>
+<span>                                                   <span class="st">"1-6"</span>,</span>
+<span>                                                   <span class="st">"6-17"</span><span class="op">)</span>,</span>
+<span>                                <span class="st">"1"</span>,</span>
+<span>                                <span class="st">"0"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">34</span><span class="op">)</span></span>
+<span><span class="va">karate.edge</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                        vertices <span class="op">=</span> <span class="va">karate.vertex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">$</span><span class="va">diameter</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>                             <span class="st">"coral1"</span>,</span>
+<span>                             <span class="st">"black"</span><span class="op">)</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">$</span><span class="va">diameter</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>                             <span class="fl">20</span>,</span>
+<span>                             <span class="fl">15</span><span class="op">)</span>,</span>
+<span>       edge.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">$</span><span class="va">diameter_edge</span> <span class="op">==</span> <span class="st">"1"</span>,</span>
+<span>                             <span class="fl">5</span>,</span>
+<span>                             <span class="fl">1</span><span class="op">)</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">$</span><span class="va">diameter_edge</span> <span class="op">==</span> <span class="st">"1"</span>,</span>
+<span>                             <span class="st">"coral1"</span>,</span>
+<span>                             <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-5-1.png" width="672"></div>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">karate1</span>, <span class="va">karate.edge</span>, <span class="va">karate.vertex</span>, <span class="va">karate</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in rm(karate1, karate.edge, karate.vertex, karate):</span></span>
+<span><span class="co">#&gt; объект 'karate1' не найден</span></span></code></pre></div>
+<p>And here is a summary table for the types of networks from the <code>lawfirm</code> network. Note the difference between the “cowork” and “friends” networks: the former has a shorter diameter, meaning (1) it is easier for ideas to travel there, (2) this network has more edges in general, so we should interpret the results carefully.</p>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">networks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"advice"</span>,</span>
+<span>              <span class="st">"friends"</span>,</span>
+<span>              <span class="st">"cowork"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">diameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/diameter.html">get_diameter</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>               <span class="fu"><a href="https://r.igraph.org/reference/diameter.html">get_diameter</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>               <span class="fu"><a href="https://r.igraph.org/reference/diameter.html">get_diameter</a></span><span class="op">(</span><span class="va">g.cowork</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">n_edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>               <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>             <span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>               <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>             <span class="fu"><a href="https://r.igraph.org/reference/E.html">E</a></span><span class="op">(</span><span class="va">g.cowork</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>               <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">n_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                  <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                  <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.cowork</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                  <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#components(g.cowork) - run on different networks</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">networks</span>, <span class="va">n_edges</span>, <span class="va">n_vertices</span>, <span class="va">diameters</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   networks n_edges n_vertices diameters</span></span>
+<span><span class="co">#&gt; 1   advice     892         71         7</span></span>
+<span><span class="co">#&gt; 2  friends     575         71         8</span></span>
+<span><span class="co">#&gt; 3   cowork    1104         71         5</span></span></code></pre></div>
+<p>Next, let’s discuss centralization and density.</p>
+<p><strong>Centralization</strong> - the measure of concentration of the network around the nodes with high values of degree centality.</p>
+<p><strong>Density</strong> - number ob observed ties / number of possible ties. You can interpret it directly, as the measure of number of relations present in the network. Note the maths here: The maximum number of possible edges in a graph can be calculated using the formula <span class="math inline">\(E_{max} = \frac{n(n-1)}{2}\)</span>, where <span class="math inline">\(n\)</span> represents the number of nodes in the network.</p>
+<p>The table below shows these values for our networks:</p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">centralization_scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/centr_degree.html">centr_degree</a></span><span class="op">(</span><span class="va">g.advice</span>, loops<span class="op">=</span><span class="cn">F</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">centralization</span>,</span>
+<span>                     <span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/centr_degree.html">centr_degree</a></span><span class="op">(</span><span class="va">g.friends</span>, loops<span class="op">=</span><span class="cn">F</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">centralization</span>,</span>
+<span>                     <span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/centr_degree.html">centr_degree</a></span><span class="op">(</span><span class="va">g.cowork</span>, loops<span class="op">=</span><span class="cn">F</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">centralization</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">density_scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/edge_density.html">edge_density</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span>,</span>
+<span>                    <span class="fu"><a href="https://r.igraph.org/reference/edge_density.html">edge_density</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span>,</span>
+<span>                    <span class="fu"><a href="https://r.igraph.org/reference/edge_density.html">edge_density</a></span><span class="op">(</span><span class="va">g.cowork</span><span class="op">)</span><span class="op">)</span> <span class="co">## !! note that we cannot compare networks of different size</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">networks</span>,</span>
+<span>           centralization <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">centralization_scores</span>,<span class="fl">2</span><span class="op">)</span>,</span>
+<span>           density <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">density_scores</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   networks centralization density</span></span>
+<span><span class="co">#&gt; 1   advice           0.26    0.18</span></span>
+<span><span class="co">#&gt; 2  friends           0.18    0.12</span></span>
+<span><span class="co">#&gt; 3   cowork           0.29    0.22</span></span></code></pre></div>
+<p>Next,</p>
+<p><strong>Reciprocity</strong> - (for directed graphs only) the share of relations which are reciprocal, i.e. directed for both nodes involved.</p>
+<p><strong>Transitivity</strong> - the density of loops of length three (triangles) in a network, or, in other words, a measure of the nodes’ tendency to cluster together.</p>
+<p><strong>Homophily</strong> - tendency of the nodes to form ties with similar nodes (similar gender, age, etc.)</p>
+<p>Let’s compute these measures for all of our networks (friendship, coworking, advice). For honophily, we check whether nodes tend to be tied to each other based on “gender” or “practice” attributes:</p>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reciprocity_scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/reciprocity.html">reciprocity</a></span><span class="op">(</span><span class="va">g.advice</span>, mode <span class="op">=</span> <span class="st">"ratio"</span><span class="op">)</span>,</span>
+<span>                        <span class="fu"><a href="https://r.igraph.org/reference/reciprocity.html">reciprocity</a></span><span class="op">(</span><span class="va">g.friends</span>, mode <span class="op">=</span> <span class="st">"ratio"</span><span class="op">)</span>,</span>
+<span>                        <span class="fu"><a href="https://r.igraph.org/reference/reciprocity.html">reciprocity</a></span><span class="op">(</span><span class="va">g.cowork</span>, mode <span class="op">=</span> <span class="st">"ratio"</span><span class="op">)</span><span class="op">)</span>  <span class="co"># set mode = ratio, it is not by deafult </span></span>
+<span></span>
+<span></span>
+<span><span class="va">transitivity_scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/transitivity.html">transitivity</a></span><span class="op">(</span><span class="va">g.advice</span>, type <span class="op">=</span> <span class="st">"global"</span><span class="op">)</span>,</span>
+<span>                         <span class="fu"><a href="https://r.igraph.org/reference/transitivity.html">transitivity</a></span><span class="op">(</span><span class="va">g.friends</span>, type <span class="op">=</span> <span class="st">"global"</span><span class="op">)</span>,</span>
+<span>                         <span class="fu"><a href="https://r.igraph.org/reference/transitivity.html">transitivity</a></span><span class="op">(</span><span class="va">g.cowork</span>, type <span class="op">=</span> <span class="st">"global"</span><span class="op">)</span><span class="op">)</span> <span class="co">## explore local by yourself</span></span>
+<span></span>
+<span><span class="va">homophily_scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://mbojan.github.io/netseg/reference/orwg.html">orwg</a></span><span class="op">(</span><span class="va">g.advice</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                             <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"gender"</span><span class="op">)</span>,</span>
+<span>                      <span class="fu"><a href="https://mbojan.github.io/netseg/reference/orwg.html">orwg</a></span><span class="op">(</span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                             <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"gender"</span><span class="op">)</span>,</span>
+<span>                      <span class="fu"><a href="https://mbojan.github.io/netseg/reference/orwg.html">orwg</a></span><span class="op">(</span><span class="va">g.cowork</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                             <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"gender"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">homophily_scores.practice</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://mbojan.github.io/netseg/reference/orwg.html">orwg</a></span><span class="op">(</span><span class="va">g.advice</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                                      <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"practice"</span><span class="op">)</span>,</span>
+<span>                               <span class="fu"><a href="https://mbojan.github.io/netseg/reference/orwg.html">orwg</a></span><span class="op">(</span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                                      <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"practice"</span><span class="op">)</span>,</span>
+<span>                               <span class="fu"><a href="https://mbojan.github.io/netseg/reference/orwg.html">orwg</a></span><span class="op">(</span><span class="va">g.cowork</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                                      <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"practice"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#orwg(g.advice %&gt;%</span></span>
+<span><span class="co">#       simplify(), "practice") ## interpret like odds ratio, “Odds ratio for connected, as opposed to disconnected, dyads depending whether it is between- or within-group, i.e. how much more likely the dyad will be connected if it is within-group.”</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">networks</span>,</span>
+<span>           gender.homophily <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">homophily_scores</span>,<span class="fl">2</span><span class="op">)</span>,</span>
+<span>           practice.homophily <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">homophily_scores.practice</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>           reciprocity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">reciprocity_scores</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>           transitivity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">transitivity_scores</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   networks gender.homophily practice.homophily reciprocity</span></span>
+<span><span class="co">#&gt; 1   advice             1.60               3.45        0.24</span></span>
+<span><span class="co">#&gt; 2  friends             1.62               1.62        0.44</span></span>
+<span><span class="co">#&gt; 3   cowork             1.33               4.01        0.52</span></span>
+<span><span class="co">#&gt;   transitivity</span></span>
+<span><span class="co">#&gt; 1         0.48</span></span>
+<span><span class="co">#&gt; 2         0.45</span></span>
+<span><span class="co">#&gt; 3         0.45</span></span></code></pre></div>
+<p>Homophily computed in this way requires you to interpret the values like odds ratio, i.e. the chances of establishing a homophilic connection rather than heterophilic one. The function <code><a href="https://mbojan.github.io/netseg/reference/orwg.html">orwg()</a></code> comes from the “netseg” package.</p>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://mbojan.github.io/netseg/reference/orwg.html">orwg</a></span><span class="op">(</span><span class="va">g.advice</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>       <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"office"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 4.138307</span></span></code></pre></div>
+<p>The core/periphery membership can be estimated as follows (we rely on <code><a href="https://schochastics.github.io/netUtils/reference/core_periphery.html">core_periphery()</a></code> function from the “netUtils” package):</p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://schochastics.github.io/netUtils/reference/core_periphery.html">core_periphery</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $vec</span></span>
+<span><span class="co">#&gt;  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 </span></span>
+<span><span class="co">#&gt;  0  1  0  1  0  0  0  0  0  0  0  1  1  1  1  1  1  0  1  1 </span></span>
+<span><span class="co">#&gt; 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 </span></span>
+<span><span class="co">#&gt;  1  1  0  1  0  1  1  1  1  1  1  1  0  1  1  0  0  0  1  1 </span></span>
+<span><span class="co">#&gt; 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 </span></span>
+<span><span class="co">#&gt;  1  1  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0 </span></span>
+<span><span class="co">#&gt; 61 62 63 64 65 66 67 68 69 70 71 </span></span>
+<span><span class="co">#&gt;  0  0  0  0  1  0  0  0  0  0  0 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $corr</span></span>
+<span><span class="co">#&gt; [1] 0.3686634</span></span>
+<span><span class="co">#?core_periphery</span></span></code></pre></div>
+<p>Be mindful when using core/periphery detection: many graphs do not exhibit this structure at all. Here is the viz with the solution from above (we need to first assign the computed partition to the nodes):</p>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span><span class="op">$</span><span class="va">core</span> <span class="op">=</span> <span class="fu"><a href="https://schochastics.github.io/netUtils/reference/core_periphery.html">core_periphery</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span><span class="op">$</span><span class="va">vec</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span><span class="op">$</span><span class="va">indegree</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">g.advice</span>, mode <span class="op">=</span> <span class="st">"in"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">g.advice</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span><span class="op">$</span><span class="va">indegree</span><span class="op">/</span><span class="fl">1.5</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.advice</span><span class="op">)</span><span class="op">$</span><span class="va">core</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>                             <span class="st">"coral1"</span>,</span>
+<span>                             <span class="st">"lightblue"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
+</div>
+<div id="community-detection-algorithms" class="section level2 unnumbered">
+<h2>
+<strong>Community detection algorithms</strong><a class="anchor" aria-label="anchor" href="#community-detection-algorithms"><i class="fas fa-link"></i></a>
+</h2>
+<p>Finally, here is a possible solution to community detection task. Note that it works for undirected graphs, so we need to convert it to undirected mode first like this:</p>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; IGRAPH e566cc1 UN-- 71 399 -- </span></span>
+<span><span class="co">#&gt; + attr: name (v/c), status (v/c), gender (v/c),</span></span>
+<span><span class="co">#&gt; | office (v/c), seniority (v/n), age (v/n), practice</span></span>
+<span><span class="co">#&gt; | (v/c), school (v/c)</span></span>
+<span><span class="co">#&gt; + edges from e566cc1 (vertex names):</span></span>
+<span><span class="co">#&gt;  [1] 1 --2  1 --4  2 --4  3 --4  3 --7  5 --7  1 --8  4 --9 </span></span>
+<span><span class="co">#&gt;  [9] 2 --10 8 --10 9 --10 4 --11 8 --11 9 --11 10--11 1 --12</span></span>
+<span><span class="co">#&gt; [17] 2 --12 4 --12 5 --12 8 --12 9 --12 10--12 11--12 4 --13</span></span>
+<span><span class="co">#&gt; [25] 9 --13 10--13 11--13 12--13 3 --14 4 --14 6 --14 12--15</span></span>
+<span><span class="co">#&gt; [33] 13--15 2 --16 4 --16 12--16 13--16 14--16 15--16 1 --17</span></span>
+<span><span class="co">#&gt; [41] 2 --17 4 --17 8 --17 9 --17 10--17 11--17 12--17 13--17</span></span>
+<span><span class="co">#&gt; + ... omitted several edges</span></span></code></pre></div>
+<p>… and here is the community detection function, reproducing the Louvain algorithm (see the <a href="https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing">lecture slides</a> for details):</p>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">22</span><span class="op">)</span> <span class="co">## to reproduce</span></span>
+<span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>                        <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co">## !!</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span><span class="op">$</span><span class="va">clusters</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/communities.html">membership</a></span><span class="op">(</span><span class="va">lc</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span><span class="op">$</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-13-1.png" width="672"></div>
+<p>Another important note is that you can use different resolution parameters. Indirectly, it changes the number of communities detected. When applying the algorithm to your data, please, check the whole range of “resolution” values to see how robust your solutions are.</p>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cl0.75</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>                            <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                       resolution <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cl1.75</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                            <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                          resolution <span class="op">=</span> <span class="fl">1.75</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span><span class="op">$</span><span class="va">cl0.75</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/communities.html">membership</a></span><span class="op">(</span><span class="va">cl0.75</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span><span class="op">$</span><span class="va">cl1.75</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/communities.html">membership</a></span><span class="op">(</span><span class="va">cl1.75</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>       main <span class="op">=</span> <span class="st">"\n\nresolution = 1.75"</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span><span class="op">$</span><span class="va">cl1.75</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>       main <span class="op">=</span> <span class="st">"\n\nresolution = 0.75"</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span><span class="op">$</span><span class="va">cl0.75</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-14-1.png" width="672"></div>
+<p>Also, we can search for overlapping communities. I decided not to cover this topic in depth, so, if you are interested, check the <a href="https://alextkalinka.github.io/linkcomm/">“linkcomm” package documentation</a>:</p>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://alextkalinka.github.io/linkcomm/reference/getLinkCommunities.html">getLinkCommunities</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">edge</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>                         hcmethod <span class="op">=</span> <span class="st">"single"</span>,</span>
+<span>                         plot <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co">#...or false</span></span>
+<span>                         verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-15-1.png" width="672"></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="topology-communities.html#cb67-1" tabindex="-1"></a></span>
+<span id="cb67-2"><a href="topology-communities.html#cb67-2" tabindex="-1"></a><span class="fu">plotLinkCommGraph</span>(lc,</span>
+<span id="cb67-3"><a href="topology-communities.html#cb67-3" tabindex="-1"></a>                  <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb67-4"><a href="topology-communities.html#cb67-4" tabindex="-1"></a>                  <span class="at">vlabel =</span> F)</span>
+<span id="cb67-5"><a href="topology-communities.html#cb67-5" tabindex="-1"></a><span class="co">#&gt;    Getting node community edge density...1%</span></span>
+<span id="cb67-6"><a href="topology-communities.html#cb67-6" tabindex="-1"></a>   Getting node community edge density...<span class="dv">3</span>%</span>
+<span id="cb67-7"><a href="topology-communities.html#cb67-7" tabindex="-1"></a>   Getting node community edge density...<span class="dv">5</span>%</span>
+<span id="cb67-8"><a href="topology-communities.html#cb67-8" tabindex="-1"></a>   Getting node community edge density...<span class="dv">7</span>%</span>
+<span id="cb67-9"><a href="topology-communities.html#cb67-9" tabindex="-1"></a>   Getting node community edge density...<span class="dv">9</span>%</span>
+<span id="cb67-10"><a href="topology-communities.html#cb67-10" tabindex="-1"></a>   Getting node community edge density...<span class="dv">11</span>%</span>
+<span id="cb67-11"><a href="topology-communities.html#cb67-11" tabindex="-1"></a>   Getting node community edge density...<span class="dv">12</span>%</span>
+<span id="cb67-12"><a href="topology-communities.html#cb67-12" tabindex="-1"></a>   Getting node community edge density...<span class="dv">14</span>%</span>
+<span id="cb67-13"><a href="topology-communities.html#cb67-13" tabindex="-1"></a>   Getting node community edge density...<span class="dv">16</span>%</span>
+<span id="cb67-14"><a href="topology-communities.html#cb67-14" tabindex="-1"></a>   Getting node community edge density...<span class="dv">18</span>%</span>
+<span id="cb67-15"><a href="topology-communities.html#cb67-15" tabindex="-1"></a>   Getting node community edge density...<span class="dv">20</span>%</span>
+<span id="cb67-16"><a href="topology-communities.html#cb67-16" tabindex="-1"></a>   Getting node community edge density...<span class="dv">22</span>%</span>
+<span id="cb67-17"><a href="topology-communities.html#cb67-17" tabindex="-1"></a>   Getting node community edge density...<span class="dv">24</span>%</span>
+<span id="cb67-18"><a href="topology-communities.html#cb67-18" tabindex="-1"></a>   Getting node community edge density...<span class="dv">25</span>%</span>
+<span id="cb67-19"><a href="topology-communities.html#cb67-19" tabindex="-1"></a>   Getting node community edge density...<span class="dv">27</span>%</span>
+<span id="cb67-20"><a href="topology-communities.html#cb67-20" tabindex="-1"></a>   Getting node community edge density...<span class="dv">29</span>%</span>
+<span id="cb67-21"><a href="topology-communities.html#cb67-21" tabindex="-1"></a>   Getting node community edge density...<span class="dv">31</span>%</span>
+<span id="cb67-22"><a href="topology-communities.html#cb67-22" tabindex="-1"></a>   Getting node community edge density...<span class="dv">33</span>%</span>
+<span id="cb67-23"><a href="topology-communities.html#cb67-23" tabindex="-1"></a>   Getting node community edge density...<span class="dv">35</span>%</span>
+<span id="cb67-24"><a href="topology-communities.html#cb67-24" tabindex="-1"></a>   Getting node community edge density...<span class="dv">37</span>%</span>
+<span id="cb67-25"><a href="topology-communities.html#cb67-25" tabindex="-1"></a>   Getting node community edge density...<span class="dv">38</span>%</span>
+<span id="cb67-26"><a href="topology-communities.html#cb67-26" tabindex="-1"></a>   Getting node community edge density...<span class="dv">40</span>%</span>
+<span id="cb67-27"><a href="topology-communities.html#cb67-27" tabindex="-1"></a>   Getting node community edge density...<span class="dv">42</span>%</span>
+<span id="cb67-28"><a href="topology-communities.html#cb67-28" tabindex="-1"></a>   Getting node community edge density...<span class="dv">44</span>%</span>
+<span id="cb67-29"><a href="topology-communities.html#cb67-29" tabindex="-1"></a>   Getting node community edge density...<span class="dv">46</span>%</span>
+<span id="cb67-30"><a href="topology-communities.html#cb67-30" tabindex="-1"></a>   Getting node community edge density...<span class="dv">48</span>%</span>
+<span id="cb67-31"><a href="topology-communities.html#cb67-31" tabindex="-1"></a>   Getting node community edge density...<span class="dv">50</span>%</span>
+<span id="cb67-32"><a href="topology-communities.html#cb67-32" tabindex="-1"></a>   Getting node community edge density...<span class="dv">51</span>%</span>
+<span id="cb67-33"><a href="topology-communities.html#cb67-33" tabindex="-1"></a>   Getting node community edge density...<span class="dv">53</span>%</span>
+<span id="cb67-34"><a href="topology-communities.html#cb67-34" tabindex="-1"></a>   Getting node community edge density...<span class="dv">55</span>%</span>
+<span id="cb67-35"><a href="topology-communities.html#cb67-35" tabindex="-1"></a>   Getting node community edge density...<span class="dv">57</span>%</span>
+<span id="cb67-36"><a href="topology-communities.html#cb67-36" tabindex="-1"></a>   Getting node community edge density...<span class="dv">59</span>%</span>
+<span id="cb67-37"><a href="topology-communities.html#cb67-37" tabindex="-1"></a>   Getting node community edge density...<span class="dv">61</span>%</span>
+<span id="cb67-38"><a href="topology-communities.html#cb67-38" tabindex="-1"></a>   Getting node community edge density...<span class="dv">62</span>%</span>
+<span id="cb67-39"><a href="topology-communities.html#cb67-39" tabindex="-1"></a>   Getting node community edge density...<span class="dv">64</span>%</span>
+<span id="cb67-40"><a href="topology-communities.html#cb67-40" tabindex="-1"></a>   Getting node community edge density...<span class="dv">66</span>%</span>
+<span id="cb67-41"><a href="topology-communities.html#cb67-41" tabindex="-1"></a>   Getting node community edge density...<span class="dv">68</span>%</span>
+<span id="cb67-42"><a href="topology-communities.html#cb67-42" tabindex="-1"></a>   Getting node community edge density...<span class="dv">70</span>%</span>
+<span id="cb67-43"><a href="topology-communities.html#cb67-43" tabindex="-1"></a>   Getting node community edge density...<span class="dv">72</span>%</span>
+<span id="cb67-44"><a href="topology-communities.html#cb67-44" tabindex="-1"></a>   Getting node community edge density...<span class="dv">74</span>%</span>
+<span id="cb67-45"><a href="topology-communities.html#cb67-45" tabindex="-1"></a>   Getting node community edge density...<span class="dv">75</span>%</span>
+<span id="cb67-46"><a href="topology-communities.html#cb67-46" tabindex="-1"></a>   Getting node community edge density...<span class="dv">77</span>%</span>
+<span id="cb67-47"><a href="topology-communities.html#cb67-47" tabindex="-1"></a>   Getting node community edge density...<span class="dv">79</span>%</span>
+<span id="cb67-48"><a href="topology-communities.html#cb67-48" tabindex="-1"></a>   Getting node community edge density...<span class="dv">81</span>%</span>
+<span id="cb67-49"><a href="topology-communities.html#cb67-49" tabindex="-1"></a>   Getting node community edge density...<span class="dv">83</span>%</span>
+<span id="cb67-50"><a href="topology-communities.html#cb67-50" tabindex="-1"></a>   Getting node community edge density...<span class="dv">85</span>%</span>
+<span id="cb67-51"><a href="topology-communities.html#cb67-51" tabindex="-1"></a>   Getting node community edge density...<span class="dv">87</span>%</span>
+<span id="cb67-52"><a href="topology-communities.html#cb67-52" tabindex="-1"></a>   Getting node community edge density...<span class="dv">88</span>%</span>
+<span id="cb67-53"><a href="topology-communities.html#cb67-53" tabindex="-1"></a>   Getting node community edge density...<span class="dv">90</span>%</span>
+<span id="cb67-54"><a href="topology-communities.html#cb67-54" tabindex="-1"></a>   Getting node community edge density...<span class="dv">92</span>%</span>
+<span id="cb67-55"><a href="topology-communities.html#cb67-55" tabindex="-1"></a>   Getting node community edge density...<span class="dv">94</span>%</span>
+<span id="cb67-56"><a href="topology-communities.html#cb67-56" tabindex="-1"></a>   Getting node community edge density...<span class="dv">96</span>%</span>
+<span id="cb67-57"><a href="topology-communities.html#cb67-57" tabindex="-1"></a>   Getting node community edge density...<span class="dv">98</span>%</span>
+<span id="cb67-58"><a href="topology-communities.html#cb67-58" tabindex="-1"></a>   Getting node community edge density...<span class="dv">100</span>%</span>
+<span id="cb67-59"><a href="topology-communities.html#cb67-59" tabindex="-1"></a><span class="co">#&gt;    Getting node layout...</span></span>
+<span id="cb67-60"><a href="topology-communities.html#cb67-60" tabindex="-1"></a><span class="co">#&gt;    Constructing node pies...1%</span></span>
+<span id="cb67-61"><a href="topology-communities.html#cb67-61" tabindex="-1"></a>   Constructing node pies...<span class="dv">3</span>%</span>
+<span id="cb67-62"><a href="topology-communities.html#cb67-62" tabindex="-1"></a>   Constructing node pies...<span class="dv">5</span>%</span>
+<span id="cb67-63"><a href="topology-communities.html#cb67-63" tabindex="-1"></a>   Constructing node pies...<span class="dv">7</span>%</span>
+<span id="cb67-64"><a href="topology-communities.html#cb67-64" tabindex="-1"></a>   Constructing node pies...<span class="dv">9</span>%</span>
+<span id="cb67-65"><a href="topology-communities.html#cb67-65" tabindex="-1"></a>   Constructing node pies...<span class="dv">11</span>%</span>
+<span id="cb67-66"><a href="topology-communities.html#cb67-66" tabindex="-1"></a>   Constructing node pies...<span class="dv">12</span>%</span>
+<span id="cb67-67"><a href="topology-communities.html#cb67-67" tabindex="-1"></a>   Constructing node pies...<span class="dv">14</span>%</span>
+<span id="cb67-68"><a href="topology-communities.html#cb67-68" tabindex="-1"></a>   Constructing node pies...<span class="dv">16</span>%</span>
+<span id="cb67-69"><a href="topology-communities.html#cb67-69" tabindex="-1"></a>   Constructing node pies...<span class="dv">18</span>%</span>
+<span id="cb67-70"><a href="topology-communities.html#cb67-70" tabindex="-1"></a>   Constructing node pies...<span class="dv">20</span>%</span>
+<span id="cb67-71"><a href="topology-communities.html#cb67-71" tabindex="-1"></a>   Constructing node pies...<span class="dv">22</span>%</span>
+<span id="cb67-72"><a href="topology-communities.html#cb67-72" tabindex="-1"></a>   Constructing node pies...<span class="dv">24</span>%</span>
+<span id="cb67-73"><a href="topology-communities.html#cb67-73" tabindex="-1"></a>   Constructing node pies...<span class="dv">25</span>%</span>
+<span id="cb67-74"><a href="topology-communities.html#cb67-74" tabindex="-1"></a>   Constructing node pies...<span class="dv">27</span>%</span>
+<span id="cb67-75"><a href="topology-communities.html#cb67-75" tabindex="-1"></a>   Constructing node pies...<span class="dv">29</span>%</span>
+<span id="cb67-76"><a href="topology-communities.html#cb67-76" tabindex="-1"></a>   Constructing node pies...<span class="dv">31</span>%</span>
+<span id="cb67-77"><a href="topology-communities.html#cb67-77" tabindex="-1"></a>   Constructing node pies...<span class="dv">33</span>%</span>
+<span id="cb67-78"><a href="topology-communities.html#cb67-78" tabindex="-1"></a>   Constructing node pies...<span class="dv">35</span>%</span>
+<span id="cb67-79"><a href="topology-communities.html#cb67-79" tabindex="-1"></a>   Constructing node pies...<span class="dv">37</span>%</span>
+<span id="cb67-80"><a href="topology-communities.html#cb67-80" tabindex="-1"></a>   Constructing node pies...<span class="dv">38</span>%</span>
+<span id="cb67-81"><a href="topology-communities.html#cb67-81" tabindex="-1"></a>   Constructing node pies...<span class="dv">40</span>%</span>
+<span id="cb67-82"><a href="topology-communities.html#cb67-82" tabindex="-1"></a>   Constructing node pies...<span class="dv">42</span>%</span>
+<span id="cb67-83"><a href="topology-communities.html#cb67-83" tabindex="-1"></a>   Constructing node pies...<span class="dv">44</span>%</span>
+<span id="cb67-84"><a href="topology-communities.html#cb67-84" tabindex="-1"></a>   Constructing node pies...<span class="dv">46</span>%</span>
+<span id="cb67-85"><a href="topology-communities.html#cb67-85" tabindex="-1"></a>   Constructing node pies...<span class="dv">48</span>%</span>
+<span id="cb67-86"><a href="topology-communities.html#cb67-86" tabindex="-1"></a>   Constructing node pies...<span class="dv">50</span>%</span>
+<span id="cb67-87"><a href="topology-communities.html#cb67-87" tabindex="-1"></a>   Constructing node pies...<span class="dv">51</span>%</span>
+<span id="cb67-88"><a href="topology-communities.html#cb67-88" tabindex="-1"></a>   Constructing node pies...<span class="dv">53</span>%</span>
+<span id="cb67-89"><a href="topology-communities.html#cb67-89" tabindex="-1"></a>   Constructing node pies...<span class="dv">55</span>%</span>
+<span id="cb67-90"><a href="topology-communities.html#cb67-90" tabindex="-1"></a>   Constructing node pies...<span class="dv">57</span>%</span>
+<span id="cb67-91"><a href="topology-communities.html#cb67-91" tabindex="-1"></a>   Constructing node pies...<span class="dv">59</span>%</span>
+<span id="cb67-92"><a href="topology-communities.html#cb67-92" tabindex="-1"></a>   Constructing node pies...<span class="dv">61</span>%</span>
+<span id="cb67-93"><a href="topology-communities.html#cb67-93" tabindex="-1"></a>   Constructing node pies...<span class="dv">62</span>%</span>
+<span id="cb67-94"><a href="topology-communities.html#cb67-94" tabindex="-1"></a>   Constructing node pies...<span class="dv">64</span>%</span>
+<span id="cb67-95"><a href="topology-communities.html#cb67-95" tabindex="-1"></a>   Constructing node pies...<span class="dv">66</span>%</span>
+<span id="cb67-96"><a href="topology-communities.html#cb67-96" tabindex="-1"></a>   Constructing node pies...<span class="dv">68</span>%</span>
+<span id="cb67-97"><a href="topology-communities.html#cb67-97" tabindex="-1"></a>   Constructing node pies...<span class="dv">70</span>%</span>
+<span id="cb67-98"><a href="topology-communities.html#cb67-98" tabindex="-1"></a>   Constructing node pies...<span class="dv">72</span>%</span>
+<span id="cb67-99"><a href="topology-communities.html#cb67-99" tabindex="-1"></a>   Constructing node pies...<span class="dv">74</span>%</span>
+<span id="cb67-100"><a href="topology-communities.html#cb67-100" tabindex="-1"></a>   Constructing node pies...<span class="dv">75</span>%</span>
+<span id="cb67-101"><a href="topology-communities.html#cb67-101" tabindex="-1"></a>   Constructing node pies...<span class="dv">77</span>%</span>
+<span id="cb67-102"><a href="topology-communities.html#cb67-102" tabindex="-1"></a>   Constructing node pies...<span class="dv">79</span>%</span>
+<span id="cb67-103"><a href="topology-communities.html#cb67-103" tabindex="-1"></a>   Constructing node pies...<span class="dv">81</span>%</span>
+<span id="cb67-104"><a href="topology-communities.html#cb67-104" tabindex="-1"></a>   Constructing node pies...<span class="dv">83</span>%</span>
+<span id="cb67-105"><a href="topology-communities.html#cb67-105" tabindex="-1"></a>   Constructing node pies...<span class="dv">85</span>%</span>
+<span id="cb67-106"><a href="topology-communities.html#cb67-106" tabindex="-1"></a>   Constructing node pies...<span class="dv">87</span>%</span>
+<span id="cb67-107"><a href="topology-communities.html#cb67-107" tabindex="-1"></a>   Constructing node pies...<span class="dv">88</span>%</span>
+<span id="cb67-108"><a href="topology-communities.html#cb67-108" tabindex="-1"></a>   Constructing node pies...<span class="dv">90</span>%</span>
+<span id="cb67-109"><a href="topology-communities.html#cb67-109" tabindex="-1"></a>   Constructing node pies...<span class="dv">92</span>%</span>
+<span id="cb67-110"><a href="topology-communities.html#cb67-110" tabindex="-1"></a>   Constructing node pies...<span class="dv">94</span>%</span>
+<span id="cb67-111"><a href="topology-communities.html#cb67-111" tabindex="-1"></a>   Constructing node pies...<span class="dv">96</span>%</span>
+<span id="cb67-112"><a href="topology-communities.html#cb67-112" tabindex="-1"></a>   Constructing node pies...<span class="dv">98</span>%</span>
+<span id="cb67-113"><a href="topology-communities.html#cb67-113" tabindex="-1"></a>   Constructing node pies...<span class="dv">100</span>%</span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-15-2.png" width="672"></div>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#plot(lc, type = "graph", layout = "spencer.circle")</span></span>
+<span><span class="co">## see package documentation for more details</span></span></code></pre></div>
+<p>Clean environment:</p>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Finally, let’s try to reproduce an image with multiple clustering of karateka dataset (<a href="https://network-science-data-and-models.github.io/phys7332_fa25/notebooks/class_08/class_08_communities1.html">here</a>) - this image is included in the slides, and is intended as an illustration of the idea that there are indeed many approaches to the problem of community detection:</p>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## karateka graph</span></span>
+<span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">ison_karateka</span></span>
+<span></span>
+<span><span class="co">## list of basic functions from `igraph` package, without detailed specifications</span></span>
+<span><span class="va">functions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  edge_betweenness <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_edge_betweenness.html">cluster_edge_betweenness</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  fluid_comm <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_fast_greedy.html">cluster_fast_greedy</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  fast_greedy <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_fast_greedy.html">cluster_fast_greedy</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  </span>
+<span>  infomap <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_infomap.html">cluster_infomap</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  label_prop <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_label_prop.html">cluster_label_prop</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  ledaing_eigen <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_leading_eigen.html">cluster_leading_eigen</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  leiden <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_leiden.html">cluster_leiden</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  louvain <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  optimal <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_optimal.html">cluster_optimal</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  spinglass <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_spinglass.html">cluster_spinglass</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span>,</span>
+<span>  walktrap <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">graph</span><span class="op">)</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_walktrap.html">cluster_walktrap</a></span><span class="op">(</span><span class="va">graph</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co">## plotting parameters:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## loop through the functions:</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">11</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">group</span> <span class="op">=</span> <span class="va">functions</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">(</span><span class="va">g</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu"><a href="https://r.igraph.org/reference/communities.html">membership</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">g</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>         vertex.size <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>         cex.main <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>         main <span class="op">=</span> <span class="va">functions</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/toString.html">toString</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>           <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="st">"function \\(graph\\) \\n|igraph\\:\\:|\\(graph\\)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>           <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"()"</span><span class="op">)</span>,</span>
+<span>         vertex.color <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">group</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; Warning in igraph::cluster_edge_betweenness(graph): At</span></span>
+<span><span class="co">#&gt; vendor/cigraph/src/community/edge_betweenness.c:503 :</span></span>
+<span><span class="co">#&gt; Membership vector will be selected based on the highest</span></span>
+<span><span class="co">#&gt; modularity score.</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-17-1.png" width="672"></div>
+</div>
+<div id="case-study-last-week-openalex-network" class="section level2 unnumbered">
+<h2>
+<strong>Case study: last week OpenAlex network</strong><a class="anchor" aria-label="anchor" href="#case-study-last-week-openalex-network"><i class="fas fa-link"></i></a>
+</h2>
+<p>Last week we have discussed bibliographic networks you can obtain using OpenAlex, an open science source of articles’ metadata and citations’ information. Below is a brief illustration of today’s measures on this network:</p>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/openalexR">openalexR</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Thank you for using openalexR!</span></span>
+<span><span class="co">#&gt; To acknowledge our work, please cite the package by calling `citation("openalexR")`.</span></span>
+<span><span class="co">#&gt; To suppress this message, add `openalexR.message = suppressed` to your .Renviron file.</span></span>
+<span></span>
+<span><span class="va">oa_sustainable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/openalexR/reference/oa_fetch.html">oa_fetch</a></span><span class="op">(</span>entity <span class="op">=</span> <span class="st">"works"</span>,</span>
+<span>         output <span class="op">=</span> <span class="st">"dataframe"</span>,</span>
+<span>         display_name.search <span class="op">=</span> <span class="st">'Sustainable Business Models'</span>,</span>
+<span>         cited_by_count <span class="op">=</span> <span class="st">"&gt;10"</span>,</span>
+<span>         verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="co">## takes around 20 seconds with my internet connection</span></span>
+<span><span class="co">#&gt; Requesting url: https://api.openalex.org/works?filter=display_name.search%3ASustainable%20Business%20Models%2Ccited_by_count%3A%3E10</span></span>
+<span><span class="co">#&gt; Getting 5 pages of results with a total of 896 records...</span></span>
+<span></span>
+<span><span class="va">oa_edges</span> <span class="op">&lt;-</span> <span class="va">oa_sustainable</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">referenced_works</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html">unnest</a></span><span class="op">(</span><span class="va">referenced_works</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>referenced_works <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">referenced_works</span>,</span>
+<span>                                                      <span class="st">"https\\:\\/\\/openalex\\.org\\/"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">referenced_works</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">oa_sustainable</span><span class="op">$</span><span class="va">id</span>,</span>
+<span>                                              <span class="st">"https\\:\\/\\/openalex\\.org\\/"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">id</span>,</span>
+<span>                                        <span class="st">"https\\:\\/\\/openalex\\.org\\/"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">`colnames&lt;-`</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"from"</span>, <span class="st">"to"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">oa_g</span> <span class="op">&lt;-</span> <span class="va">oa_edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                        vertices <span class="op">=</span> <span class="va">oa_sustainable</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>                          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">id</span>,</span>
+<span>                                                     <span class="st">"https\\:\\/\\/openalex\\.org\\/"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>                          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">title</span>, <span class="va">publication_year</span>, <span class="va">so</span>, <span class="va">cited_by_count</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## leave biggest component only</span></span>
+<span></span>
+<span><span class="va">components</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/clusters.html">clusters</a></span><span class="op">(</span><span class="va">oa_g</span>, mode<span class="op">=</span><span class="st">"weak"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `clusters()` was deprecated in igraph 2.0.0.</span></span>
+<span><span class="co">#&gt; ℹ Please use `components()` instead.</span></span>
+<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where</span></span>
+<span><span class="co">#&gt; this warning was generated.</span></span>
+<span><span class="va">biggest_cluster_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">components</span><span class="op">$</span><span class="va">csize</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># subgraph</span></span>
+<span><span class="va">oa_g.biggest</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/subgraph.html">induced_subgraph</a></span><span class="op">(</span><span class="va">oa_g</span>,</span>
+<span>                                         <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">oa_g</span><span class="op">)</span><span class="op">[</span><span class="va">components</span><span class="op">$</span><span class="va">membership</span> <span class="op">==</span> <span class="va">biggest_cluster_id</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span><span class="va">oa_g.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="st">"coral1"</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>       edge.size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>       edge.arrow.size <span class="op">=</span> <span class="fl">0.5</span>, edge.arrow.width <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-18-1.png" width="672"></div>
+<p>We start by computing the very basic indicators:</p>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/diameter.html">diameter</a></span><span class="op">(</span><span class="va">oa_g.biggest</span><span class="op">)</span> <span class="co">## 8</span></span>
+<span><span class="co">#&gt; [1] 8</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/average.path.length.html">average.path.length</a></span><span class="op">(</span><span class="va">oa_g.biggest</span><span class="op">)</span> <span class="co">## 2.63</span></span>
+<span><span class="co">#&gt; Warning: `average.path.length()` was deprecated in igraph 2.0.0.</span></span>
+<span><span class="co">#&gt; ℹ Please use `mean_distance()` instead.</span></span>
+<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where</span></span>
+<span><span class="co">#&gt; this warning was generated.</span></span>
+<span><span class="co">#&gt; [1] 2.629412</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/edge_density.html">edge_density</a></span><span class="op">(</span><span class="va">oa_g.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>               <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co">## 0.02</span></span>
+<span><span class="co">#&gt; [1] 0.02245943</span></span>
+<span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/centr_degree.html">centr_degree</a></span><span class="op">(</span><span class="va">oa_g.biggest</span>, loops<span class="op">=</span><span class="cn">F</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">centralization</span> <span class="co">## 0.23</span></span>
+<span><span class="co">#&gt; [1] 0.2329838</span></span></code></pre></div>
+<p>Let’s further try to map core/periphery and find communities:</p>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">oa_g.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">core</span> <span class="op">=</span> <span class="fu"><a href="https://schochastics.github.io/netUtils/reference/core_periphery.html">core_periphery</a></span><span class="op">(</span><span class="va">oa_g.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">vec</span></span>
+<span><span class="va">oa_g.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">oa_g.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">core</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>                             <span class="st">"coral1"</span>,</span>
+<span>                             <span class="st">"grey70"</span><span class="op">)</span>,</span>
+<span>       </span>
+<span>       vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="st">"grey70"</span>,</span>
+<span>       edge.size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>       edge.arrow.size <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>       edge.arrow.width <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-20-1.png" width="672"></div>
+<p>And what about the communities?</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span><span class="va">cl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">oa_g.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                            <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                          resolution <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">oa_g.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">cl1</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/communities.html">membership</a></span><span class="op">(</span><span class="va">cl1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">oa_g.biggest</span>,</span>
+<span>     vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>     vertex.color <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">oa_g.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">cl1</span>,</span>
+<span>            vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="st">"grey70"</span>,</span>
+<span>       edge.size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>       edge.arrow.size <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>       edge.arrow.width <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-21-1.png" width="672"></div>
+<p>To dive into the obtained clusters, we can group some attributes of the articles to see what’s hidden inside (note that we calculated the share of nodes associated with the “core” coming from each of the calculated communities. In some cases, it might be a good idea, if your communities coexist with the core/periphery structure, - we will cover one such example briefly next time):</p>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">oa_g.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="co">#count(cl1) %&gt;% </span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cl1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            share.core <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span>,<span class="fl">2</span><span class="op">)</span>,</span>
+<span>            mean.age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">publication_year</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 4</span></span>
+<span><span class="co">#&gt;   cl1            n share.core mean.age</span></span>
+<span><span class="co">#&gt;   &lt;membrshp&gt; &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 1            259       0.19    2019.</span></span>
+<span><span class="co">#&gt; 2 2            145       0.17    2019.</span></span>
+<span><span class="co">#&gt; 3 3            174       0.18    2017.</span></span>
+<span><span class="co">#&gt; 4 4            107       0.04    2020.</span></span>
+<span><span class="co">#&gt; 5 5             11       0       2014.</span></span>
+<span><span class="co">#&gt; 6 6              3       0       2022.</span></span>
+<span></span>
+<span><span class="co">#(oa_g.biggest %&gt;% </span></span>
+<span><span class="co">#  asDF())$vertex %&gt;% </span></span>
+<span>  </span>
+<span><span class="co">#  ggplot(aes(cited_by_count)) +</span></span>
+<span><span class="co">#  geom_histogram() +</span></span>
+<span><span class="co">#  facet_wrap(~as.factor(cl1), scales = "free")</span></span></code></pre></div>
+<p>Arguably, we need to adjust our searching query to obtain more meaningful communities, or to use different community detection techniques. At the end of the day, remember, <em>cohesion is easier to measure than to detect communities, and sometimes you do not need to do the latter</em>.</p>
+</div>
+<div id="networks-to-work-in-gephi" class="section level2 unnumbered">
+<h2>
+<strong>Networks to work in Gephi</strong><a class="anchor" aria-label="anchor" href="#networks-to-work-in-gephi"><i class="fas fa-link"></i></a>
+</h2>
+<p>Install Gephi: <a href="https://gephi.org/users/download/" class="uri">https://gephi.org/users/download/</a></p>
+<p>In this short tutorial, we’ll look at three datasets in Gephi (available via my github, see the code below, or the course folder) - all sent to you with this code in the archive. Below is a simple example of how to load them into R, analyze them, and save them back for analysis.</p>
+<div id="insna" class="section level3 unnumbered">
+<h3>
+<strong>insna</strong><a class="anchor" aria-label="anchor" href="#insna"><i class="fas fa-link"></i></a>
+</h3>
+<p>The first data set is <code>insna</code>, containing social scientists who studied networks in the 1970s. The data dates back to 1977 and includes information about who taught whom among the participants of the International Network for Social Network Analysis (INSNA). The data was collected by Barry Wellman, the founder of INSNA. Among the 60 participants in the network are Harrison White, Mark Granovetter, Ronald Burt, and Diane Crane.</p>
+<p>This data can be obtained from the <code>networkdata</code> package (if you don’t have 5-7 minutes to spare, it’s best not to install this package - it’s very large).</p>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># list all datasets from `networkdata` (987 datasets containing 2260 networks)</span></span>
+<span><span class="co">## data(package = "networkdata")</span></span>
+<span></span>
+<span><span class="co"># datasets from movies:</span></span>
+<span><span class="co">## crash &lt;- networkdata::movie_184</span></span>
+<span><span class="co">## twilight &lt;- networkdata::movie_721</span></span>
+<span></span>
+<span><span class="va">insna</span> <span class="op">&lt;-</span> <span class="fu">networkdata</span><span class="fu">::</span><span class="va"><a href="https://schochastics.github.io/networkdata/reference/insna.html">insna</a></span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">outdegree</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">insna</span>, mode <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">totaldegree</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">insna</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">outdegree</span><span class="op">*</span><span class="fl">1.5</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>       edge.arrow.width <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-23-1.png" width="672"></div>
+<p>To load lists of edges and nodes, Gephi requires special names for variables:</p>
+<ol style="list-style-type: decimal">
+<li><p><em>in the edgelist</em>, the first columns should be named “Source” and “Target”,</p></li>
+<li><p><em>in the nodelist</em>, the first columns should be named “Id” and “Label”</p></li>
+</ol>
+<p>This allows Gephi to mark up the data and load everything correctly. In the code below I get the edgelist and nodelist and rename the first columns in them.</p>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">insna.edgelist</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>   <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">edge</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">`colnames&lt;-`</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Source"</span>, <span class="st">"Target"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">insna.nodelist</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>   <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>Id <span class="op">=</span> <span class="va">intergraph_id</span>,</span>
+<span>         Label <span class="op">=</span> <span class="va">name</span><span class="op">)</span></span></code></pre></div>
+<p>Save the data:</p>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># do not forget to check the direction of data saving!</span></span>
+<span><span class="co">#getwd()</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">insna.edgelist</span>,</span>
+<span>          <span class="st">"insna.edgelist.csv"</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">insna.nodelist</span>,</span>
+<span>          <span class="st">"insna.nodelist.csv"</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<p>Clear environment:</p>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="twin-peaks-json" class="section level3 unnumbered">
+<h3>
+<strong>Twin Peaks (json)</strong><a class="anchor" aria-label="anchor" href="#twin-peaks-json"><i class="fas fa-link"></i></a>
+</h3>
+<p>Our next dataset is about the character interactions in “Twin Peaks”. We are interested in this dataset as:</p>
+<ol style="list-style-type: decimal">
+<li><p>an example of data in an atypical format that can be converted into familiar lists of nodes and edges,</p></li>
+<li><p>from the point of view of the community search: the data already has clustering, but we will also search for communities in R and look at how to search for communities directly in Gephi.</p></li>
+</ol>
+<p>Load data and look at the network (download json): <a href="https://moviegalaxies.com/movies/view/851/twin-peaks/#" class="uri">https://moviegalaxies.com/movies/view/851/twin-peaks/#</a></p>
+<p>Data in the json format is already in the archive.</p>
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## to read json-files:</span></span>
+<span><span class="co"># install.packages("jsonlite")</span></span>
+<span></span>
+<span></span>
+<span><span class="co">## data loading:</span></span>
+<span><span class="va">twinpeaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"datasets/Moviegalaxies - Twin Peaks.json"</span>,</span>
+<span>                      flatten<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## look at the data structure:</span></span>
+<span><span class="co">#twinpeaks</span></span>
+<span></span>
+<span><span class="co">## edgelist и nodelist:</span></span>
+<span><span class="va">twinpeaks.edges</span> <span class="op">&lt;-</span> <span class="va">twinpeaks</span><span class="op">$</span><span class="va">network</span><span class="op">$</span><span class="va">edges</span></span>
+<span><span class="va">twinpeaks.nodes</span> <span class="op">&lt;-</span> <span class="va">twinpeaks</span><span class="op">$</span><span class="va">network</span><span class="op">$</span><span class="va">nodes</span></span>
+<span></span>
+<span><span class="co">## create igraph-object:</span></span>
+<span><span class="va">twinpeaks.g</span> <span class="op">&lt;-</span> <span class="va">twinpeaks.edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>vertices <span class="op">=</span> <span class="va">twinpeaks.nodes</span>,</span>
+<span>                        directed <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## community detection:</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="va">clustering.louvain</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">twinpeaks.g</span>,</span>
+<span>                                              resolution <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">twinpeaks.g</span><span class="op">)</span><span class="op">$</span><span class="va">our.louvain</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/communities.html">membership</a></span><span class="op">(</span><span class="va">clustering.louvain</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## create new nodelist:</span></span>
+<span><span class="va">twinpeaks.nodes2</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">twinpeaks.g</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span></span></code></pre></div>
+<p>What is the intersection of the community detection solutions?</p>
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#twinpeaks.nodes2 %&gt;% </span></span>
+<span><span class="co">#  count(group, our.louvain)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">twinpeaks.g</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>       main <span class="op">=</span> <span class="st">"\noriginal mapping\n"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span><span class="va">twinpeaks.g</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>       main <span class="op">=</span> <span class="st">"\nlouvain mapping,\nresolution = 0.7"</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">twinpeaks.g</span><span class="op">)</span><span class="op">$</span><span class="va">our.louvain</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>                             <span class="st">"coral1"</span>,</span>
+<span>                             <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">twinpeaks.g</span><span class="op">)</span><span class="op">$</span><span class="va">our.louvain</span> <span class="op">==</span> <span class="fl">2</span>,</span>
+<span>                                    <span class="st">"green"</span>,</span>
+<span>                                    <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">twinpeaks.g</span><span class="op">)</span><span class="op">$</span><span class="va">our.louvain</span> <span class="op">==</span> <span class="fl">3</span>,</span>
+<span>                                           <span class="st">"blue"</span>,</span>
+<span>                                           <span class="st">"grey70"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-28-1.png" width="672"></div>
+<p>Save data for Gephi:</p>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## note that in the first table the variables are already named correctly, but for the node list we rename and overwrite id:</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">twinpeaks.edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>Source <span class="op">=</span> <span class="va">source</span>,</span>
+<span>                   Target <span class="op">=</span> <span class="va">target</span><span class="op">)</span>,</span>
+<span>          <span class="st">"twinpeaks.edgelist.csv"</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">twinpeaks.nodes2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">intergraph_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">name</span><span class="op">)</span>,</span>
+<span>          <span class="st">"twinpeaks.nodelist.csv"</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<p>Clear the environment:</p>
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="dictionary-of-russian-writers-of-the-18th-century-a-network-of-personalities" class="section level3 unnumbered">
+<h3>
+<strong>Dictionary of Russian writers of the 18th century: a network of personalities</strong><a class="anchor" aria-label="anchor" href="#dictionary-of-russian-writers-of-the-18th-century-a-network-of-personalities"><i class="fas fa-link"></i></a>
+</h3>
+<p>Data source: <a href="https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2022.1-B002" class="uri">https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2022.1-B002</a></p>
+<p>Although the authors of the dataset write that “data without preliminary processing can be loaded into programs for network analysis when solving educational problems”, it is still better to firstly observe the files in R to get acquainted with their organization, convert them into a format familiar for work, and calculate the statistics of interest.</p>
+<p>Following the authors’ advice, however, we will immediately go to Gephi with this dataset and try to do the entire analysis there.</p>
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#list.files() - list files in the directory</span></span>
+<span></span>
+<span><span class="va">writers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"datasets/Persons_EDGES.tab"</span>,</span>
+<span>                      header <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">writers</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         Source         Target Weight     Type</span></span>
+<span><span class="co">#&gt; 1 Н.И.Ахвердов П.И.Богданович      1 directed</span></span>
+<span><span class="co">#&gt; 2 А.Д.Байбаков     А.А.Барсов      1 directed</span></span>
+<span><span class="co">#&gt; 3 А.Д.Кантемир     А.К.Барсов      1 directed</span></span>
+<span><span class="co">#&gt; 4 А.Д.Кантемир    С.С.Волчков      1 directed</span></span>
+<span><span class="co">#&gt; 5 А.Д.Кантемир  И.И.Ильинский      1 directed</span></span>
+<span><span class="co">#&gt; 6 А.Д.Кантемир       Ф.Кролик      1 directed</span></span></code></pre></div>
+<p>Re-write edges:</p>
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">writers</span>,</span>
+<span>          <span class="st">"russian.writers_18century.csv"</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<p>Data description:</p>
+<blockquote>
+<p>Датасет представляет собой осмысленные в терминах сетевого анализа междустатейные ссылки в Словаре русских писателей XVIII века (1988–2010. Вып. 1–3). Узлами сети выступают посвященные персоналиям статьи словаря, а ребрами – ссылки на другие статьи в том же словаре. Такая сеть позволяет проследить ключевые тенденции в социальном и интеллектуальном взаимодействии литераторов XVIII века.</p>
+</blockquote>
+<blockquote>
+<p>По словам составителей: «В биографиях лиц, вошедших в историю гуманитарной культуры в качестве государственных деятелей, церковных и светских ораторов, ученых (экономистов, географов, правоведов, историков, лингвистов и пр.), издателей журналов и газет, публицистов, составителей сборников литературного содержания и вместе с тем попадающих в “Словарь”, выделяются и рассматриваются прежде всего сочинения, так или иначе повлиявшие на развитие художественной литературы» (Словарь русских писателей XVIII века. Принципы составления. Словник / сост. В. П. Степанов. Л.: Наука, 1975. С. 11). Таким образом, связи в построенной на данных Словаря сети отражают <em>взаимодействие агентов в поле русской литературы XVIII века.</em></p>
+</blockquote>
+<p>Data viz from the authors: <a href="https://nevmenandr.github.io/rus-dict18-persons/#" class="uri">https://nevmenandr.github.io/rus-dict18-persons/#</a></p>
+<p>If you want, you can also look in Gephi at the second dataset from the same authors, <code>foreign_EDGES.csv</code>, and compare it with the previous data:</p>
+<blockquote>
+<p>Узлами сети выступают русские писатели XVIII века, ребрами — общность их обращения к одним и тем же европейским литераторам. &lt;…&gt; Такая сеть позволяет
+проследить ключевые тенденции в литературной моде XVIII века. Данные организованы в виде ненаправленного взвешенного графа. Вес ребра означает число общих для данных литераторов упоминаний европейских писателей.</p>
+</blockquote>
+<p>Link to the data (it contains the readme file): <a href="https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2023.4-B003" class="uri">https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2023.4-B003</a></p>
+</div>
+</div>
+<div id="graph-commons-data" class="section level2 unnumbered">
+<h2>
+<strong>Graph Commons data</strong><a class="anchor" aria-label="anchor" href="#graph-commons-data"><i class="fas fa-link"></i></a>
+</h2>
+<p>For this platform, we need to use different variable names than those required by Gephi. The required renaming is illustrated below with the familiar <code>insna</code> data and the Twin Peaks character network.</p>
+<p><em>For nodes’ list:</em></p>
+<ul>
+<li><p>“Node Type” (to assign color; I do not use it below)</p></li>
+<li><p>“Name”</p></li>
+<li><p>optional: “Description” and “Image”</p></li>
+<li><p>other columns: anything you want</p></li>
+</ul>
+<p><em>For edges’ list:</em></p>
+<ul>
+<li><p>“From Type”</p></li>
+<li><p>“From Name”</p></li>
+<li><p>“Edge Type”</p></li>
+<li><p>“To Type”</p></li>
+<li><p>“To Name” (“column can have multiple names separated by semicolons for adding multiple connections to these nodes at once.”)</p></li>
+<li><p>optional: “Weight”</p></li>
+<li><p>other columns: anything you want</p></li>
+</ul>
+<p>INSNA network:</p>
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## load:</span></span>
+<span><span class="va">insna</span> <span class="op">&lt;-</span> <span class="fu">networkdata</span><span class="fu">::</span><span class="va"><a href="https://schochastics.github.io/networkdata/reference/insna.html">insna</a></span></span>
+<span></span>
+<span><span class="co">## calculate centralities:</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">outdegree</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">insna</span>, mode <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">totaldegree</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">insna</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## get edgelist and rename columns appropriately for graph commons:</span></span>
+<span><span class="va">insna.edgelist</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>   <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">edge</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">`colnames&lt;-`</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"From Name"</span>, <span class="st">"To Name"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>`From Type` <span class="op">=</span> <span class="st">"person"</span>,</span>
+<span>         `Edge Type` <span class="op">=</span> <span class="st">"teaching"</span>,</span>
+<span>         `To Type` <span class="op">=</span> <span class="st">"person"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## get nodelist and rename columns appropriately for graph commons:</span></span>
+<span><span class="va">insna.nodelist</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>   <span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="va">intergraph_id</span>,</span>
+<span>         displayed_name <span class="op">=</span> <span class="va">name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>`Node Type` <span class="op">=</span> <span class="st">"person"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># check directory:</span></span>
+<span><span class="co">#getwd()</span></span>
+<span></span>
+<span><span class="co"># save:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">insna.edgelist</span>,</span>
+<span>          <span class="st">"GC.insna.edgelist.csv"</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">insna.nodelist</span>,</span>
+<span>          <span class="st">"GC.insna.nodelist.csv"</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<p>“Twin peaks”:</p>
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## to read json-files:</span></span>
+<span><span class="co"># install.packages("jsonlite")</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jeroen.r-universe.dev/jsonlite">jsonlite</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># clear env:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## load data:</span></span>
+<span><span class="va">twinpeaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"datasets/Moviegalaxies - Twin Peaks.json"</span>,</span>
+<span>                      flatten<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## edgelist и nodelist:</span></span>
+<span><span class="va">twinpeaks.edges</span> <span class="op">&lt;-</span> <span class="va">twinpeaks</span><span class="op">$</span><span class="va">network</span><span class="op">$</span><span class="va">edges</span></span>
+<span><span class="va">twinpeaks.nodes</span> <span class="op">&lt;-</span> <span class="va">twinpeaks</span><span class="op">$</span><span class="va">network</span><span class="op">$</span><span class="va">nodes</span></span>
+<span></span>
+<span><span class="co">## re-naming:</span></span>
+<span><span class="va">twinpeaks.nodes</span> <span class="op">&lt;-</span> <span class="va">twinpeaks.nodes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span>, <span class="op">-</span><span class="va">color</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="va">name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>`Node Type` <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">twinpeaks.edges</span> <span class="op">&lt;-</span> <span class="va">twinpeaks.edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>`From Name` <span class="op">=</span> <span class="va">source</span>,</span>
+<span>         `To Name` <span class="op">=</span> <span class="va">target</span>,</span>
+<span>         Weight <span class="op">=</span> <span class="va">weight</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>`From Type` <span class="op">=</span> <span class="st">"character"</span>,</span>
+<span>         `To Type` <span class="op">=</span> <span class="st">"character"</span>,</span>
+<span>         `Edge Type` <span class="op">=</span> <span class="st">"plot connection"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># save:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">twinpeaks.edges</span>,</span>
+<span>          <span class="st">"GC.twinpeaks.edgelist.csv"</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">twinpeaks.nodes</span>,</span>
+<span>          <span class="st">"GC.twinpeaks.nodelist.csv"</span>,</span>
+<span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<p>More about <em>graph commons</em>: <a href="https://docs.graphcommons.com/" class="uri">https://docs.graphcommons.com/</a></p>
+</div>
+<div id="cosmograph" class="section level2 unnumbered">
+<h2>
+<strong>Cosmograph</strong><a class="anchor" aria-label="anchor" href="#cosmograph"><i class="fas fa-link"></i></a>
+</h2>
+<p>This is a free-to-use online tool from the Russian creators. Way more advanced than the previous tools.</p>
+<ul>
+<li><p><a href="https://cosmograph.app/docs/cosmograph/How%20to%20Use/">Tutorial</a></p></li>
+<li><p><a href="no%20need%20to%20register">Website</a>(<a href="https://cosmograph.app/run/" class="uri">https://cosmograph.app/run/</a>)</p></li>
+<li><p><a href="https://t.me/dataviznews">tg-channel of one of the creators</a></p></li>
+<li><p><a href="https://cosmograph.app/run/?data=https://data.newsgraph.xyz/4500a184-f5bb-4e7d-a646-bfadd2b0b1db.csv&amp;meta=https://data.newsgraph.xyz/f94dcc4b-705b-46b2-bf14-dcec8dce17e1.csv&amp;source=source&amp;target=target&amp;gravity=0.25&amp;repulsion=1&amp;repulsionTheta=0.75&amp;linkSpring=0.4&amp;linkDistance=10&amp;friction=0.85&amp;renderLabels=true&amp;renderHoveredLabel=true&amp;renderLinks=true&amp;nodeSizeScale=0.7&amp;linkWidthScale=1&amp;linkArrowsSizeScale=1&amp;nodeSize=size-sum-size&amp;nodeColor=color-type&amp;linkWidth=width-avg-size&amp;linkColor=color-avg-size&amp;">Recent example of use</a></p></li>
+</ul>
+<p>The data format needs:</p>
+<ul>
+<li><p>edgelist (“source”, “target”) - it is already enough to build the graph, though you can also add columns “time” and “value”</p></li>
+<li><p>nodelist = metadata file (“id”, “color”, “size”)</p></li>
+</ul>
+<p>To put your hands on the program, you can load the files about the connections of Russian writers created above into the program: they are already in the appropriate format (source, target), and therefore no modifications are needed.</p>
+</div>
+<div id="home-assignment-3" class="section level2 unnumbered">
+<h2>
+<strong>Home assignment 3</strong><a class="anchor" aria-label="anchor" href="#home-assignment-3"><i class="fas fa-link"></i></a>
+</h2>
+<p>Choose a dataset you like ((check <a href="available-datasets.html#available-datasets"><strong>Available datasets</strong></a>) or find a network by yourself), format it appropriately (lists of nodes and edges), and draw the network in Gephi or other software (Graph Commons, Cosmograph). Think about the story you want to tell by showing your network (specific nodes’ positions, network structure, etc.). Feel free to edit the picture using other softwares (if you struggle with captions in Gephi, for example, you can annotate your picture somewhere else).</p>
+<p>Insert your graph to pdf/word and write 5-6 sentences about your thought process and story behind the image. Refer to network properties we discussed in class (diameter, homophily, core/peripherical structure) to support your arguments.</p>
+<p>If you want to practice more, you can accompany your work with a short report about the most central nodes in the network and/or the structure of the network, including your interpretation of these results.</p>
+<p>Deadline: before next class | send to <a href="mailto:aapecherskikh@hse.ru" class="email">aapecherskikh@hse.ru</a></p>
 
+</div>
 </div>
 
 
@@ -81,7 +1036,22 @@
 <div class="next"><a href="available-datasets.html">Available datasets</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#topology-communities">3 - Topology &amp; communities</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#topology-communities">3 - Topology &amp; communities</a></li>
+<li><a class="nav-link" href="#graph-level-indicators">Graph-level indicators</a></li>
+<li><a class="nav-link" href="#community-detection-algorithms">Community detection algorithms</a></li>
+<li><a class="nav-link" href="#case-study-last-week-openalex-network">Case study: last week OpenAlex network</a></li>
+<li>
+<a class="nav-link" href="#networks-to-work-in-gephi">Networks to work in Gephi</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#insna">insna</a></li>
+<li><a class="nav-link" href="#twin-peaks-json">Twin Peaks (json)</a></li>
+<li><a class="nav-link" href="#dictionary-of-russian-writers-of-the-18th-century-a-network-of-personalities">Dictionary of Russian writers of the 18th century: a network of personalities</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#graph-commons-data">Graph Commons data</a></li>
+<li><a class="nav-link" href="#cosmograph">Cosmograph</a></li>
+<li><a class="nav-link" href="#home-assignment-3">Home assignment 3</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
@@ -98,7 +1068,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-11-10.</p>
+    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-11-17.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
@@ -106,6 +1076,34 @@
   </div>
 
 </div></div>
-</footer>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
 </body>
 </html>
