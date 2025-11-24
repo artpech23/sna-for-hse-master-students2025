@@ -3,7 +3,7 @@
 
 
 
-The notes below accompany the second lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) as well, as some technical details and examples are discussed there. During this session, we will:
+The notes below accompany the third lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) as well, as some technical details and examples are discussed there. During this session, we will:
 
 
   - take a look at graph-level characheristics of the networks,

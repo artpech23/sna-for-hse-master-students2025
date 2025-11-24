@@ -1,0 +1,1762 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>4 - two-mode networks | yet another SNA coursebook</title>
+
+    <meta name="author" content="Arthur Pecherskikh" />
+  
+   <meta name="description" content="This is a supporting page for the short course “Social Network Analysis” delivered to the HSE master students in 2025 (November-December)." />
+   <meta name="generator" content="placeholder" />
+  <meta property="og:title" content="4 - two-mode networks | yet another SNA coursebook" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a supporting page for the short course “Social Network Analysis” delivered to the HSE master students in 2025 (November-December)." />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 - two-mode networks | yet another SNA coursebook" />
+  
+  <meta name="twitter:description" content="This is a supporting page for the short course “Social Network Analysis” delivered to the HSE master students in 2025 (November-December)." />
+  
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script>
+    <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
+    <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
+    <script src="libs/bs3compat-0.9.0/transition.js"></script>
+    <script src="libs/bs3compat-0.9.0/tabs.js"></script>
+    <script src="libs/bs3compat-0.9.0/bs3compat.js"></script>
+    <link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet" />
+    <script src="libs/bs4_book-1.0.0/bs4_book.js"></script>
+    <link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+    <script src="libs/plotly-binding-4.10.4/plotly.js"></script>
+    <script src="libs/typedarray-0.1/typedarray.min.js"></script>
+    <link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+    <link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <script src="libs/d3-4.9.1/d3.min.js"></script>
+    <script src="libs/forceNetwork-binding-0.4.1/forceNetwork.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script>
+
+  <!-- CSS -->
+  <style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+      <link rel="stylesheet" href="style.css" />
+  
+</head>
+
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">yet another SNA coursebook</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+      </form>
+
+      <nav aria-label="Table of contents">
+        <h2>Table of contents</h2>
+        <div id="book-toc"></div>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="#">View book source <i class="fab fa-github"></i></a></li></p>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="col-sm-12 col-md-9 col-lg-7" id="content">
+<div id="two-mode-networks" class="section level1 unnumbered">
+<h1><strong>4 - two-mode networks</strong></h1>
+<p>Two-mode networks, or bipartite networks, or affiliation networks (these are used interchangeably sometimes), consist of <strong>two distinct sets of nodes, where ties exist only between nodes of different sets</strong> (e.g., people and events, authors and papers). This structure is particularly useful for representing affiliations, co-occurrences, or memberships, while preserving the relationships between these categories. Unlike one-mode networks, analyzing two-mode networks requires specialized workflows and metrics to account for their unique structure. In this session, we will walk through the steps of construction, vizualization, and analysis of a two-mode network.</p>
+<p>If you want to consult the other sources, check:</p>
+<ol style="list-style-type: decimal">
+<li><p><a href="https://toreopsahl.com/tnet/two-mode-networks/projection/">this discussion of projections</a>,</p></li>
+<li><p><a href="https://rpubs.com/pjmurphy/317838">this</a> or <a href="https://schochastics.github.io/R4SNA/two-mode-networks.html">that</a> pages with the workflow in R. Partially, we will take a look at the data from the first source below.</p></li>
+</ol>
+<p>Today’s lecture slides are available <a href="https://docs.google.com/presentation/d/1a7bgijjxv3r3-VjLjCoCmrf1wtlbZZpM9b3xtZGFD58/edit?usp=sharing">here</a>.</p>
+<p>Libraries for this session:</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="two-mode-networks.html#cb88-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)    <span class="do">## general workflow</span></span>
+<span id="cb88-2"><a href="two-mode-networks.html#cb88-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)      <span class="do">## general for vizualizations </span></span>
+<span id="cb88-3"><a href="two-mode-networks.html#cb88-3" tabindex="-1"></a><span class="fu">library</span>(igraph)       <span class="do">## core package to work with networks</span></span>
+<span id="cb88-4"><a href="two-mode-networks.html#cb88-4" tabindex="-1"></a><span class="fu">library</span>(intergraph)   <span class="do">## to convert graphs to data frames and back</span></span>
+<span id="cb88-5"><a href="two-mode-networks.html#cb88-5" tabindex="-1"></a><span class="fu">library</span>(manynet)      <span class="do">## data package</span></span>
+<span id="cb88-6"><a href="two-mode-networks.html#cb88-6" tabindex="-1"></a><span class="fu">library</span>(netUtils)     <span class="do">## to compute network statistics</span></span>
+<span id="cb88-7"><a href="two-mode-networks.html#cb88-7" tabindex="-1"></a></span>
+<span id="cb88-8"><a href="two-mode-networks.html#cb88-8" tabindex="-1"></a><span class="co"># for `networkdata` package:</span></span>
+<span id="cb88-9"><a href="two-mode-networks.html#cb88-9" tabindex="-1"></a><span class="co">#install.packages(&quot;remotes&quot;)</span></span>
+<span id="cb88-10"><a href="two-mode-networks.html#cb88-10" tabindex="-1"></a><span class="co">#remotes::install_github(&quot;schochastics/networkdata&quot;)</span></span>
+<span id="cb88-11"><a href="two-mode-networks.html#cb88-11" tabindex="-1"></a></span>
+<span id="cb88-12"><a href="two-mode-networks.html#cb88-12" tabindex="-1"></a><span class="fu">library</span>(networkdata)  <span class="do">## exteremely large library! take time to install in once</span></span>
+<span id="cb88-13"><a href="two-mode-networks.html#cb88-13" tabindex="-1"></a></span>
+<span id="cb88-14"><a href="two-mode-networks.html#cb88-14" tabindex="-1"></a><span class="co">#install.packages(&quot;oaqc&quot;)</span></span>
+<span id="cb88-15"><a href="two-mode-networks.html#cb88-15" tabindex="-1"></a><span class="co">#library(oaqc)         ## for more layouts</span></span>
+<span id="cb88-16"><a href="two-mode-networks.html#cb88-16" tabindex="-1"></a><span class="co">#library(graphlayouts) ## for more layouts</span></span>
+<span id="cb88-17"><a href="two-mode-networks.html#cb88-17" tabindex="-1"></a></span>
+<span id="cb88-18"><a href="two-mode-networks.html#cb88-18" tabindex="-1"></a><span class="co">#install.packages(&quot;tnet&quot;)</span></span>
+<span id="cb88-19"><a href="two-mode-networks.html#cb88-19" tabindex="-1"></a><span class="fu">library</span>(tnet)         <span class="do">## to analyze 2-mode networks without projections</span></span>
+<span id="cb88-20"><a href="two-mode-networks.html#cb88-20" tabindex="-1"></a></span>
+<span id="cb88-21"><a href="two-mode-networks.html#cb88-21" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb88-22"><a href="two-mode-networks.html#cb88-22" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb88-23"><a href="two-mode-networks.html#cb88-23" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb88-24"><a href="two-mode-networks.html#cb88-24" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code></pre></div>
+<hr />
+<div id="basic-example" class="section level2 unnumbered">
+<h2><strong>Basic example</strong></h2>
+<p>The data for the first part of today’s session comes from the famous study conducted by Davis and his colleagues (1941). It represents attendance data from 14 social events hosted by 18 women in the American South during the 1930s. This bipartite network captures the <em>affiliations between women and events</em>, highlighting patterns of social interaction, group formation, and shared affiliations. It is a classical dataset to tell students about the two-mode network analysis.</p>
+<p>This data is available via the <code>networkdata</code> package that you should already be aware of. Just in case, this same dataset is attached to the zip-folder I sent you, so, below I load it directly from this file.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="two-mode-networks.html#cb89-1" tabindex="-1"></a><span class="co"># ?southern_women # - to know more aboout the data</span></span>
+<span id="cb89-2"><a href="two-mode-networks.html#cb89-2" tabindex="-1"></a></span>
+<span id="cb89-3"><a href="two-mode-networks.html#cb89-3" tabindex="-1"></a><span class="do">## get data from `networkdata`:</span></span>
+<span id="cb89-4"><a href="two-mode-networks.html#cb89-4" tabindex="-1"></a><span class="fu">data</span>(southern_women)</span>
+<span id="cb89-5"><a href="two-mode-networks.html#cb89-5" tabindex="-1"></a></span>
+<span id="cb89-6"><a href="two-mode-networks.html#cb89-6" tabindex="-1"></a><span class="do">## save data for it to be available to you</span></span>
+<span id="cb89-7"><a href="two-mode-networks.html#cb89-7" tabindex="-1"></a><span class="co">#save.image(&quot;southern_women.RData&quot;)</span></span>
+<span id="cb89-8"><a href="two-mode-networks.html#cb89-8" tabindex="-1"></a></span>
+<span id="cb89-9"><a href="two-mode-networks.html#cb89-9" tabindex="-1"></a><span class="do">## load this same data back:</span></span>
+<span id="cb89-10"><a href="two-mode-networks.html#cb89-10" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;datasets/southern_women.RData&quot;</span>)</span>
+<span id="cb89-11"><a href="two-mode-networks.html#cb89-11" tabindex="-1"></a>southern_women <span class="sc">%&gt;%</span> </span>
+<span id="cb89-12"><a href="two-mode-networks.html#cb89-12" tabindex="-1"></a>  <span class="fu">str</span>()</span>
+<span id="cb89-13"><a href="two-mode-networks.html#cb89-13" tabindex="-1"></a><span class="co">#&gt; -----------------------------------------------------------</span></span>
+<span id="cb89-14"><a href="two-mode-networks.html#cb89-14" tabindex="-1"></a><span class="co">#&gt; UNNAMED NETWORK (undirected, unweighted, two-mode network)</span></span>
+<span id="cb89-15"><a href="two-mode-networks.html#cb89-15" tabindex="-1"></a><span class="co">#&gt; -----------------------------------------------------------</span></span>
+<span id="cb89-16"><a href="two-mode-networks.html#cb89-16" tabindex="-1"></a><span class="co">#&gt; Nodes: 32, Edges: 89, Density: 0.1794, Components: 1,</span></span>
+<span id="cb89-17"><a href="two-mode-networks.html#cb89-17" tabindex="-1"></a><span class="co">#&gt; Isolates: 0</span></span>
+<span id="cb89-18"><a href="two-mode-networks.html#cb89-18" tabindex="-1"></a><span class="co">#&gt; -Vertex Attributes:</span></span>
+<span id="cb89-19"><a href="two-mode-networks.html#cb89-19" tabindex="-1"></a><span class="co">#&gt;  type(l): FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, ...</span></span>
+<span id="cb89-20"><a href="two-mode-networks.html#cb89-20" tabindex="-1"></a><span class="co">#&gt;  name(c): EVELYN, LAURA, THERESA, BRENDA, CHARLOTTE, ...</span></span>
+<span id="cb89-21"><a href="two-mode-networks.html#cb89-21" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb89-22"><a href="two-mode-networks.html#cb89-22" tabindex="-1"></a><span class="co">#&gt; -Edges (first 10): </span></span>
+<span id="cb89-23"><a href="two-mode-networks.html#cb89-23" tabindex="-1"></a><span class="co">#&gt;  EVELYN--6/27 EVELYN--3/2 EVELYN--4/12 EVELYN--9/26</span></span>
+<span id="cb89-24"><a href="two-mode-networks.html#cb89-24" tabindex="-1"></a><span class="co">#&gt; EVELYN--2/25 EVELYN--5/19 EVELYN--9/16 EVELYN--4/8</span></span>
+<span id="cb89-25"><a href="two-mode-networks.html#cb89-25" tabindex="-1"></a><span class="co">#&gt; LAURA--6/27 LAURA--3/2</span></span></code></pre></div>
+<p>By looking at this data structure, you should note several things:</p>
+<ol style="list-style-type: decimal">
+<li><p>types of nodes (women and events) are not differentiated when counting the number of nodes.</p></li>
+<li><p>However, there is a nodes’ attribute “type” which specifies whether a node is an event or a women. When you create a graph with the two-mode organization by yourself, <code>igraph</code> would not recognize its special nature unless you provide this variable, “type”, in the nodes’ list.</p></li>
+</ol>
+<p>Let’s try to plot this graph to get a better sense of two-mode networks:</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="two-mode-networks.html#cb90-1" tabindex="-1"></a><span class="co">#asDF(southern_women) - run to see how people are distinguished from events</span></span>
+<span id="cb90-2"><a href="two-mode-networks.html#cb90-2" tabindex="-1"></a></span>
+<span id="cb90-3"><a href="two-mode-networks.html#cb90-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb90-4"><a href="two-mode-networks.html#cb90-4" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb90-5"><a href="two-mode-networks.html#cb90-5" tabindex="-1"></a>southern_women <span class="sc">%&gt;%</span> </span>
+<span id="cb90-6"><a href="two-mode-networks.html#cb90-6" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label.cex =</span> <span class="fl">0.5</span>,</span>
+<span id="cb90-7"><a href="two-mode-networks.html#cb90-7" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb90-8"><a href="two-mode-networks.html#cb90-8" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb90-9"><a href="two-mode-networks.html#cb90-9" tabindex="-1"></a>                             <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb90-10"><a href="two-mode-networks.html#cb90-10" tabindex="-1"></a>                             <span class="st">&quot;darkblue&quot;</span>),</span>
+<span id="cb90-11"><a href="two-mode-networks.html#cb90-11" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb90-12"><a href="two-mode-networks.html#cb90-12" tabindex="-1"></a>                             <span class="st">&quot;square&quot;</span>,</span>
+<span id="cb90-13"><a href="two-mode-networks.html#cb90-13" tabindex="-1"></a>                             <span class="st">&quot;circle&quot;</span>))</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><code>igraph</code> includes some fancy network layouts which can look pretty when dealing with two-mode networks. These examples also show you how to excel at network visualizations in R:</p>
+<ol style="list-style-type: decimal">
+<li><p>we remove nodes’ captions to simplify the picture,</p></li>
+<li><p>we code the types of nodes using colors and shapes together,</p></li>
+<li><p>we change layouts each time to see whether the network structure is presented intuitively clear,</p></li>
+<li><p>finally, we add titles so that the layout applied is shown.</p></li>
+</ol>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="two-mode-networks.html#cb91-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb91-2"><a href="two-mode-networks.html#cb91-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb91-3"><a href="two-mode-networks.html#cb91-3" tabindex="-1"></a>southern_women <span class="sc">%&gt;%</span> </span>
+<span id="cb91-4"><a href="two-mode-networks.html#cb91-4" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb91-5"><a href="two-mode-networks.html#cb91-5" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb91-6"><a href="two-mode-networks.html#cb91-6" tabindex="-1"></a>                             <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb91-7"><a href="two-mode-networks.html#cb91-7" tabindex="-1"></a>                             <span class="st">&quot;darkblue&quot;</span>),</span>
+<span id="cb91-8"><a href="two-mode-networks.html#cb91-8" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb91-9"><a href="two-mode-networks.html#cb91-9" tabindex="-1"></a>                             <span class="st">&quot;square&quot;</span>,</span>
+<span id="cb91-10"><a href="two-mode-networks.html#cb91-10" tabindex="-1"></a>                             <span class="st">&quot;circle&quot;</span>),</span>
+<span id="cb91-11"><a href="two-mode-networks.html#cb91-11" tabindex="-1"></a>       <span class="at">layout =</span> <span class="fu">layout_as_bipartite</span>(southern_women),</span>
+<span id="cb91-12"><a href="two-mode-networks.html#cb91-12" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">&quot;layout_as_bipartite()&quot;</span>) </span>
+<span id="cb91-13"><a href="two-mode-networks.html#cb91-13" tabindex="-1"></a></span>
+<span id="cb91-14"><a href="two-mode-networks.html#cb91-14" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb91-15"><a href="two-mode-networks.html#cb91-15" tabindex="-1"></a>southern_women <span class="sc">%&gt;%</span> </span>
+<span id="cb91-16"><a href="two-mode-networks.html#cb91-16" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb91-17"><a href="two-mode-networks.html#cb91-17" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb91-18"><a href="two-mode-networks.html#cb91-18" tabindex="-1"></a>                             <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb91-19"><a href="two-mode-networks.html#cb91-19" tabindex="-1"></a>                             <span class="st">&quot;darkblue&quot;</span>),</span>
+<span id="cb91-20"><a href="two-mode-networks.html#cb91-20" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb91-21"><a href="two-mode-networks.html#cb91-21" tabindex="-1"></a>                             <span class="st">&quot;square&quot;</span>,</span>
+<span id="cb91-22"><a href="two-mode-networks.html#cb91-22" tabindex="-1"></a>                             <span class="st">&quot;circle&quot;</span>),</span>
+<span id="cb91-23"><a href="two-mode-networks.html#cb91-23" tabindex="-1"></a>       <span class="at">layout =</span> <span class="fu">layout_nicely</span>(southern_women),</span>
+<span id="cb91-24"><a href="two-mode-networks.html#cb91-24" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">&quot;layout_nicely()&quot;</span>) </span>
+<span id="cb91-25"><a href="two-mode-networks.html#cb91-25" tabindex="-1"></a></span>
+<span id="cb91-26"><a href="two-mode-networks.html#cb91-26" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb91-27"><a href="two-mode-networks.html#cb91-27" tabindex="-1"></a>southern_women <span class="sc">%&gt;%</span> </span>
+<span id="cb91-28"><a href="two-mode-networks.html#cb91-28" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb91-29"><a href="two-mode-networks.html#cb91-29" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb91-30"><a href="two-mode-networks.html#cb91-30" tabindex="-1"></a>                             <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb91-31"><a href="two-mode-networks.html#cb91-31" tabindex="-1"></a>                             <span class="st">&quot;darkblue&quot;</span>),</span>
+<span id="cb91-32"><a href="two-mode-networks.html#cb91-32" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb91-33"><a href="two-mode-networks.html#cb91-33" tabindex="-1"></a>                             <span class="st">&quot;square&quot;</span>,</span>
+<span id="cb91-34"><a href="two-mode-networks.html#cb91-34" tabindex="-1"></a>                             <span class="st">&quot;circle&quot;</span>),</span>
+<span id="cb91-35"><a href="two-mode-networks.html#cb91-35" tabindex="-1"></a>       <span class="at">layout =</span> <span class="fu">layout_in_circle</span>(southern_women),</span>
+<span id="cb91-36"><a href="two-mode-networks.html#cb91-36" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">&quot;layout_in_circle()&quot;</span>) </span>
+<span id="cb91-37"><a href="two-mode-networks.html#cb91-37" tabindex="-1"></a></span>
+<span id="cb91-38"><a href="two-mode-networks.html#cb91-38" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb91-39"><a href="two-mode-networks.html#cb91-39" tabindex="-1"></a>southern_women <span class="sc">%&gt;%</span> </span>
+<span id="cb91-40"><a href="two-mode-networks.html#cb91-40" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb91-41"><a href="two-mode-networks.html#cb91-41" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb91-42"><a href="two-mode-networks.html#cb91-42" tabindex="-1"></a>                             <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb91-43"><a href="two-mode-networks.html#cb91-43" tabindex="-1"></a>                             <span class="st">&quot;darkblue&quot;</span>),</span>
+<span id="cb91-44"><a href="two-mode-networks.html#cb91-44" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(southern_women)<span class="sc">$</span>type <span class="sc">==</span> <span class="cn">FALSE</span>,</span>
+<span id="cb91-45"><a href="two-mode-networks.html#cb91-45" tabindex="-1"></a>                             <span class="st">&quot;square&quot;</span>,</span>
+<span id="cb91-46"><a href="two-mode-networks.html#cb91-46" tabindex="-1"></a>                             <span class="st">&quot;circle&quot;</span>),</span>
+<span id="cb91-47"><a href="two-mode-networks.html#cb91-47" tabindex="-1"></a>       <span class="at">layout =</span> <span class="fu">layout_with_mds</span>(southern_women),</span>
+<span id="cb91-48"><a href="two-mode-networks.html#cb91-48" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">&quot;layout_with_mds()&quot;</span>) </span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+<p>Probably, the core message in-scripted in these pictures is the presence of two types of nodes and the exclusive attachment of dissimilar nodes to each other. Again, these are the core features of the two-mode networks, and they bound the range of techniques we can apply to study this graph.</p>
+<p>Theoretically, we have 3 options:</p>
+<ol style="list-style-type: decimal">
+<li><p>proceed as usual, and apply typical one-mode measures to the two-mode network</p></li>
+<li><p>analyze each mode separately using two-mode metrics</p></li>
+<li><p>convert the two-Mode network into two projections (i.e., a network of women and a network of events, where the ties correspond to the omitted type of nodes) and analyze them both as the usual one-mode networks.</p></li>
+</ol>
+<p>The first approach involves treating the two-mode network as-is and applying standard metrics like degree centrality, betweenness centrality, and closeness centrality directly to the bipartite structure. While familiar and straightforward, this strategy may overlook nuances specific to the two-mode context, as <em>many of these measures assume homogeneity among nodes</em>. For example, computing degree centrality can highlight which women attended the most events and which events had the highest participation, meanwhile writing these centrality values into a single column. This last obstacle can puzzle us once the networks get larger and some of the second-order nodes receive too many connections. To put shortly, the comparison of the centralities of these two types of nodes might be misleading. And <em>it gets worse with other measures</em>, and degree centrality, as the simpliest version of centrality, is an only real option to calculate (even with the difficulties just metioned).</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="two-mode-networks.html#cb92-1" tabindex="-1"></a><span class="fu">V</span>(southern_women)<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(southern_women,</span>
+<span id="cb92-2"><a href="two-mode-networks.html#cb92-2" tabindex="-1"></a>                                  <span class="at">mode =</span> <span class="st">&quot;all&quot;</span>) <span class="do">## note that affiliation networks cannot be directed, in a sense, as well as its projections</span></span>
+<span id="cb92-3"><a href="two-mode-networks.html#cb92-3" tabindex="-1"></a></span>
+<span id="cb92-4"><a href="two-mode-networks.html#cb92-4" tabindex="-1"></a>(<span class="fu">asDF</span>(southern_women))<span class="sc">$</span>vertex <span class="sc">%&gt;%</span> </span>
+<span id="cb92-5"><a href="two-mode-networks.html#cb92-5" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>intergraph_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb92-6"><a href="two-mode-networks.html#cb92-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">ifelse</span>(type <span class="sc">==</span> F,</span>
+<span id="cb92-7"><a href="two-mode-networks.html#cb92-7" tabindex="-1"></a>                       <span class="st">&quot;women&quot;</span>,</span>
+<span id="cb92-8"><a href="two-mode-networks.html#cb92-8" tabindex="-1"></a>                       <span class="st">&quot;event&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb92-9"><a href="two-mode-networks.html#cb92-9" tabindex="-1"></a>  <span class="fu">group_by</span>(type) <span class="sc">%&gt;%</span> </span>
+<span id="cb92-10"><a href="two-mode-networks.html#cb92-10" tabindex="-1"></a>  <span class="fu">slice_max</span>(degree, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb92-11"><a href="two-mode-networks.html#cb92-11" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb92-12"><a href="two-mode-networks.html#cb92-12" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F)</span></code></pre></div>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+type
+</th>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:right;">
+degree
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+event
+</td>
+<td style="text-align:left;">
+9/16
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+event
+</td>
+<td style="text-align:left;">
+4/8
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+event
+</td>
+<td style="text-align:left;">
+3/15
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+women
+</td>
+<td style="text-align:left;">
+EVELYN
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+women
+</td>
+<td style="text-align:left;">
+THERESA
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+women
+</td>
+<td style="text-align:left;">
+NORA
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+</tbody>
+</table>
+<p>The code from above computes the degree centrality scores (nothing new to you) and produce a table with the nodes of each class which possess the highest degree values. It should be interpreted as “Evelyn attended 8 events”, or “event on 16th of September was attended by 14 women (all who are present in the data attended it)”.</p>
+<p>The second option we have is to apply metrics developed specifically for two-mode networks. They allow researchers to investigate each set of nodes individually while preserving their connections to the other set. For instance, bipartite density measures the proportion of possible ties in the network, while metrics like two-mode clustering coefficients examine how groups form across the sets. <strong>Analyzing modes separately ensures that the unique nature of bipartite ties is not lost.</strong></p>
+<p>Unfortunately for us, this line of the possible workflows is not currently well-developed for R. The only available reliable package we have at the moment is <code>tnet</code> developed by <a href="https://toreopsahl.com/">Tore Opsahl</a>. We would not cover it today (although, you can consult external sources on <code>tnet</code> or work in the other softwares, like Pajek, to work in this style).</p>
+<p>The third option is the one we focus on below. It implies a common strategy to project the two-mode network onto one or both sets of nodes, resulting in one-mode networks. <strong>In the projection, nodes from one set are connected if they share a common neighbor in the other set.</strong> For example, women could be connected if they attended the same event, or events could be connected if they were attended by the same women. This approach facilitates the use of standard one-mode network analysis tools but <strong>risks introducing bias, as projections often inflate edge weights and lose important bipartite context.</strong> Careful interpretation is required to avoid overestimating connectivity.</p>
+<p>The simplest way to get the projections is to multiply two-mode matrice to its transposed version (i.e., the matrix where rows become columns and columns become rows). This is a way to get one of the one-mode networks, or projections. Once we change the order of multiplication, we get the second desired one-mode network. The code below shows these steps in details:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="two-mode-networks.html#cb93-1" tabindex="-1"></a><span class="do">## 1. get the matrix:</span></span>
+<span id="cb93-2"><a href="two-mode-networks.html#cb93-2" tabindex="-1"></a></span>
+<span id="cb93-3"><a href="two-mode-networks.html#cb93-3" tabindex="-1"></a><span class="co">#(southern_women %&gt;%</span></span>
+<span id="cb93-4"><a href="two-mode-networks.html#cb93-4" tabindex="-1"></a><span class="co">#  as_biadjacency_matrix())[1:6, 1:6] ## - to check if everything is correct</span></span>
+<span id="cb93-5"><a href="two-mode-networks.html#cb93-5" tabindex="-1"></a></span>
+<span id="cb93-6"><a href="two-mode-networks.html#cb93-6" tabindex="-1"></a>bimod.matrix <span class="ot">&lt;-</span> southern_women <span class="sc">%&gt;%</span></span>
+<span id="cb93-7"><a href="two-mode-networks.html#cb93-7" tabindex="-1"></a>  <span class="fu">as_biadjacency_matrix</span>()</span>
+<span id="cb93-8"><a href="two-mode-networks.html#cb93-8" tabindex="-1"></a></span>
+<span id="cb93-9"><a href="two-mode-networks.html#cb93-9" tabindex="-1"></a><span class="do">## 2. get the projections by matrices multiplications:</span></span>
+<span id="cb93-10"><a href="two-mode-networks.html#cb93-10" tabindex="-1"></a></span>
+<span id="cb93-11"><a href="two-mode-networks.html#cb93-11" tabindex="-1"></a>women_matrix <span class="ot">&lt;-</span> bimod.matrix <span class="sc">%*%</span> <span class="fu">t</span>(bimod.matrix)</span>
+<span id="cb93-12"><a href="two-mode-networks.html#cb93-12" tabindex="-1"></a>event_matrix <span class="ot">&lt;-</span> <span class="fu">t</span>(bimod.matrix) <span class="sc">%*%</span> bimod.matrix</span>
+<span id="cb93-13"><a href="two-mode-networks.html#cb93-13" tabindex="-1"></a><span class="do">## the order of multiplication is important!</span></span>
+<span id="cb93-14"><a href="two-mode-networks.html#cb93-14" tabindex="-1"></a></span>
+<span id="cb93-15"><a href="two-mode-networks.html#cb93-15" tabindex="-1"></a><span class="do">## remove the artificial loops:</span></span>
+<span id="cb93-16"><a href="two-mode-networks.html#cb93-16" tabindex="-1"></a><span class="fu">diag</span>(women_matrix) <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb93-17"><a href="two-mode-networks.html#cb93-17" tabindex="-1"></a><span class="fu">diag</span>(event_matrix) <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb93-18"><a href="two-mode-networks.html#cb93-18" tabindex="-1"></a></span>
+<span id="cb93-19"><a href="two-mode-networks.html#cb93-19" tabindex="-1"></a><span class="do">## 3. structure of the new one-mode women network:</span></span>
+<span id="cb93-20"><a href="two-mode-networks.html#cb93-20" tabindex="-1"></a>women_matrix <span class="sc">%&gt;%</span> </span>
+<span id="cb93-21"><a href="two-mode-networks.html#cb93-21" tabindex="-1"></a>  <span class="fu">graph_from_adjacency_matrix</span>(<span class="at">mode =</span> <span class="st">&quot;undirected&quot;</span>)</span>
+<span id="cb93-22"><a href="two-mode-networks.html#cb93-22" tabindex="-1"></a><span class="co">#&gt; IGRAPH 1c086d1 UN-- 18 322 -- </span></span>
+<span id="cb93-23"><a href="two-mode-networks.html#cb93-23" tabindex="-1"></a><span class="co">#&gt; + attr: name (v/c)</span></span>
+<span id="cb93-24"><a href="two-mode-networks.html#cb93-24" tabindex="-1"></a><span class="co">#&gt; + edges from 1c086d1 (vertex names):</span></span>
+<span id="cb93-25"><a href="two-mode-networks.html#cb93-25" tabindex="-1"></a><span class="co">#&gt;  [1] EVELYN--LAURA     EVELYN--LAURA     EVELYN--LAURA    </span></span>
+<span id="cb93-26"><a href="two-mode-networks.html#cb93-26" tabindex="-1"></a><span class="co">#&gt;  [4] EVELYN--LAURA     EVELYN--LAURA     EVELYN--LAURA    </span></span>
+<span id="cb93-27"><a href="two-mode-networks.html#cb93-27" tabindex="-1"></a><span class="co">#&gt;  [7] EVELYN--THERESA   EVELYN--THERESA   EVELYN--THERESA  </span></span>
+<span id="cb93-28"><a href="two-mode-networks.html#cb93-28" tabindex="-1"></a><span class="co">#&gt; [10] EVELYN--THERESA   EVELYN--THERESA   EVELYN--THERESA  </span></span>
+<span id="cb93-29"><a href="two-mode-networks.html#cb93-29" tabindex="-1"></a><span class="co">#&gt; [13] EVELYN--THERESA   EVELYN--BRENDA    EVELYN--BRENDA   </span></span>
+<span id="cb93-30"><a href="two-mode-networks.html#cb93-30" tabindex="-1"></a><span class="co">#&gt; [16] EVELYN--BRENDA    EVELYN--BRENDA    EVELYN--BRENDA   </span></span>
+<span id="cb93-31"><a href="two-mode-networks.html#cb93-31" tabindex="-1"></a><span class="co">#&gt; [19] EVELYN--BRENDA    EVELYN--CHARLOTTE EVELYN--CHARLOTTE</span></span>
+<span id="cb93-32"><a href="two-mode-networks.html#cb93-32" tabindex="-1"></a><span class="co">#&gt; [22] EVELYN--CHARLOTTE EVELYN--FRANCES   EVELYN--FRANCES  </span></span>
+<span id="cb93-33"><a href="two-mode-networks.html#cb93-33" tabindex="-1"></a><span class="co">#&gt; + ... omitted several edges</span></span></code></pre></div>
+<p>As seen from the structure of the women network (one-mode projection) given above, we indeed shifted to the networks with the simple and supposedly easy to work with structure (one-mode).</p>
+<p>We can now plot these two networks:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="two-mode-networks.html#cb94-1" tabindex="-1"></a><span class="do">## get igraph objects:</span></span>
+<span id="cb94-2"><a href="two-mode-networks.html#cb94-2" tabindex="-1"></a>g.women <span class="ot">&lt;-</span> women_matrix <span class="sc">%&gt;%</span> </span>
+<span id="cb94-3"><a href="two-mode-networks.html#cb94-3" tabindex="-1"></a>  <span class="fu">graph_from_adjacency_matrix</span>(<span class="at">mode =</span> <span class="st">&quot;undirected&quot;</span>,</span>
+<span id="cb94-4"><a href="two-mode-networks.html#cb94-4" tabindex="-1"></a>                              <span class="at">weighted =</span> T)</span>
+<span id="cb94-5"><a href="two-mode-networks.html#cb94-5" tabindex="-1"></a>g.events <span class="ot">&lt;-</span> event_matrix <span class="sc">%&gt;%</span> </span>
+<span id="cb94-6"><a href="two-mode-networks.html#cb94-6" tabindex="-1"></a>  <span class="fu">graph_from_adjacency_matrix</span>(<span class="at">mode =</span> <span class="st">&quot;undirected&quot;</span>,</span>
+<span id="cb94-7"><a href="two-mode-networks.html#cb94-7" tabindex="-1"></a>                              <span class="at">weighted =</span> T)</span>
+<span id="cb94-8"><a href="two-mode-networks.html#cb94-8" tabindex="-1"></a></span>
+<span id="cb94-9"><a href="two-mode-networks.html#cb94-9" tabindex="-1"></a><span class="do">## calculate simple centralities:</span></span>
+<span id="cb94-10"><a href="two-mode-networks.html#cb94-10" tabindex="-1"></a><span class="fu">V</span>(g.women)<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(g.women, <span class="at">mode =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb94-11"><a href="two-mode-networks.html#cb94-11" tabindex="-1"></a><span class="fu">V</span>(g.events)<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(g.events, <span class="at">mode =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb94-12"><a href="two-mode-networks.html#cb94-12" tabindex="-1"></a></span>
+<span id="cb94-13"><a href="two-mode-networks.html#cb94-13" tabindex="-1"></a><span class="do">## plotting:</span></span>
+<span id="cb94-14"><a href="two-mode-networks.html#cb94-14" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb94-15"><a href="two-mode-networks.html#cb94-15" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb94-16"><a href="two-mode-networks.html#cb94-16" tabindex="-1"></a>g.women <span class="sc">%&gt;%</span> </span>
+<span id="cb94-17"><a href="two-mode-networks.html#cb94-17" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label.cex =</span> <span class="fl">0.5</span>,</span>
+<span id="cb94-18"><a href="two-mode-networks.html#cb94-18" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb94-19"><a href="two-mode-networks.html#cb94-19" tabindex="-1"></a>       <span class="at">vertex.size =</span> <span class="fu">V</span>(g.women)<span class="sc">$</span>degree,</span>
+<span id="cb94-20"><a href="two-mode-networks.html#cb94-20" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb94-21"><a href="two-mode-networks.html#cb94-21" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="st">&quot;square&quot;</span>,</span>
+<span id="cb94-22"><a href="two-mode-networks.html#cb94-22" tabindex="-1"></a>       <span class="at">layout =</span> <span class="fu">layout_with_dh</span>(g.women),</span>
+<span id="cb94-23"><a href="two-mode-networks.html#cb94-23" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">&quot;women projection&quot;</span>)</span>
+<span id="cb94-24"><a href="two-mode-networks.html#cb94-24" tabindex="-1"></a></span>
+<span id="cb94-25"><a href="two-mode-networks.html#cb94-25" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb94-26"><a href="two-mode-networks.html#cb94-26" tabindex="-1"></a>g.events <span class="sc">%&gt;%</span> </span>
+<span id="cb94-27"><a href="two-mode-networks.html#cb94-27" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label.cex =</span> <span class="fl">0.9</span>,</span>
+<span id="cb94-28"><a href="two-mode-networks.html#cb94-28" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb94-29"><a href="two-mode-networks.html#cb94-29" tabindex="-1"></a>       <span class="at">vertex.size =</span> <span class="fu">V</span>(g.events)<span class="sc">$</span>degree,</span>
+<span id="cb94-30"><a href="two-mode-networks.html#cb94-30" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="st">&quot;darkblue&quot;</span>,</span>
+<span id="cb94-31"><a href="two-mode-networks.html#cb94-31" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="st">&quot;circle&quot;</span>,</span>
+<span id="cb94-32"><a href="two-mode-networks.html#cb94-32" tabindex="-1"></a>       <span class="at">layout =</span> <span class="fu">layout_with_dh</span>(g.events),</span>
+<span id="cb94-33"><a href="two-mode-networks.html#cb94-33" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">&quot;events projection&quot;</span>)</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>We can compute centrality values for both sets of nodes (women and events):</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="two-mode-networks.html#cb95-1" tabindex="-1"></a><span class="fu">V</span>(g.women)<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(g.women, <span class="at">mode =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb95-2"><a href="two-mode-networks.html#cb95-2" tabindex="-1"></a><span class="fu">V</span>(g.women)<span class="sc">$</span>betweenness.score <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(g.women)</span>
+<span id="cb95-3"><a href="two-mode-networks.html#cb95-3" tabindex="-1"></a><span class="fu">V</span>(g.women)<span class="sc">$</span>closeness.score <span class="ot">&lt;-</span> <span class="fu">closeness</span>(g.women)</span>
+<span id="cb95-4"><a href="two-mode-networks.html#cb95-4" tabindex="-1"></a></span>
+<span id="cb95-5"><a href="two-mode-networks.html#cb95-5" tabindex="-1"></a>(g.women <span class="sc">%&gt;%</span> </span>
+<span id="cb95-6"><a href="two-mode-networks.html#cb95-6" tabindex="-1"></a>  <span class="fu">asDF</span>())<span class="sc">$</span>vertex <span class="sc">%&gt;%</span> </span>
+<span id="cb95-7"><a href="two-mode-networks.html#cb95-7" tabindex="-1"></a>  <span class="fu">select</span>(name, degree, betweenness.score, closeness.score) <span class="sc">%&gt;%</span> </span>
+<span id="cb95-8"><a href="two-mode-networks.html#cb95-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">betweenness.score =</span> <span class="fu">round</span>(betweenness.score,<span class="dv">2</span>),</span>
+<span id="cb95-9"><a href="two-mode-networks.html#cb95-9" tabindex="-1"></a>         <span class="at">closeness.score =</span> <span class="fu">round</span>(closeness.score,<span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb95-10"><a href="two-mode-networks.html#cb95-10" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(betweenness.score)) <span class="sc">%&gt;%</span> </span>
+<span id="cb95-11"><a href="two-mode-networks.html#cb95-11" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb95-12"><a href="two-mode-networks.html#cb95-12" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F)</span></code></pre></div>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:right;">
+degree
+</th>
+<th style="text-align:right;">
+betweenness.score
+</th>
+<th style="text-align:right;">
+closeness.score
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+OLIVIA
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+18.53
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FLORA
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+18.53
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DOROTHY
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+13.02
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HELEN
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+8.39
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FRANCES
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+7.87
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYRNA
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+7.31
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+KATHERINE
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+7.31
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VERNE
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+2.51
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SYLVIA
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+2.51
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHARLOTTE
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+2.08
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NORA
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+1.49
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ELEANOR
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.62
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LAURA
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BRENDA
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EVELYN
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+THERESA
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PEARL
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RUTH
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+</tr>
+</tbody>
+</table>
+<p>By contrast, we can use <code>tnet</code> package to compute weighted centrality scores. To do that, we firstly need to convert our matrix to <code>tnet</code> format.</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="two-mode-networks.html#cb96-1" tabindex="-1"></a>women_tnet <span class="ot">&lt;-</span> <span class="fu">as.tnet</span>(women_matrix)</span>
+<span id="cb96-2"><a href="two-mode-networks.html#cb96-2" tabindex="-1"></a></span>
+<span id="cb96-3"><a href="two-mode-networks.html#cb96-3" tabindex="-1"></a>tnet_degree <span class="ot">&lt;-</span> <span class="fu">degree_w</span>(women_tnet)</span>
+<span id="cb96-4"><a href="two-mode-networks.html#cb96-4" tabindex="-1"></a>tnet_betweenness <span class="ot">&lt;-</span> <span class="fu">betweenness_w</span>(women_tnet)</span>
+<span id="cb96-5"><a href="two-mode-networks.html#cb96-5" tabindex="-1"></a>tnet_closeness <span class="ot">&lt;-</span> <span class="fu">closeness_w</span>(women_tnet,</span>
+<span id="cb96-6"><a href="two-mode-networks.html#cb96-6" tabindex="-1"></a>                              <span class="at">gconly =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb96-7"><a href="two-mode-networks.html#cb96-7" tabindex="-1"></a></span>
+<span id="cb96-8"><a href="two-mode-networks.html#cb96-8" tabindex="-1"></a>southern_women_compare <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb96-9"><a href="two-mode-networks.html#cb96-9" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">row.names</span>(women_matrix),</span>
+<span id="cb96-10"><a href="two-mode-networks.html#cb96-10" tabindex="-1"></a>  <span class="at">weighted_degree =</span> tnet_degree[,<span class="dv">2</span>],</span>
+<span id="cb96-11"><a href="two-mode-networks.html#cb96-11" tabindex="-1"></a>  <span class="at">weighted_betweenness =</span> tnet_betweenness[,<span class="dv">2</span>],</span>
+<span id="cb96-12"><a href="two-mode-networks.html#cb96-12" tabindex="-1"></a>  <span class="at">weighted_closeness =</span> tnet_closeness[,<span class="dv">3</span>]) <span class="sc">%&gt;%</span></span>
+<span id="cb96-13"><a href="two-mode-networks.html#cb96-13" tabindex="-1"></a>  </span>
+<span id="cb96-14"><a href="two-mode-networks.html#cb96-14" tabindex="-1"></a>  <span class="fu">left_join</span>((<span class="fu">asDF</span>(g.women))<span class="sc">$</span>vertex <span class="sc">%&gt;%</span></span>
+<span id="cb96-15"><a href="two-mode-networks.html#cb96-15" tabindex="-1"></a>              <span class="fu">select</span>(<span class="sc">-</span>intergraph_id))</span>
+<span id="cb96-16"><a href="two-mode-networks.html#cb96-16" tabindex="-1"></a></span>
+<span id="cb96-17"><a href="two-mode-networks.html#cb96-17" tabindex="-1"></a><span class="fu">head</span>(southern_women_compare) <span class="sc">%&gt;%</span></span>
+<span id="cb96-18"><a href="two-mode-networks.html#cb96-18" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb96-19"><a href="two-mode-networks.html#cb96-19" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F)</span></code></pre></div>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:right;">
+weighted_degree
+</th>
+<th style="text-align:right;">
+weighted_betweenness
+</th>
+<th style="text-align:right;">
+weighted_closeness
+</th>
+<th style="text-align:right;">
+degree
+</th>
+<th style="text-align:right;">
+betweenness.score
+</th>
+<th style="text-align:right;">
+closeness.score
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+EVELYN
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+4.5000000
+</td>
+<td style="text-align:right;">
+1.2926019
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+0.0909091
+</td>
+<td style="text-align:right;">
+0.0294118
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LAURA
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.3333333
+</td>
+<td style="text-align:right;">
+1.2315491
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.4523810
+</td>
+<td style="text-align:right;">
+0.0285714
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+THERESA
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+34.3333333
+</td>
+<td style="text-align:right;">
+1.4575448
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+0.0909091
+</td>
+<td style="text-align:right;">
+0.0263158
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BRENDA
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1.5000000
+</td>
+<td style="text-align:right;">
+1.2569419
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.4523810
+</td>
+<td style="text-align:right;">
+0.0285714
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHARLOTTE
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+0.8642842
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+2.0833333
+</td>
+<td style="text-align:right;">
+0.0285714
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FRANCES
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+0.9477175
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+7.8690476
+</td>
+<td style="text-align:right;">
+0.0357143
+</td>
+</tr>
+</tbody>
+</table>
+<p>We can compare the values we got from two approaches. The values are different when plotting two types of betweenness against each other.</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="two-mode-networks.html#cb97-1" tabindex="-1"></a><span class="co">#southern_women_compare %&gt;% </span></span>
+<span id="cb97-2"><a href="two-mode-networks.html#cb97-2" tabindex="-1"></a><span class="co">#  ggplot(aes(degree, weighted_degree)) +</span></span>
+<span id="cb97-3"><a href="two-mode-networks.html#cb97-3" tabindex="-1"></a><span class="co">#  geom_point() ## values are similar</span></span>
+<span id="cb97-4"><a href="two-mode-networks.html#cb97-4" tabindex="-1"></a></span>
+<span id="cb97-5"><a href="two-mode-networks.html#cb97-5" tabindex="-1"></a>southern_women_compare <span class="sc">%&gt;%</span> </span>
+<span id="cb97-6"><a href="two-mode-networks.html#cb97-6" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(betweenness.score, weighted_betweenness)) <span class="sc">+</span></span>
+<span id="cb97-7"><a href="two-mode-networks.html#cb97-7" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb97-8"><a href="two-mode-networks.html#cb97-8" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">size =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="two-mode-networks.html#cb98-1" tabindex="-1"></a></span>
+<span id="cb98-2"><a href="two-mode-networks.html#cb98-2" tabindex="-1"></a><span class="co">#southern_women_compare %&gt;% </span></span>
+<span id="cb98-3"><a href="two-mode-networks.html#cb98-3" tabindex="-1"></a><span class="co">#  ggplot(aes(closeness.score, weighted_closeness)) +</span></span>
+<span id="cb98-4"><a href="two-mode-networks.html#cb98-4" tabindex="-1"></a><span class="co">#  geom_point()</span></span></code></pre></div>
+<p>Actors with the highest scores:</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="two-mode-networks.html#cb99-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb99-2"><a href="two-mode-networks.html#cb99-2" tabindex="-1"></a>g.women <span class="sc">%&gt;%</span> </span>
+<span id="cb99-3"><a href="two-mode-networks.html#cb99-3" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label.cex =</span> <span class="fl">0.5</span>,</span>
+<span id="cb99-4"><a href="two-mode-networks.html#cb99-4" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb99-5"><a href="two-mode-networks.html#cb99-5" tabindex="-1"></a>       <span class="co">#vertex.size = V(g.women)$betweenness.score,</span></span>
+<span id="cb99-6"><a href="two-mode-networks.html#cb99-6" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g.women)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;OLIVIA&quot;</span>, <span class="st">&quot;FLORA&quot;</span>),</span>
+<span id="cb99-7"><a href="two-mode-networks.html#cb99-7" tabindex="-1"></a>                             <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb99-8"><a href="two-mode-networks.html#cb99-8" tabindex="-1"></a>                             <span class="fu">ifelse</span>(<span class="fu">V</span>(g.women)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;NORA&quot;</span>, <span class="st">&quot;THERESA&quot;</span>),</span>
+<span id="cb99-9"><a href="two-mode-networks.html#cb99-9" tabindex="-1"></a>                                    </span>
+<span id="cb99-10"><a href="two-mode-networks.html#cb99-10" tabindex="-1"></a>                                    <span class="st">&quot;lightblue&quot;</span>,</span>
+<span id="cb99-11"><a href="two-mode-networks.html#cb99-11" tabindex="-1"></a>                                    <span class="st">&quot;grey60&quot;</span>)),</span>
+<span id="cb99-12"><a href="two-mode-networks.html#cb99-12" tabindex="-1"></a>       <span class="at">vertex.size =</span> <span class="fu">V</span>(g.women)<span class="sc">$</span>degree<span class="sc">*</span><span class="fl">1.5</span>,</span>
+<span id="cb99-13"><a href="two-mode-networks.html#cb99-13" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="st">&quot;square&quot;</span>,</span>
+<span id="cb99-14"><a href="two-mode-networks.html#cb99-14" tabindex="-1"></a>       <span class="at">layout =</span> <span class="fu">layout_nicely</span>(g.women))</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Communities in the women projection:</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="two-mode-networks.html#cb100-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb100-2"><a href="two-mode-networks.html#cb100-2" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">cluster_louvain</span>(g.women)</span>
+<span id="cb100-3"><a href="two-mode-networks.html#cb100-3" tabindex="-1"></a></span>
+<span id="cb100-4"><a href="two-mode-networks.html#cb100-4" tabindex="-1"></a><span class="fu">V</span>(g.women)<span class="sc">$</span>cl <span class="ot">=</span> <span class="fu">membership</span>(cl)</span>
+<span id="cb100-5"><a href="two-mode-networks.html#cb100-5" tabindex="-1"></a></span>
+<span id="cb100-6"><a href="two-mode-networks.html#cb100-6" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb100-7"><a href="two-mode-networks.html#cb100-7" tabindex="-1"></a>g.women <span class="sc">%&gt;%</span> </span>
+<span id="cb100-8"><a href="two-mode-networks.html#cb100-8" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label.cex =</span> <span class="fl">0.5</span>,</span>
+<span id="cb100-9"><a href="two-mode-networks.html#cb100-9" tabindex="-1"></a>       <span class="at">vertex.label.color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb100-10"><a href="two-mode-networks.html#cb100-10" tabindex="-1"></a>       <span class="co">#vertex.size = V(g.women)$betweenness.score,</span></span>
+<span id="cb100-11"><a href="two-mode-networks.html#cb100-11" tabindex="-1"></a>       <span class="at">vertex.size =</span> <span class="fu">V</span>(g.women)<span class="sc">$</span>degree<span class="sc">*</span><span class="fl">1.5</span>,</span>
+<span id="cb100-12"><a href="two-mode-networks.html#cb100-12" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g.women)<span class="sc">$</span>cl <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb100-13"><a href="two-mode-networks.html#cb100-13" tabindex="-1"></a>                             <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb100-14"><a href="two-mode-networks.html#cb100-14" tabindex="-1"></a>                             <span class="st">&quot;lightblue&quot;</span>),</span>
+<span id="cb100-15"><a href="two-mode-networks.html#cb100-15" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="st">&quot;square&quot;</span>,</span>
+<span id="cb100-16"><a href="two-mode-networks.html#cb100-16" tabindex="-1"></a>       <span class="at">layout =</span> <span class="fu">layout_nicely</span>(g.women))</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>And in the matrix form (we will analyze next time):</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="two-mode-networks.html#cb101-1" tabindex="-1"></a><span class="fu">library</span>(blockmodeling)</span>
+<span id="cb101-2"><a href="two-mode-networks.html#cb101-2" tabindex="-1"></a></span>
+<span id="cb101-3"><a href="two-mode-networks.html#cb101-3" tabindex="-1"></a>class2 <span class="ot">&lt;-</span> <span class="fu">optRandomParC</span>(<span class="at">M=</span>women_matrix,</span>
+<span id="cb101-4"><a href="two-mode-networks.html#cb101-4" tabindex="-1"></a>                        <span class="at">k =</span> <span class="dv">2</span>,</span>
+<span id="cb101-5"><a href="two-mode-networks.html#cb101-5" tabindex="-1"></a>                        <span class="at">rep =</span> <span class="dv">10</span>,</span>
+<span id="cb101-6"><a href="two-mode-networks.html#cb101-6" tabindex="-1"></a>                        <span class="at">approach=</span><span class="st">&quot;ss&quot;</span>,</span>
+<span id="cb101-7"><a href="two-mode-networks.html#cb101-7" tabindex="-1"></a>                        <span class="at">blocks=</span><span class="st">&quot;com&quot;</span>,</span>
+<span id="cb101-8"><a href="two-mode-networks.html#cb101-8" tabindex="-1"></a>                        <span class="at">printRep =</span> F)</span>
+<span id="cb101-9"><a href="two-mode-networks.html#cb101-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb101-10"><a href="two-mode-networks.html#cb101-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb101-11"><a href="two-mode-networks.html#cb101-11" tabindex="-1"></a><span class="co">#&gt; Optimization of all partitions completed</span></span>
+<span id="cb101-12"><a href="two-mode-networks.html#cb101-12" tabindex="-1"></a><span class="co">#&gt; 1 solution(s) with minimal error = 392.3794 found.</span></span>
+<span id="cb101-13"><a href="two-mode-networks.html#cb101-13" tabindex="-1"></a></span>
+<span id="cb101-14"><a href="two-mode-networks.html#cb101-14" tabindex="-1"></a><span class="fu">plot</span>(class2, <span class="at">main =</span> <span class="cn">NA</span>)</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="dimensionality-reduction" class="section level2 unnumbered">
+<h2><strong>Dimensionality reduction</strong></h2>
+<p>Dimensionality Reduction refers to the process of reducing the number of variables or dimensions in a dataset while retaining as much meaningful information as possible. This is particularly useful in exploratory data analysis, visualization, and machine learning when high-dimensional data becomes challenging to interpret or analyze.</p>
+<p>Correspondence Analysis (CA) is a dimensionality reduction method designed for visualizing the relationships between rows and columns in a contingency table. By decomposing the chi-squared statistic of the table, it projects the data onto a lower-dimensional space, revealing patterns and associations. CA has a natural connection to the analysis of two-mode networks, as it provides a powerful framework for understanding relationships between two distinct sets of entities, much like bipartite networks.</p>
+<p>Computation and the variation explained:</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="two-mode-networks.html#cb102-1" tabindex="-1"></a>southern_women2 <span class="ot">&lt;-</span> southern_women <span class="sc">%&gt;%</span> </span>
+<span id="cb102-2"><a href="two-mode-networks.html#cb102-2" tabindex="-1"></a>  <span class="fu">as_biadjacency_matrix</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb102-3"><a href="two-mode-networks.html#cb102-3" tabindex="-1"></a>  <span class="fu">as.data.frame.matrix</span>() <span class="do">## 18 rows = women, 14 columns = events</span></span>
+<span id="cb102-4"><a href="two-mode-networks.html#cb102-4" tabindex="-1"></a></span>
+<span id="cb102-5"><a href="two-mode-networks.html#cb102-5" tabindex="-1"></a></span>
+<span id="cb102-6"><a href="two-mode-networks.html#cb102-6" tabindex="-1"></a><span class="fu">library</span>(ca)</span>
+<span id="cb102-7"><a href="two-mode-networks.html#cb102-7" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
+<span id="cb102-8"><a href="two-mode-networks.html#cb102-8" tabindex="-1"></a><span class="do">## perform correspondence analysis</span></span>
+<span id="cb102-9"><a href="two-mode-networks.html#cb102-9" tabindex="-1"></a>res.ca <span class="ot">&lt;-</span> <span class="fu">ca</span>(southern_women2, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb102-10"><a href="two-mode-networks.html#cb102-10" tabindex="-1"></a></span>
+<span id="cb102-11"><a href="two-mode-networks.html#cb102-11" tabindex="-1"></a><span class="do">## plot with the variance explained by each dimension:</span></span>
+<span id="cb102-12"><a href="two-mode-networks.html#cb102-12" tabindex="-1"></a><span class="fu">fviz_eig</span>(res.ca)</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>Plotting:</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="two-mode-networks.html#cb103-1" tabindex="-1"></a>women.profiles <span class="ot">&lt;-</span> <span class="fu">get_ca_row</span>(res.ca)</span>
+<span id="cb103-2"><a href="two-mode-networks.html#cb103-2" tabindex="-1"></a>events.profiles <span class="ot">&lt;-</span> <span class="fu">get_ca_col</span>(res.ca) </span>
+<span id="cb103-3"><a href="two-mode-networks.html#cb103-3" tabindex="-1"></a></span>
+<span id="cb103-4"><a href="two-mode-networks.html#cb103-4" tabindex="-1"></a>women.profiles<span class="sc">$</span>coord <span class="sc">%&gt;%</span> </span>
+<span id="cb103-5"><a href="two-mode-networks.html#cb103-5" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb103-6"><a href="two-mode-networks.html#cb103-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">row.names</span>(.),</span>
+<span id="cb103-7"><a href="two-mode-networks.html#cb103-7" tabindex="-1"></a>         <span class="at">type =</span> <span class="st">&quot;people&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb103-8"><a href="two-mode-networks.html#cb103-8" tabindex="-1"></a>  </span>
+<span id="cb103-9"><a href="two-mode-networks.html#cb103-9" tabindex="-1"></a>  <span class="fu">bind_rows</span>(events.profiles<span class="sc">$</span>coord <span class="sc">%&gt;%</span></span>
+<span id="cb103-10"><a href="two-mode-networks.html#cb103-10" tabindex="-1"></a>              <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb103-11"><a href="two-mode-networks.html#cb103-11" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">row.names</span>(.),</span>
+<span id="cb103-12"><a href="two-mode-networks.html#cb103-12" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">&quot;events&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb103-13"><a href="two-mode-networks.html#cb103-13" tabindex="-1"></a>  </span>
+<span id="cb103-14"><a href="two-mode-networks.html#cb103-14" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Dim<span class="fl">.1</span>, Dim<span class="fl">.2</span>, <span class="at">color =</span> type)) <span class="sc">+</span></span>
+<span id="cb103-15"><a href="two-mode-networks.html#cb103-15" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb103-16"><a href="two-mode-networks.html#cb103-16" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb103-17"><a href="two-mode-networks.html#cb103-17" tabindex="-1"></a>  </span>
+<span id="cb103-18"><a href="two-mode-networks.html#cb103-18" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;darkblue&quot;</span>, <span class="st">&quot;coral1&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb103-19"><a href="two-mode-networks.html#cb103-19" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div id="clustering-a-two-mode-network-on-cultural-tastes-and-leisure-activities" class="section level2 unnumbered">
+<h2><strong>Clustering a two-mode network on cultural tastes and leisure activities</strong></h2>
+<p>This data was collected by the group of sociology students who attended the course on “Culture and Inequality” during the spring of 2025. The goal here was to map the respondents’ perception of association between the jobs / professions and cultural preferences. The whole research strategy is inspired by:</p>
+<blockquote>
+<p>Boltanski, L., &amp; Thévenot, L. (1983). Finding one’s way in social space: a study based on games. Social science information, 22(4-5), 631-680.</p>
+</blockquote>
+<p>This is an on-going project, so it is just the slice of the data. Apologies that it is in Russian.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="two-mode-networks.html#cb104-1" tabindex="-1"></a>cultural.choices <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;datasets/cultural.choices_table.csv&quot;</span>)</span></code></pre></div>
+<p>First, we need to consturct a graph object:</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="two-mode-networks.html#cb105-1" tabindex="-1"></a>g <span class="ot">&lt;-</span> cultural.choices <span class="sc">%&gt;%</span> </span>
+<span id="cb105-2"><a href="two-mode-networks.html#cb105-2" tabindex="-1"></a>  <span class="fu">count</span>(cultural_choice, occupation_card) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-3"><a href="two-mode-networks.html#cb105-3" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">weight =</span> n) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-4"><a href="two-mode-networks.html#cb105-4" tabindex="-1"></a>  <span class="fu">graph_from_data_frame</span>(<span class="at">directed =</span> F)</span>
+<span id="cb105-5"><a href="two-mode-networks.html#cb105-5" tabindex="-1"></a></span>
+<span id="cb105-6"><a href="two-mode-networks.html#cb105-6" tabindex="-1"></a>nodelist <span class="ot">&lt;-</span> <span class="fu">asDF</span>(g)<span class="sc">$</span>edge <span class="sc">%&gt;%</span> </span>
+<span id="cb105-7"><a href="two-mode-networks.html#cb105-7" tabindex="-1"></a>  <span class="fu">count</span>(V1) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-8"><a href="two-mode-networks.html#cb105-8" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>n) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-9"><a href="two-mode-networks.html#cb105-9" tabindex="-1"></a>  </span>
+<span id="cb105-10"><a href="two-mode-networks.html#cb105-10" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">asDF</span>(g)<span class="sc">$</span>vertex <span class="sc">%&gt;%</span> </span>
+<span id="cb105-11"><a href="two-mode-networks.html#cb105-11" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">V1 =</span> intergraph_id)) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-12"><a href="two-mode-networks.html#cb105-12" tabindex="-1"></a>  </span>
+<span id="cb105-13"><a href="two-mode-networks.html#cb105-13" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">&quot;choice&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-14"><a href="two-mode-networks.html#cb105-14" tabindex="-1"></a>  </span>
+<span id="cb105-15"><a href="two-mode-networks.html#cb105-15" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">intergraph_id =</span> V1) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-16"><a href="two-mode-networks.html#cb105-16" tabindex="-1"></a>  </span>
+<span id="cb105-17"><a href="two-mode-networks.html#cb105-17" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">asDF</span>(g)<span class="sc">$</span>edge <span class="sc">%&gt;%</span> </span>
+<span id="cb105-18"><a href="two-mode-networks.html#cb105-18" tabindex="-1"></a>  <span class="fu">count</span>(V2) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-19"><a href="two-mode-networks.html#cb105-19" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>n) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-20"><a href="two-mode-networks.html#cb105-20" tabindex="-1"></a>  </span>
+<span id="cb105-21"><a href="two-mode-networks.html#cb105-21" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">asDF</span>(g)<span class="sc">$</span>vertex <span class="sc">%&gt;%</span></span>
+<span id="cb105-22"><a href="two-mode-networks.html#cb105-22" tabindex="-1"></a>              <span class="fu">rename</span>(<span class="at">V2 =</span> intergraph_id)) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-23"><a href="two-mode-networks.html#cb105-23" tabindex="-1"></a>  </span>
+<span id="cb105-24"><a href="two-mode-networks.html#cb105-24" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">&quot;occupation&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-25"><a href="two-mode-networks.html#cb105-25" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">intergraph_id =</span> V2))</span>
+<span id="cb105-26"><a href="two-mode-networks.html#cb105-26" tabindex="-1"></a></span>
+<span id="cb105-27"><a href="two-mode-networks.html#cb105-27" tabindex="-1"></a>g <span class="ot">&lt;-</span> cultural.choices <span class="sc">%&gt;%</span> </span>
+<span id="cb105-28"><a href="two-mode-networks.html#cb105-28" tabindex="-1"></a>  <span class="fu">count</span>(cultural_choice, occupation_card) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-29"><a href="two-mode-networks.html#cb105-29" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">weight =</span> n) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-30"><a href="two-mode-networks.html#cb105-30" tabindex="-1"></a>  <span class="fu">graph_from_data_frame</span>(<span class="at">directed =</span> F,</span>
+<span id="cb105-31"><a href="two-mode-networks.html#cb105-31" tabindex="-1"></a>                        <span class="at">vertices =</span> nodelist <span class="sc">%&gt;%</span> </span>
+<span id="cb105-32"><a href="two-mode-networks.html#cb105-32" tabindex="-1"></a>                          <span class="fu">select</span>(<span class="sc">-</span>intergraph_id))</span>
+<span id="cb105-33"><a href="two-mode-networks.html#cb105-33" tabindex="-1"></a></span>
+<span id="cb105-34"><a href="two-mode-networks.html#cb105-34" tabindex="-1"></a>g <span class="sc">%&gt;%</span> </span>
+<span id="cb105-35"><a href="two-mode-networks.html#cb105-35" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb105-36"><a href="two-mode-networks.html#cb105-36" tabindex="-1"></a>       <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>type <span class="sc">==</span> <span class="st">&quot;choice&quot;</span>,</span>
+<span id="cb105-37"><a href="two-mode-networks.html#cb105-37" tabindex="-1"></a>                             <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb105-38"><a href="two-mode-networks.html#cb105-38" tabindex="-1"></a>                             <span class="st">&quot;lightblue&quot;</span>),</span>
+<span id="cb105-39"><a href="two-mode-networks.html#cb105-39" tabindex="-1"></a>       <span class="at">vertex.shape =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g)<span class="sc">$</span>type <span class="sc">==</span> <span class="st">&quot;choice&quot;</span>,</span>
+<span id="cb105-40"><a href="two-mode-networks.html#cb105-40" tabindex="-1"></a>                             <span class="st">&quot;circle&quot;</span>,</span>
+<span id="cb105-41"><a href="two-mode-networks.html#cb105-41" tabindex="-1"></a>                             <span class="st">&quot;square&quot;</span>))</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Community detection:</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="two-mode-networks.html#cb106-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb106-2"><a href="two-mode-networks.html#cb106-2" tabindex="-1"></a>cl <span class="ot">&lt;-</span> g <span class="sc">%&gt;%</span> </span>
+<span id="cb106-3"><a href="two-mode-networks.html#cb106-3" tabindex="-1"></a>  <span class="fu">cluster_fast_greedy</span>(<span class="at">weights =</span> <span class="fu">E</span>(g)<span class="sc">$</span>weight) </span>
+<span id="cb106-4"><a href="two-mode-networks.html#cb106-4" tabindex="-1"></a></span>
+<span id="cb106-5"><a href="two-mode-networks.html#cb106-5" tabindex="-1"></a>  <span class="co">#membership() %&gt;% </span></span>
+<span id="cb106-6"><a href="two-mode-networks.html#cb106-6" tabindex="-1"></a>  <span class="co">#sizes()</span></span>
+<span id="cb106-7"><a href="two-mode-networks.html#cb106-7" tabindex="-1"></a>cl</span>
+<span id="cb106-8"><a href="two-mode-networks.html#cb106-8" tabindex="-1"></a><span class="co">#&gt; IGRAPH clustering fast greedy, groups: 4, mod: 0.29</span></span>
+<span id="cb106-9"><a href="two-mode-networks.html#cb106-9" tabindex="-1"></a><span class="co">#&gt; + groups:</span></span>
+<span id="cb106-10"><a href="two-mode-networks.html#cb106-10" tabindex="-1"></a><span class="co">#&gt;   $`1`</span></span>
+<span id="cb106-11"><a href="two-mode-networks.html#cb106-11" tabindex="-1"></a><span class="co">#&gt;    [1] &quot;бывали на каникулах в италии&quot;                      </span></span>
+<span id="cb106-12"><a href="two-mode-networks.html#cb106-12" tabindex="-1"></a><span class="co">#&gt;    [2] &quot;были в мариинском театре в прошлом месяце&quot;         </span></span>
+<span id="cb106-13"><a href="two-mode-networks.html#cb106-13" tabindex="-1"></a><span class="co">#&gt;    [3] &quot;живут на петроградке&quot;                              </span></span>
+<span id="cb106-14"><a href="two-mode-networks.html#cb106-14" tabindex="-1"></a><span class="co">#&gt;    [4] &quot;знают французский&quot;                                 </span></span>
+<span id="cb106-15"><a href="two-mode-networks.html#cb106-15" tabindex="-1"></a><span class="co">#&gt;    [5] &quot;покупают в среднем две книги в месяц&quot;              </span></span>
+<span id="cb106-16"><a href="two-mode-networks.html#cb106-16" tabindex="-1"></a><span class="co">#&gt;    [6] &quot;придерживаются оппозиционных политических взглядов&quot;</span></span>
+<span id="cb106-17"><a href="two-mode-networks.html#cb106-17" tabindex="-1"></a><span class="co">#&gt;    [7] &quot;смотрят фестивальное кино&quot;                         </span></span>
+<span id="cb106-18"><a href="two-mode-networks.html#cb106-18" tabindex="-1"></a><span class="co">#&gt;    [8] &quot;старше 60 лет&quot;                                     </span></span>
+<span id="cb106-19"><a href="two-mode-networks.html#cb106-19" tabindex="-1"></a><span class="co">#&gt;    [9] &quot;артист оркестра&quot;                                   </span></span>
+<span id="cb106-20"><a href="two-mode-networks.html#cb106-20" tabindex="-1"></a><span class="co">#&gt;   + ... omitted several groups/vertices</span></span></code></pre></div>
+<p>Table with clusters:</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="two-mode-networks.html#cb107-1" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>fast.greedy.cl <span class="ot">=</span> <span class="fu">membership</span>(cl)</span>
+<span id="cb107-2"><a href="two-mode-networks.html#cb107-2" tabindex="-1"></a></span>
+<span id="cb107-3"><a href="two-mode-networks.html#cb107-3" tabindex="-1"></a><span class="fu">asDF</span>(g)<span class="sc">$</span>vertex <span class="sc">%&gt;%</span> </span>
+<span id="cb107-4"><a href="two-mode-networks.html#cb107-4" tabindex="-1"></a>  <span class="fu">group_by</span>(type, fast.greedy.cl) <span class="sc">%&gt;%</span> </span>
+<span id="cb107-5"><a href="two-mode-networks.html#cb107-5" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">members =</span> <span class="fu">toString</span>(name)) <span class="sc">%&gt;%</span> </span>
+<span id="cb107-6"><a href="two-mode-networks.html#cb107-6" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb107-7"><a href="two-mode-networks.html#cb107-7" tabindex="-1"></a>  </span>
+<span id="cb107-8"><a href="two-mode-networks.html#cb107-8" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">&quot;type&quot;</span>,</span>
+<span id="cb107-9"><a href="two-mode-networks.html#cb107-9" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">&quot;members&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb107-10"><a href="two-mode-networks.html#cb107-10" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">`</span><span class="at">fast-greedy cluster</span><span class="st">`</span> <span class="ot">=</span> fast.greedy.cl,</span>
+<span id="cb107-11"><a href="two-mode-networks.html#cb107-11" tabindex="-1"></a>         <span class="at">choices =</span> choice,</span>
+<span id="cb107-12"><a href="two-mode-networks.html#cb107-12" tabindex="-1"></a>         <span class="at">occupations =</span> occupation)</span>
+<span id="cb107-13"><a href="two-mode-networks.html#cb107-13" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 3</span></span>
+<span id="cb107-14"><a href="two-mode-networks.html#cb107-14" tabindex="-1"></a><span class="co">#&gt;   `fast-greedy cluster` choices                  occupations</span></span>
+<span id="cb107-15"><a href="two-mode-networks.html#cb107-15" tabindex="-1"></a><span class="co">#&gt;   &lt;membrshp&gt;            &lt;chr&gt;                    &lt;chr&gt;      </span></span>
+<span id="cb107-16"><a href="two-mode-networks.html#cb107-16" tabindex="-1"></a><span class="co">#&gt; 1 1                     бывали на каникулах в и… артист орк…</span></span>
+<span id="cb107-17"><a href="two-mode-networks.html#cb107-17" tabindex="-1"></a><span class="co">#&gt; 2 2                     были на спортивном матч… повар, про…</span></span>
+<span id="cb107-18"><a href="two-mode-networks.html#cb107-18" tabindex="-1"></a><span class="co">#&gt; 3 3                     носят натуральную дубле… агент по н…</span></span>
+<span id="cb107-19"><a href="two-mode-networks.html#cb107-19" tabindex="-1"></a><span class="co">#&gt; 4 4                     вегетарианцы, ежедневно… администра…</span></span>
+<span id="cb107-20"><a href="two-mode-networks.html#cb107-20" tabindex="-1"></a></span>
+<span id="cb107-21"><a href="two-mode-networks.html#cb107-21" tabindex="-1"></a><span class="co">#as_image(width = 8, height = 20) -- other option</span></span>
+<span id="cb107-22"><a href="two-mode-networks.html#cb107-22" tabindex="-1"></a><span class="co">#install.packages(&quot;webshot2&quot;)</span></span>
+<span id="cb107-23"><a href="two-mode-networks.html#cb107-23" tabindex="-1"></a><span class="co">#install.packages(&quot;magick&quot;)</span></span></code></pre></div>
+<p>Overview from Gephi:</p>
+<p><img src="images/graph_fast-greedy_cl2.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="case-study-interlocking-editors-in-russian-sociology" class="section level2 unnumbered">
+<h2><strong>Case study: interlocking editors in Russian sociology</strong></h2>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="two-mode-networks.html#cb108-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
+<p>Read more about the data: <a href="https://github.com/artpech23/russian_sociology_abstracts.sequel" class="uri">https://github.com/artpech23/russian_sociology_abstracts.sequel</a></p>
+<p>load data:</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="two-mode-networks.html#cb109-1" tabindex="-1"></a>vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;datasets/journals_nodes.csv&quot;</span>)</span>
+<span id="cb109-2"><a href="two-mode-networks.html#cb109-2" tabindex="-1"></a>edges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;datasets/journals_edges.csv&quot;</span>)</span>
+<span id="cb109-3"><a href="two-mode-networks.html#cb109-3" tabindex="-1"></a></span>
+<span id="cb109-4"><a href="two-mode-networks.html#cb109-4" tabindex="-1"></a>mode2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;datasets/2mode_journals.csv&quot;</span>)</span>
+<span id="cb109-5"><a href="two-mode-networks.html#cb109-5" tabindex="-1"></a></span>
+<span id="cb109-6"><a href="two-mode-networks.html#cb109-6" tabindex="-1"></a><span class="fu">rm</span>(edges)</span></code></pre></div>
+<p>Get projections:</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="two-mode-networks.html#cb110-1" tabindex="-1"></a><span class="do">##########################################</span></span>
+<span id="cb110-2"><a href="two-mode-networks.html#cb110-2" tabindex="-1"></a><span class="do">## get bimodal network and projections: ##</span></span>
+<span id="cb110-3"><a href="two-mode-networks.html#cb110-3" tabindex="-1"></a><span class="do">##########################################</span></span>
+<span id="cb110-4"><a href="two-mode-networks.html#cb110-4" tabindex="-1"></a></span>
+<span id="cb110-5"><a href="two-mode-networks.html#cb110-5" tabindex="-1"></a>two.mode <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(mode2 <span class="sc">%&gt;%</span></span>
+<span id="cb110-6"><a href="two-mode-networks.html#cb110-6" tabindex="-1"></a>                                    <span class="do">## get unique journal-editor couples:</span></span>
+<span id="cb110-7"><a href="two-mode-networks.html#cb110-7" tabindex="-1"></a>                                    <span class="fu">count</span>(journal_name, </span>
+<span id="cb110-8"><a href="two-mode-networks.html#cb110-8" tabindex="-1"></a>                                          unified_name),</span>
+<span id="cb110-9"><a href="two-mode-networks.html#cb110-9" tabindex="-1"></a>                                  <span class="at">directed =</span> F)</span>
+<span id="cb110-10"><a href="two-mode-networks.html#cb110-10" tabindex="-1"></a></span>
+<span id="cb110-11"><a href="two-mode-networks.html#cb110-11" tabindex="-1"></a><span class="do">## assign bipartite mapping:</span></span>
+<span id="cb110-12"><a href="two-mode-networks.html#cb110-12" tabindex="-1"></a><span class="fu">V</span>(two.mode)<span class="sc">$</span>type <span class="ot">&lt;-</span> <span class="fu">bipartite_mapping</span>(two.mode)<span class="sc">$</span>type</span>
+<span id="cb110-13"><a href="two-mode-networks.html#cb110-13" tabindex="-1"></a></span>
+<span id="cb110-14"><a href="two-mode-networks.html#cb110-14" tabindex="-1"></a><span class="do">## extract projections:</span></span>
+<span id="cb110-15"><a href="two-mode-networks.html#cb110-15" tabindex="-1"></a>bipartite_matrix <span class="ot">&lt;-</span> <span class="fu">as_biadjacency_matrix</span>(two.mode)</span>
+<span id="cb110-16"><a href="two-mode-networks.html#cb110-16" tabindex="-1"></a></span>
+<span id="cb110-17"><a href="two-mode-networks.html#cb110-17" tabindex="-1"></a>journal_matrix <span class="ot">&lt;-</span> bipartite_matrix <span class="sc">%*%</span> <span class="fu">t</span>(bipartite_matrix)</span>
+<span id="cb110-18"><a href="two-mode-networks.html#cb110-18" tabindex="-1"></a>people_matrix <span class="ot">&lt;-</span> <span class="fu">t</span>(bipartite_matrix) <span class="sc">%*%</span> bipartite_matrix</span>
+<span id="cb110-19"><a href="two-mode-networks.html#cb110-19" tabindex="-1"></a></span>
+<span id="cb110-20"><a href="two-mode-networks.html#cb110-20" tabindex="-1"></a><span class="do">## create journals&#39; projection:</span></span>
+<span id="cb110-21"><a href="two-mode-networks.html#cb110-21" tabindex="-1"></a><span class="fu">diag</span>(journal_matrix) <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb110-22"><a href="two-mode-networks.html#cb110-22" tabindex="-1"></a><span class="fu">diag</span>(people_matrix) <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb110-23"><a href="two-mode-networks.html#cb110-23" tabindex="-1"></a></span>
+<span id="cb110-24"><a href="two-mode-networks.html#cb110-24" tabindex="-1"></a>g_journals <span class="ot">&lt;-</span> <span class="fu">graph_from_adjacency_matrix</span>(journal_matrix,</span>
+<span id="cb110-25"><a href="two-mode-networks.html#cb110-25" tabindex="-1"></a>                                          <span class="at">mode =</span> <span class="st">&quot;undirected&quot;</span>,</span>
+<span id="cb110-26"><a href="two-mode-networks.html#cb110-26" tabindex="-1"></a>                                          <span class="at">weighted =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb110-27"><a href="two-mode-networks.html#cb110-27" tabindex="-1"></a>g_people <span class="ot">&lt;-</span> <span class="fu">graph_from_adjacency_matrix</span>(people_matrix,</span>
+<span id="cb110-28"><a href="two-mode-networks.html#cb110-28" tabindex="-1"></a>                                          <span class="at">mode =</span> <span class="st">&quot;undirected&quot;</span>,</span>
+<span id="cb110-29"><a href="two-mode-networks.html#cb110-29" tabindex="-1"></a>                                          <span class="at">weighted =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb110-30"><a href="two-mode-networks.html#cb110-30" tabindex="-1"></a></span>
+<span id="cb110-31"><a href="two-mode-networks.html#cb110-31" tabindex="-1"></a><span class="fu">rm</span>(bipartite_matrix, journal_matrix, two.mode)</span></code></pre></div>
+<p>Central editors:</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="two-mode-networks.html#cb111-1" tabindex="-1"></a><span class="fu">V</span>(g_people)<span class="sc">$</span>totaldegree <span class="ot">=</span> <span class="fu">degree</span>(g_people, <span class="at">mode =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb111-2"><a href="two-mode-networks.html#cb111-2" tabindex="-1"></a><span class="fu">V</span>(g_people)<span class="sc">$</span>betweenness.score <span class="ot">=</span> <span class="fu">betweenness</span>(g_people)</span>
+<span id="cb111-3"><a href="two-mode-networks.html#cb111-3" tabindex="-1"></a></span>
+<span id="cb111-4"><a href="two-mode-networks.html#cb111-4" tabindex="-1"></a><span class="co">#(asDF(g_people))$vertex %&gt;% </span></span>
+<span id="cb111-5"><a href="two-mode-networks.html#cb111-5" tabindex="-1"></a><span class="co">#  arrange(desc(totaldegree))</span></span>
+<span id="cb111-6"><a href="two-mode-networks.html#cb111-6" tabindex="-1"></a></span>
+<span id="cb111-7"><a href="two-mode-networks.html#cb111-7" tabindex="-1"></a><span class="do">## better way:</span></span>
+<span id="cb111-8"><a href="two-mode-networks.html#cb111-8" tabindex="-1"></a>mode2 <span class="sc">%&gt;%</span> </span>
+<span id="cb111-9"><a href="two-mode-networks.html#cb111-9" tabindex="-1"></a>  <span class="fu">count</span>(journal_name, unified_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb111-10"><a href="two-mode-networks.html#cb111-10" tabindex="-1"></a>  <span class="fu">count</span>(unified_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb111-11"><a href="two-mode-networks.html#cb111-11" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb111-12"><a href="two-mode-networks.html#cb111-12" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">7</span>, n) <span class="sc">%&gt;%</span> </span>
+<span id="cb111-13"><a href="two-mode-networks.html#cb111-13" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb111-14"><a href="two-mode-networks.html#cb111-14" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F)</span></code></pre></div>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+unified_name
+</th>
+<th style="text-align:right;">
+n
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+зубок юлия альбертовна
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+голенкова зинаида тихоновна
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+тощенко жан терентьевич
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+горшков михаил константинович
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+черныш михаил федорович
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ивченков сергей григорьевич
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+каменева татьяна николаевна
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+омельченко елена леонидовна
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+погосян геворк арамович
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+скворцов николай генрихович
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ярская-смирнова елена ростиславовна
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+</tbody>
+</table>
+<p>Central journals:</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="two-mode-networks.html#cb112-1" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb112-2"><a href="two-mode-networks.html#cb112-2" tabindex="-1"></a><span class="do">## get degree centralities: ## </span></span>
+<span id="cb112-3"><a href="two-mode-networks.html#cb112-3" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb112-4"><a href="two-mode-networks.html#cb112-4" tabindex="-1"></a></span>
+<span id="cb112-5"><a href="two-mode-networks.html#cb112-5" tabindex="-1"></a><span class="fu">V</span>(g_journals)<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(g_journals, <span class="at">mode =</span> <span class="st">&quot;total&quot;</span>)</span>
+<span id="cb112-6"><a href="two-mode-networks.html#cb112-6" tabindex="-1"></a></span>
+<span id="cb112-7"><a href="two-mode-networks.html#cb112-7" tabindex="-1"></a><span class="do">## preview the most central journals:</span></span>
+<span id="cb112-8"><a href="two-mode-networks.html#cb112-8" tabindex="-1"></a>(g_journals <span class="sc">%&gt;%</span> <span class="fu">asDF</span>())<span class="sc">$</span>vertexes <span class="sc">%&gt;%</span> </span>
+<span id="cb112-9"><a href="two-mode-networks.html#cb112-9" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>intergraph_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb112-10"><a href="two-mode-networks.html#cb112-10" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(degree)) <span class="sc">%&gt;%</span> </span>
+<span id="cb112-11"><a href="two-mode-networks.html#cb112-11" tabindex="-1"></a>  <span class="fu">head</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb112-12"><a href="two-mode-networks.html#cb112-12" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb112-13"><a href="two-mode-networks.html#cb112-13" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F)</span></code></pre></div>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:right;">
+degree
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+социологические исследования
+</td>
+<td style="text-align:right;">
+40
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+журнал социологии и социальной антропологии
+</td>
+<td style="text-align:right;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+научный результат. социология и управление
+</td>
+<td style="text-align:right;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+теория и практика общественного развития
+</td>
+<td style="text-align:right;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+поиск: политика. обществоведение. искусство. социология. культура
+</td>
+<td style="text-align:right;">
+22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+социология
+</td>
+<td style="text-align:right;">
+22
+</td>
+</tr>
+</tbody>
+</table>
+<p>Journal communities:</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="two-mode-networks.html#cb113-1" tabindex="-1"></a><span class="do">##########################</span></span>
+<span id="cb113-2"><a href="two-mode-networks.html#cb113-2" tabindex="-1"></a><span class="do">## community detection: ##</span></span>
+<span id="cb113-3"><a href="two-mode-networks.html#cb113-3" tabindex="-1"></a><span class="do">##########################</span></span>
+<span id="cb113-4"><a href="two-mode-networks.html#cb113-4" tabindex="-1"></a></span>
+<span id="cb113-5"><a href="two-mode-networks.html#cb113-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb113-6"><a href="two-mode-networks.html#cb113-6" tabindex="-1"></a>cl3 <span class="ot">&lt;-</span> <span class="fu">cluster_louvain</span>(g_journals,</span>
+<span id="cb113-7"><a href="two-mode-networks.html#cb113-7" tabindex="-1"></a>                       <span class="at">resolution =</span> <span class="fl">0.75</span>)</span>
+<span id="cb113-8"><a href="two-mode-networks.html#cb113-8" tabindex="-1"></a></span>
+<span id="cb113-9"><a href="two-mode-networks.html#cb113-9" tabindex="-1"></a><span class="fu">V</span>(g_journals)<span class="sc">$</span>cl3 <span class="ot">=</span> <span class="fu">membership</span>(cl3)</span>
+<span id="cb113-10"><a href="two-mode-networks.html#cb113-10" tabindex="-1"></a></span>
+<span id="cb113-11"><a href="two-mode-networks.html#cb113-11" tabindex="-1"></a><span class="co">#asDF(g_journals)</span></span>
+<span id="cb113-12"><a href="two-mode-networks.html#cb113-12" tabindex="-1"></a></span>
+<span id="cb113-13"><a href="two-mode-networks.html#cb113-13" tabindex="-1"></a><span class="do">## solution preview:</span></span>
+<span id="cb113-14"><a href="two-mode-networks.html#cb113-14" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb113-15"><a href="two-mode-networks.html#cb113-15" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb113-16"><a href="two-mode-networks.html#cb113-16" tabindex="-1"></a><span class="fu">plot</span>(g_journals,</span>
+<span id="cb113-17"><a href="two-mode-networks.html#cb113-17" tabindex="-1"></a>     <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g_journals)<span class="sc">$</span>cl3 <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb113-18"><a href="two-mode-networks.html#cb113-18" tabindex="-1"></a>                           <span class="st">&quot;#988F2A&quot;</span>,</span>
+<span id="cb113-19"><a href="two-mode-networks.html#cb113-19" tabindex="-1"></a>                           <span class="fu">ifelse</span>(<span class="fu">V</span>(g_journals)<span class="sc">$</span>cl3 <span class="sc">==</span> <span class="dv">2</span>,</span>
+<span id="cb113-20"><a href="two-mode-networks.html#cb113-20" tabindex="-1"></a>                                  <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb113-21"><a href="two-mode-networks.html#cb113-21" tabindex="-1"></a>                                  <span class="st">&quot;#30638E&quot;</span>)),</span>
+<span id="cb113-22"><a href="two-mode-networks.html#cb113-22" tabindex="-1"></a>     <span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb113-23"><a href="two-mode-networks.html#cb113-23" tabindex="-1"></a>     <span class="at">vertex.size =</span> <span class="fu">V</span>(g_journals)<span class="sc">$</span>degree <span class="sc">*</span> <span class="fl">0.6</span>)</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="two-mode-networks.html#cb114-1" tabindex="-1"></a></span>
+<span id="cb114-2"><a href="two-mode-networks.html#cb114-2" tabindex="-1"></a><span class="fu">rm</span>(cl3)</span></code></pre></div>
+<p>Core/periphery:</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="two-mode-networks.html#cb115-1" tabindex="-1"></a><span class="do">#####################</span></span>
+<span id="cb115-2"><a href="two-mode-networks.html#cb115-2" tabindex="-1"></a><span class="do">## core/periphery: ##</span></span>
+<span id="cb115-3"><a href="two-mode-networks.html#cb115-3" tabindex="-1"></a><span class="do">#####################</span></span>
+<span id="cb115-4"><a href="two-mode-networks.html#cb115-4" tabindex="-1"></a></span>
+<span id="cb115-5"><a href="two-mode-networks.html#cb115-5" tabindex="-1"></a>core_peiphery <span class="ot">&lt;-</span> netUtils<span class="sc">::</span><span class="fu">core_periphery</span>(g_journals)</span>
+<span id="cb115-6"><a href="two-mode-networks.html#cb115-6" tabindex="-1"></a><span class="fu">V</span>(g_journals)<span class="sc">$</span>core_periphery <span class="ot">=</span> core_peiphery<span class="sc">$</span>vec</span>
+<span id="cb115-7"><a href="two-mode-networks.html#cb115-7" tabindex="-1"></a></span>
+<span id="cb115-8"><a href="two-mode-networks.html#cb115-8" tabindex="-1"></a></span>
+<span id="cb115-9"><a href="two-mode-networks.html#cb115-9" tabindex="-1"></a><span class="do">## solution preview:</span></span>
+<span id="cb115-10"><a href="two-mode-networks.html#cb115-10" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb115-11"><a href="two-mode-networks.html#cb115-11" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb115-12"><a href="two-mode-networks.html#cb115-12" tabindex="-1"></a><span class="fu">plot</span>(g_journals,</span>
+<span id="cb115-13"><a href="two-mode-networks.html#cb115-13" tabindex="-1"></a>     <span class="at">vertex.color =</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(g_journals)<span class="sc">$</span>core_periphery <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb115-14"><a href="two-mode-networks.html#cb115-14" tabindex="-1"></a>                           <span class="st">&quot;lightgreen&quot;</span>,</span>
+<span id="cb115-15"><a href="two-mode-networks.html#cb115-15" tabindex="-1"></a>                           <span class="st">&quot;coral1&quot;</span>),</span>
+<span id="cb115-16"><a href="two-mode-networks.html#cb115-16" tabindex="-1"></a>     <span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb115-17"><a href="two-mode-networks.html#cb115-17" tabindex="-1"></a>     <span class="at">vertex.size =</span> <span class="fu">V</span>(g_journals)<span class="sc">$</span>degree <span class="sc">*</span> <span class="fl">0.6</span>)</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>Table with partitions (core/periphery and communities):</p>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="two-mode-networks.html#cb116-1" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb116-2"><a href="two-mode-networks.html#cb116-2" tabindex="-1"></a><span class="do">## table of core/periphery and communities: ##</span></span>
+<span id="cb116-3"><a href="two-mode-networks.html#cb116-3" tabindex="-1"></a><span class="do">##############################################</span></span>
+<span id="cb116-4"><a href="two-mode-networks.html#cb116-4" tabindex="-1"></a></span>
+<span id="cb116-5"><a href="two-mode-networks.html#cb116-5" tabindex="-1"></a>journals_positions <span class="ot">&lt;-</span> (<span class="fu">asDF</span>(g_journals))<span class="sc">$</span>vertexes <span class="sc">%&gt;%</span> </span>
+<span id="cb116-6"><a href="two-mode-networks.html#cb116-6" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">journal_name =</span> name) <span class="sc">%&gt;%</span> </span>
+<span id="cb116-7"><a href="two-mode-networks.html#cb116-7" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(degree)) <span class="sc">%&gt;%</span> </span>
+<span id="cb116-8"><a href="two-mode-networks.html#cb116-8" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>intergraph_id, <span class="sc">-</span>degree)</span>
+<span id="cb116-9"><a href="two-mode-networks.html#cb116-9" tabindex="-1"></a></span>
+<span id="cb116-10"><a href="two-mode-networks.html#cb116-10" tabindex="-1"></a><span class="do">## table preview:</span></span>
+<span id="cb116-11"><a href="two-mode-networks.html#cb116-11" tabindex="-1"></a><span class="fu">head</span>(journals_positions) <span class="sc">%&gt;%</span> </span>
+<span id="cb116-12"><a href="two-mode-networks.html#cb116-12" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb116-13"><a href="two-mode-networks.html#cb116-13" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F)</span></code></pre></div>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+journal_name
+</th>
+<th style="text-align:right;">
+cl3
+</th>
+<th style="text-align:right;">
+core_periphery
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+социологические исследования
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+журнал социологии и социальной антропологии
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+научный результат. социология и управление
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+теория и практика общественного развития
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+поиск: политика. обществоведение. искусство. социология. культура
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+социология
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<p>Community properties:</p>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="two-mode-networks.html#cb117-1" tabindex="-1"></a><span class="do">###############################</span></span>
+<span id="cb117-2"><a href="two-mode-networks.html#cb117-2" tabindex="-1"></a><span class="do">## get community properties: ##</span></span>
+<span id="cb117-3"><a href="two-mode-networks.html#cb117-3" tabindex="-1"></a><span class="do">###############################</span></span>
+<span id="cb117-4"><a href="two-mode-networks.html#cb117-4" tabindex="-1"></a></span>
+<span id="cb117-5"><a href="two-mode-networks.html#cb117-5" tabindex="-1"></a>communities <span class="ot">&lt;-</span> (<span class="fu">asDF</span>(g_journals))<span class="sc">$</span>vertexes <span class="sc">%&gt;%</span> </span>
+<span id="cb117-6"><a href="two-mode-networks.html#cb117-6" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>intergraph_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb117-7"><a href="two-mode-networks.html#cb117-7" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">journal_name =</span> name) <span class="sc">%&gt;%</span> </span>
+<span id="cb117-8"><a href="two-mode-networks.html#cb117-8" tabindex="-1"></a>  </span>
+<span id="cb117-9"><a href="two-mode-networks.html#cb117-9" tabindex="-1"></a>  <span class="fu">left_join</span>(vertices, <span class="at">by =</span> <span class="st">&quot;journal_name&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb117-10"><a href="two-mode-networks.html#cb117-10" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cl3 =</span> <span class="fu">ifelse</span>(cl3 <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb117-11"><a href="two-mode-networks.html#cb117-11" tabindex="-1"></a>                      <span class="st">&quot;west&quot;</span>,</span>
+<span id="cb117-12"><a href="two-mode-networks.html#cb117-12" tabindex="-1"></a>                      <span class="fu">ifelse</span>(cl3 <span class="sc">==</span> <span class="dv">2</span>,</span>
+<span id="cb117-13"><a href="two-mode-networks.html#cb117-13" tabindex="-1"></a>                             <span class="st">&quot;east&quot;</span>,</span>
+<span id="cb117-14"><a href="two-mode-networks.html#cb117-14" tabindex="-1"></a>                             <span class="st">&quot;center&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb117-15"><a href="two-mode-networks.html#cb117-15" tabindex="-1"></a>  </span>
+<span id="cb117-16"><a href="two-mode-networks.html#cb117-16" tabindex="-1"></a>  <span class="fu">group_by</span>(cl3) <span class="sc">%&gt;%</span> </span>
+<span id="cb117-17"><a href="two-mode-networks.html#cb117-17" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_reference_list =</span> <span class="fu">mean</span>(mean_n_references2021),</span>
+<span id="cb117-18"><a href="two-mode-networks.html#cb117-18" tabindex="-1"></a>            <span class="at">mean_publications =</span> <span class="fu">mean</span>(total_publications2021),</span>
+<span id="cb117-19"><a href="two-mode-networks.html#cb117-19" tabindex="-1"></a>            <span class="at">mean_citations =</span> <span class="fu">mean</span>(total_citations2021),</span>
+<span id="cb117-20"><a href="two-mode-networks.html#cb117-20" tabindex="-1"></a>            </span>
+<span id="cb117-21"><a href="two-mode-networks.html#cb117-21" tabindex="-1"></a>            <span class="at">share_foreigners =</span> <span class="fu">mean</span>(share_foreigners),</span>
+<span id="cb117-22"><a href="two-mode-networks.html#cb117-22" tabindex="-1"></a>            <span class="at">share_RAS =</span> <span class="fu">mean</span>(share_ras),</span>
+<span id="cb117-23"><a href="two-mode-networks.html#cb117-23" tabindex="-1"></a>            <span class="at">share_moscowites =</span> <span class="fu">mean</span>(share_moscowite)</span>
+<span id="cb117-24"><a href="two-mode-networks.html#cb117-24" tabindex="-1"></a>            <span class="do">## more attributes can be calculated here. I include those which are reported among the picture.</span></span>
+<span id="cb117-25"><a href="two-mode-networks.html#cb117-25" tabindex="-1"></a>            )</span>
+<span id="cb117-26"><a href="two-mode-networks.html#cb117-26" tabindex="-1"></a></span>
+<span id="cb117-27"><a href="two-mode-networks.html#cb117-27" tabindex="-1"></a><span class="do">## properties&#39; preview:</span></span>
+<span id="cb117-28"><a href="two-mode-networks.html#cb117-28" tabindex="-1"></a>communities[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>] <span class="sc">%&gt;%</span> </span>
+<span id="cb117-29"><a href="two-mode-networks.html#cb117-29" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb117-30"><a href="two-mode-networks.html#cb117-30" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> F)</span></code></pre></div>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+cl3
+</th>
+<th style="text-align:right;">
+mean_reference_list
+</th>
+<th style="text-align:right;">
+mean_publications
+</th>
+<th style="text-align:right;">
+mean_citations
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+center
+</td>
+<td style="text-align:right;">
+19.84167
+</td>
+<td style="text-align:right;">
+72.66667
+</td>
+<td style="text-align:right;">
+433.8333
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+east
+</td>
+<td style="text-align:right;">
+18.92500
+</td>
+<td style="text-align:right;">
+77.18750
+</td>
+<td style="text-align:right;">
+303.8125
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+west
+</td>
+<td style="text-align:right;">
+35.31923
+</td>
+<td style="text-align:right;">
+44.84615
+</td>
+<td style="text-align:right;">
+352.6154
+</td>
+</tr>
+</tbody>
+</table>
+<p>Network slices, i.e. netwroks where only “strong” ties are retained:</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="two-mode-networks.html#cb118-1" tabindex="-1"></a><span class="do">#######################</span></span>
+<span id="cb118-2"><a href="two-mode-networks.html#cb118-2" tabindex="-1"></a><span class="do">## reduced networks: ##</span></span>
+<span id="cb118-3"><a href="two-mode-networks.html#cb118-3" tabindex="-1"></a><span class="do">#######################</span></span>
+<span id="cb118-4"><a href="two-mode-networks.html#cb118-4" tabindex="-1"></a></span>
+<span id="cb118-5"><a href="two-mode-networks.html#cb118-5" tabindex="-1"></a><span class="do">## Here, you need to run par() and loop together. To get the reduced graphs on the same picture.</span></span>
+<span id="cb118-6"><a href="two-mode-networks.html#cb118-6" tabindex="-1"></a><span class="do">## You may also need to zoom to see them (this is due to RStusio default view properties).</span></span>
+<span id="cb118-7"><a href="two-mode-networks.html#cb118-7" tabindex="-1"></a></span>
+<span id="cb118-8"><a href="two-mode-networks.html#cb118-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb118-9"><a href="two-mode-networks.html#cb118-9" tabindex="-1"></a></span>
+<span id="cb118-10"><a href="two-mode-networks.html#cb118-10" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">3</span>)){</span>
+<span id="cb118-11"><a href="two-mode-networks.html#cb118-11" tabindex="-1"></a></span>
+<span id="cb118-12"><a href="two-mode-networks.html#cb118-12" tabindex="-1"></a>g <span class="ot">&lt;-</span> g_journals <span class="sc">%&gt;%</span></span>
+<span id="cb118-13"><a href="two-mode-networks.html#cb118-13" tabindex="-1"></a>  <span class="fu">as_data_frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb118-14"><a href="two-mode-networks.html#cb118-14" tabindex="-1"></a>  <span class="fu">filter</span>(weight <span class="sc">&gt;</span> i) <span class="sc">%&gt;%</span></span>
+<span id="cb118-15"><a href="two-mode-networks.html#cb118-15" tabindex="-1"></a>  <span class="fu">graph_from_data_frame</span>(<span class="at">directed =</span> F)</span>
+<span id="cb118-16"><a href="two-mode-networks.html#cb118-16" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">31</span>)</span>
+<span id="cb118-17"><a href="two-mode-networks.html#cb118-17" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb118-18"><a href="two-mode-networks.html#cb118-18" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>color <span class="ot">&lt;-</span>((<span class="fu">asDF</span>(g))<span class="sc">$</span>vertexes <span class="sc">%&gt;%</span> </span>
+<span id="cb118-19"><a href="two-mode-networks.html#cb118-19" tabindex="-1"></a>                 </span>
+<span id="cb118-20"><a href="two-mode-networks.html#cb118-20" tabindex="-1"></a>                 <span class="fu">left_join</span>(journals_positions <span class="sc">%&gt;%</span> </span>
+<span id="cb118-21"><a href="two-mode-networks.html#cb118-21" tabindex="-1"></a>                             <span class="fu">rename</span>(<span class="at">name =</span> journal_name)) <span class="sc">%&gt;%</span></span>
+<span id="cb118-22"><a href="two-mode-networks.html#cb118-22" tabindex="-1"></a>                 <span class="fu">mutate</span>(<span class="at">cl_colors =</span> <span class="fu">ifelse</span>(cl3 <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb118-23"><a href="two-mode-networks.html#cb118-23" tabindex="-1"></a>                                          <span class="st">&quot;#988F2A&quot;</span>,</span>
+<span id="cb118-24"><a href="two-mode-networks.html#cb118-24" tabindex="-1"></a>                                          <span class="fu">ifelse</span>(cl3 <span class="sc">==</span> <span class="dv">2</span>,</span>
+<span id="cb118-25"><a href="two-mode-networks.html#cb118-25" tabindex="-1"></a>                                                 <span class="st">&quot;coral1&quot;</span>,</span>
+<span id="cb118-26"><a href="two-mode-networks.html#cb118-26" tabindex="-1"></a>                                                 <span class="st">&quot;#30638E&quot;</span>))))<span class="sc">$</span>cl_colors</span>
+<span id="cb118-27"><a href="two-mode-networks.html#cb118-27" tabindex="-1"></a><span class="fu">plot</span>(g,</span>
+<span id="cb118-28"><a href="two-mode-networks.html#cb118-28" tabindex="-1"></a>     <span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb118-29"><a href="two-mode-networks.html#cb118-29" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">str_c</span>(<span class="st">&quot;tie strength &gt; &quot;</span>, i))</span>
+<span id="cb118-30"><a href="two-mode-networks.html#cb118-30" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="chapter4_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>Save data to load in Gephi:</p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="two-mode-networks.html#cb119-1" tabindex="-1"></a><span class="co">#mode2 %&gt;% </span></span>
+<span id="cb119-2"><a href="two-mode-networks.html#cb119-2" tabindex="-1"></a><span class="co">#  count(journal_name, unified_name) %&gt;%</span></span>
+<span id="cb119-3"><a href="two-mode-networks.html#cb119-3" tabindex="-1"></a><span class="co">#  select(-n) %&gt;% </span></span>
+<span id="cb119-4"><a href="two-mode-networks.html#cb119-4" tabindex="-1"></a><span class="co">#  `colnames&lt;-`(c(&quot;Source&quot;, &quot;Target&quot;)) %&gt;% </span></span>
+<span id="cb119-5"><a href="two-mode-networks.html#cb119-5" tabindex="-1"></a><span class="co">#  write.csv(&quot;gephi_edges.csv&quot;,</span></span>
+<span id="cb119-6"><a href="two-mode-networks.html#cb119-6" tabindex="-1"></a><span class="co">#            row.names = F)</span></span>
+<span id="cb119-7"><a href="two-mode-networks.html#cb119-7" tabindex="-1"></a></span>
+<span id="cb119-8"><a href="two-mode-networks.html#cb119-8" tabindex="-1"></a><span class="co">#mode2 %&gt;% </span></span>
+<span id="cb119-9"><a href="two-mode-networks.html#cb119-9" tabindex="-1"></a><span class="co">#  count(journal_name) %&gt;% </span></span>
+<span id="cb119-10"><a href="two-mode-networks.html#cb119-10" tabindex="-1"></a><span class="co">#  mutate(type = &quot;journal&quot;) %&gt;% </span></span>
+<span id="cb119-11"><a href="two-mode-networks.html#cb119-11" tabindex="-1"></a><span class="co">#  rename(Id = journal_name) %&gt;% </span></span>
+<span id="cb119-12"><a href="two-mode-networks.html#cb119-12" tabindex="-1"></a>  </span>
+<span id="cb119-13"><a href="two-mode-networks.html#cb119-13" tabindex="-1"></a><span class="co">#  bind_rows(mode2 %&gt;% </span></span>
+<span id="cb119-14"><a href="two-mode-networks.html#cb119-14" tabindex="-1"></a><span class="co">#              count(unified_name) %&gt;%</span></span>
+<span id="cb119-15"><a href="two-mode-networks.html#cb119-15" tabindex="-1"></a><span class="co">#              mutate(type = &quot;person&quot;) %&gt;% </span></span>
+<span id="cb119-16"><a href="two-mode-networks.html#cb119-16" tabindex="-1"></a><span class="co">#              rename(Id = unified_name)) %&gt;%</span></span>
+<span id="cb119-17"><a href="two-mode-networks.html#cb119-17" tabindex="-1"></a><span class="co">#  select(-n) %&gt;% </span></span>
+<span id="cb119-18"><a href="two-mode-networks.html#cb119-18" tabindex="-1"></a><span class="co">#  mutate(name = Id) %&gt;% </span></span>
+<span id="cb119-19"><a href="two-mode-networks.html#cb119-19" tabindex="-1"></a><span class="co">#  write.csv(&quot;gephi_nodes.csv&quot;,</span></span>
+<span id="cb119-20"><a href="two-mode-networks.html#cb119-20" tabindex="-1"></a><span class="co">#            row.names = F)</span></span></code></pre></div>
+<p>Session info:</p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="two-mode-networks.html#cb120-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb120-2"><a href="two-mode-networks.html#cb120-2" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb120-3"><a href="two-mode-networks.html#cb120-3" tabindex="-1"></a><span class="co">#&gt; R version 4.4.3 (2025-02-28 ucrt)</span></span>
+<span id="cb120-4"><a href="two-mode-networks.html#cb120-4" tabindex="-1"></a><span class="co">#&gt; Platform: x86_64-w64-mingw32/x64</span></span>
+<span id="cb120-5"><a href="two-mode-networks.html#cb120-5" tabindex="-1"></a><span class="co">#&gt; Running under: Windows 10 x64 (build 19045)</span></span>
+<span id="cb120-6"><a href="two-mode-networks.html#cb120-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb120-7"><a href="two-mode-networks.html#cb120-7" tabindex="-1"></a><span class="co">#&gt; Matrix products: default</span></span>
+<span id="cb120-8"><a href="two-mode-networks.html#cb120-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb120-9"><a href="two-mode-networks.html#cb120-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb120-10"><a href="two-mode-networks.html#cb120-10" tabindex="-1"></a><span class="co">#&gt; locale:</span></span>
+<span id="cb120-11"><a href="two-mode-networks.html#cb120-11" tabindex="-1"></a><span class="co">#&gt; [1] LC_COLLATE=Russian_Russia.utf8 </span></span>
+<span id="cb120-12"><a href="two-mode-networks.html#cb120-12" tabindex="-1"></a><span class="co">#&gt; [2] LC_CTYPE=Russian_Russia.utf8   </span></span>
+<span id="cb120-13"><a href="two-mode-networks.html#cb120-13" tabindex="-1"></a><span class="co">#&gt; [3] LC_MONETARY=Russian_Russia.utf8</span></span>
+<span id="cb120-14"><a href="two-mode-networks.html#cb120-14" tabindex="-1"></a><span class="co">#&gt; [4] LC_NUMERIC=C                   </span></span>
+<span id="cb120-15"><a href="two-mode-networks.html#cb120-15" tabindex="-1"></a><span class="co">#&gt; [5] LC_TIME=Russian_Russia.utf8    </span></span>
+<span id="cb120-16"><a href="two-mode-networks.html#cb120-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb120-17"><a href="two-mode-networks.html#cb120-17" tabindex="-1"></a><span class="co">#&gt; time zone: Europe/Moscow</span></span>
+<span id="cb120-18"><a href="two-mode-networks.html#cb120-18" tabindex="-1"></a><span class="co">#&gt; tzcode source: internal</span></span>
+<span id="cb120-19"><a href="two-mode-networks.html#cb120-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb120-20"><a href="two-mode-networks.html#cb120-20" tabindex="-1"></a><span class="co">#&gt; attached base packages:</span></span>
+<span id="cb120-21"><a href="two-mode-networks.html#cb120-21" tabindex="-1"></a><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets </span></span>
+<span id="cb120-22"><a href="two-mode-networks.html#cb120-22" tabindex="-1"></a><span class="co">#&gt; [6] methods   base     </span></span>
+<span id="cb120-23"><a href="two-mode-networks.html#cb120-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb120-24"><a href="two-mode-networks.html#cb120-24" tabindex="-1"></a><span class="co">#&gt; other attached packages:</span></span>
+<span id="cb120-25"><a href="two-mode-networks.html#cb120-25" tabindex="-1"></a><span class="co">#&gt;  [1] data.table_1.17.8   factoextra_1.0.7   </span></span>
+<span id="cb120-26"><a href="two-mode-networks.html#cb120-26" tabindex="-1"></a><span class="co">#&gt;  [3] ca_0.71.1           blockmodeling_1.1.8</span></span>
+<span id="cb120-27"><a href="two-mode-networks.html#cb120-27" tabindex="-1"></a><span class="co">#&gt;  [5] kableExtra_1.4.0    ggrepel_0.9.6      </span></span>
+<span id="cb120-28"><a href="two-mode-networks.html#cb120-28" tabindex="-1"></a><span class="co">#&gt;  [7] tnet_3.0.16         survival_3.8-3     </span></span>
+<span id="cb120-29"><a href="two-mode-networks.html#cb120-29" tabindex="-1"></a><span class="co">#&gt;  [9] networkdata_0.2.2   netUtils_0.8.3     </span></span>
+<span id="cb120-30"><a href="two-mode-networks.html#cb120-30" tabindex="-1"></a><span class="co">#&gt; [11] manynet_1.6.1       intergraph_2.0-4   </span></span>
+<span id="cb120-31"><a href="two-mode-networks.html#cb120-31" tabindex="-1"></a><span class="co">#&gt; [13] igraph_2.1.4        lubridate_1.9.4    </span></span>
+<span id="cb120-32"><a href="two-mode-networks.html#cb120-32" tabindex="-1"></a><span class="co">#&gt; [15] forcats_1.0.0       stringr_1.5.1      </span></span>
+<span id="cb120-33"><a href="two-mode-networks.html#cb120-33" tabindex="-1"></a><span class="co">#&gt; [17] dplyr_1.1.4         purrr_1.0.4        </span></span>
+<span id="cb120-34"><a href="two-mode-networks.html#cb120-34" tabindex="-1"></a><span class="co">#&gt; [19] readr_2.1.5         tidyr_1.3.1        </span></span>
+<span id="cb120-35"><a href="two-mode-networks.html#cb120-35" tabindex="-1"></a><span class="co">#&gt; [21] tibble_3.2.1        ggplot2_4.0.0      </span></span>
+<span id="cb120-36"><a href="two-mode-networks.html#cb120-36" tabindex="-1"></a><span class="co">#&gt; [23] tidyverse_2.0.0    </span></span>
+<span id="cb120-37"><a href="two-mode-networks.html#cb120-37" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb120-38"><a href="two-mode-networks.html#cb120-38" tabindex="-1"></a><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span id="cb120-39"><a href="two-mode-networks.html#cb120-39" tabindex="-1"></a><span class="co">#&gt;  [1] gtable_0.3.6          xfun_0.51            </span></span>
+<span id="cb120-40"><a href="two-mode-networks.html#cb120-40" tabindex="-1"></a><span class="co">#&gt;  [3] bslib_0.9.0           lattice_0.22-6       </span></span>
+<span id="cb120-41"><a href="two-mode-networks.html#cb120-41" tabindex="-1"></a><span class="co">#&gt;  [5] tzdb_0.5.0            vctrs_0.6.5          </span></span>
+<span id="cb120-42"><a href="two-mode-networks.html#cb120-42" tabindex="-1"></a><span class="co">#&gt;  [7] tools_4.4.3           generics_0.1.4       </span></span>
+<span id="cb120-43"><a href="two-mode-networks.html#cb120-43" tabindex="-1"></a><span class="co">#&gt;  [9] parallel_4.4.3        pkgconfig_2.0.3      </span></span>
+<span id="cb120-44"><a href="two-mode-networks.html#cb120-44" tabindex="-1"></a><span class="co">#&gt; [11] Matrix_1.7-2          RColorBrewer_1.1-3   </span></span>
+<span id="cb120-45"><a href="two-mode-networks.html#cb120-45" tabindex="-1"></a><span class="co">#&gt; [13] S7_0.2.0              lifecycle_1.0.4      </span></span>
+<span id="cb120-46"><a href="two-mode-networks.html#cb120-46" tabindex="-1"></a><span class="co">#&gt; [15] compiler_4.4.3        farver_2.1.2         </span></span>
+<span id="cb120-47"><a href="two-mode-networks.html#cb120-47" tabindex="-1"></a><span class="co">#&gt; [17] codetools_0.2-20      htmltools_0.5.8.1    </span></span>
+<span id="cb120-48"><a href="two-mode-networks.html#cb120-48" tabindex="-1"></a><span class="co">#&gt; [19] sass_0.4.10           yaml_2.3.10          </span></span>
+<span id="cb120-49"><a href="two-mode-networks.html#cb120-49" tabindex="-1"></a><span class="co">#&gt; [21] pillar_1.11.1         jquerylib_0.1.4      </span></span>
+<span id="cb120-50"><a href="two-mode-networks.html#cb120-50" tabindex="-1"></a><span class="co">#&gt; [23] cachem_1.1.0          network_1.19.0       </span></span>
+<span id="cb120-51"><a href="two-mode-networks.html#cb120-51" tabindex="-1"></a><span class="co">#&gt; [25] tidyselect_1.2.1      digest_0.6.37        </span></span>
+<span id="cb120-52"><a href="two-mode-networks.html#cb120-52" tabindex="-1"></a><span class="co">#&gt; [27] stringi_1.8.4         bookdown_0.45        </span></span>
+<span id="cb120-53"><a href="two-mode-networks.html#cb120-53" tabindex="-1"></a><span class="co">#&gt; [29] splines_4.4.3         fastmap_1.2.0        </span></span>
+<span id="cb120-54"><a href="two-mode-networks.html#cb120-54" tabindex="-1"></a><span class="co">#&gt; [31] grid_4.4.3            cli_3.6.4            </span></span>
+<span id="cb120-55"><a href="two-mode-networks.html#cb120-55" tabindex="-1"></a><span class="co">#&gt; [33] magrittr_2.0.3        tidygraph_1.3.1      </span></span>
+<span id="cb120-56"><a href="two-mode-networks.html#cb120-56" tabindex="-1"></a><span class="co">#&gt; [35] withr_3.0.2           scales_1.4.0         </span></span>
+<span id="cb120-57"><a href="two-mode-networks.html#cb120-57" tabindex="-1"></a><span class="co">#&gt; [37] timechange_0.3.0      rmarkdown_2.30       </span></span>
+<span id="cb120-58"><a href="two-mode-networks.html#cb120-58" tabindex="-1"></a><span class="co">#&gt; [39] hms_1.1.3             memoise_2.0.1        </span></span>
+<span id="cb120-59"><a href="two-mode-networks.html#cb120-59" tabindex="-1"></a><span class="co">#&gt; [41] coda_0.19-4.1         evaluate_1.0.5       </span></span>
+<span id="cb120-60"><a href="two-mode-networks.html#cb120-60" tabindex="-1"></a><span class="co">#&gt; [43] knitr_1.50            viridisLite_0.4.2    </span></span>
+<span id="cb120-61"><a href="two-mode-networks.html#cb120-61" tabindex="-1"></a><span class="co">#&gt; [45] rlang_1.1.5           downlit_0.4.4        </span></span>
+<span id="cb120-62"><a href="two-mode-networks.html#cb120-62" tabindex="-1"></a><span class="co">#&gt; [47] Rcpp_1.0.14           glue_1.8.0           </span></span>
+<span id="cb120-63"><a href="two-mode-networks.html#cb120-63" tabindex="-1"></a><span class="co">#&gt; [49] xml2_1.5.0            svglite_2.1.3        </span></span>
+<span id="cb120-64"><a href="two-mode-networks.html#cb120-64" tabindex="-1"></a><span class="co">#&gt; [51] rstudioapi_0.17.1     jsonlite_2.0.0       </span></span>
+<span id="cb120-65"><a href="two-mode-networks.html#cb120-65" tabindex="-1"></a><span class="co">#&gt; [53] R6_2.6.1              statnet.common_4.11.0</span></span>
+<span id="cb120-66"><a href="two-mode-networks.html#cb120-66" tabindex="-1"></a><span class="co">#&gt; [55] systemfonts_1.3.1     fs_1.6.6</span></span></code></pre></div>
+</div>
+<div id="home-assignment-4" class="section level2 unnumbered">
+<h2><strong>Home assignment 4</strong></h2>
+<p>The goal of this assignment is to analyze the structure and relationships within a two-mode network, understand its properties, and derive meaningful conclusions based on the patterns observed. Choose a dataset you like:</p>
+<ul>
+<li><p><a href="https://sites.google.com/site/ucinetsoftware/datasets/corporate-interlocks-in-scotland-1904-5">Corporate interlocks in Scotland</a></p></li>
+<li><p><a href="https://sites.google.com/site/ucinetsoftware/datasets/hollywood-film-music">Hollywood film music</a></p></li>
+<li><p>data you find/construct by your own (github, google, etc.)</p></li>
+</ul>
+<p>Describe the network: who/what are the nodes? Vizualize it the way you prefer (in R or in Gephi, do not forget about different layouts possible). Select the mode of analysis: choose to work with either two-mode network or one-mode projections. In the second scenario, provide vizualizations of both projections. Discuss whether you want to work with one specific projection or not. Do the analysis you consider relevant: compute centrality measures, search for communities, core/periphery, etc.</p>
+<p>Format: word/pdf/html. If you construct your document from R, make sure it is formatted nicely (no long outputs printed, etc.)
+Deadline - before your next class.</p>
+
+</div>
+</div>
+
+
+
+  </main>
+
+  <div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page">
+      <h2>On this page</h2>
+      <div id="book-on-this-page"></div>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          <li><a id="book-source" href="#">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="#">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5">
+  <div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-11-24.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+<script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+
+</html>
