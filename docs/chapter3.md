@@ -1,9 +1,9 @@
-# **3 - Topology & communities** {-}
+# **3 - topology & communities** {-}
 
 
 
 
-The notes below accompany the third lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) as well, as some technical details and examples are discussed there. During this session, we will:
+The notes below accompany the third lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing){style="color: blue;"} as well, as some technical details and examples are discussed there. During this session, we will:
 
 
   - take a look at graph-level characheristics of the networks,
@@ -12,7 +12,7 @@ The notes below accompany the third lecture of the course. It might be a good id
   - community detection algorithms,
   
   
-  - and learn how to export network data to environments outside R and visualize it. The final section of this page contains notes on sources (we would cover [Gephi](https://gephi.org/), [GraphCommons](https://graphcommons.com/), and [Cosmograph](https://cosmograph.app/)) and code to prepare your data for the export (mainly, column renaming).
+  - and learn how to export network data to environments outside R and visualize it. The final section of this page contains notes on sources (we would cover [Gephi](https://gephi.org/){style="color: blue;"}, [GraphCommons](https://graphcommons.com/), and [Cosmograph](https://cosmograph.app/){style="color: blue;"}) and code to prepare your data for the export (mainly, column renaming).
 
 
 
@@ -196,6 +196,8 @@ data.frame(networks, n_edges, n_vertices, diameters)
 #> 3   cowork    1104         71         5
 ```
 
+***
+
 Next, let's discuss centralization and density.
 
 **Centralization** - the measure of concentration of the network around the nodes with high values of degree centality.
@@ -349,11 +351,11 @@ Finally, here is a possible solution to community detection task. Note that it w
 ``` r
 g.friends %>% 
   as_undirected()
-#> IGRAPH 69f3a2b UN-- 71 399 -- 
+#> IGRAPH 11c5fd7 UN-- 71 399 -- 
 #> + attr: name (v/c), status (v/c), gender (v/c),
 #> | office (v/c), seniority (v/n), age (v/n), practice
 #> | (v/c), school (v/c)
-#> + edges from 69f3a2b (vertex names):
+#> + edges from 11c5fd7 (vertex names):
 #>  [1] 1 --2  1 --4  2 --4  3 --4  3 --7  5 --7  1 --8  4 --9 
 #>  [9] 2 --10 8 --10 9 --10 4 --11 8 --11 9 --11 10--11 1 --12
 #> [17] 2 --12 4 --12 5 --12 8 --12 9 --12 10--12 11--12 4 --13
@@ -365,7 +367,7 @@ g.friends %>%
 
 
 
-... and here is the community detection function, reproducing the Louvain algorithm (see the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) for details):
+... and here is the community detection function, reproducing the Louvain algorithm (see the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) for details){style="color: blue;"}:
 
 
 
@@ -423,7 +425,7 @@ g.friends %>%
 
 
 
-Also, we can search for overlapping communities. I decided not to cover this topic in depth, so, if you are interested, check the ["linkcomm" package documentation](https://alextkalinka.github.io/linkcomm/):
+Also, we can search for overlapping communities. I decided not to cover this topic in depth, so, if you are interested, check the ["linkcomm" package documentation](https://alextkalinka.github.io/linkcomm/){style="color: blue;"}:
 
 
 ``` r
@@ -436,13 +438,9 @@ lc <- getLinkCommunities((asDF(g.friends))$edge[,1:2],
 <img src="chapter3_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 
 ``` r
-
+#lc
 plotLinkCommGraph(lc,
-                  verbose = FALSE,
-                  vlabel = F)
-#>    Getting node community edge density...1%   Getting node community edge density...3%   Getting node community edge density...5%   Getting node community edge density...7%   Getting node community edge density...9%   Getting node community edge density...11%   Getting node community edge density...12%   Getting node community edge density...14%   Getting node community edge density...16%   Getting node community edge density...18%   Getting node community edge density...20%   Getting node community edge density...22%   Getting node community edge density...24%   Getting node community edge density...25%   Getting node community edge density...27%   Getting node community edge density...29%   Getting node community edge density...31%   Getting node community edge density...33%   Getting node community edge density...35%   Getting node community edge density...37%   Getting node community edge density...38%   Getting node community edge density...40%   Getting node community edge density...42%   Getting node community edge density...44%   Getting node community edge density...46%   Getting node community edge density...48%   Getting node community edge density...50%   Getting node community edge density...51%   Getting node community edge density...53%   Getting node community edge density...55%   Getting node community edge density...57%   Getting node community edge density...59%   Getting node community edge density...61%   Getting node community edge density...62%   Getting node community edge density...64%   Getting node community edge density...66%   Getting node community edge density...68%   Getting node community edge density...70%   Getting node community edge density...72%   Getting node community edge density...74%   Getting node community edge density...75%   Getting node community edge density...77%   Getting node community edge density...79%   Getting node community edge density...81%   Getting node community edge density...83%   Getting node community edge density...85%   Getting node community edge density...87%   Getting node community edge density...88%   Getting node community edge density...90%   Getting node community edge density...92%   Getting node community edge density...94%   Getting node community edge density...96%   Getting node community edge density...98%   Getting node community edge density...100%
-#>    Getting node layout...
-#>    Constructing node pies...1%   Constructing node pies...3%   Constructing node pies...5%   Constructing node pies...7%   Constructing node pies...9%   Constructing node pies...11%   Constructing node pies...12%   Constructing node pies...14%   Constructing node pies...16%   Constructing node pies...18%   Constructing node pies...20%   Constructing node pies...22%   Constructing node pies...24%   Constructing node pies...25%   Constructing node pies...27%   Constructing node pies...29%   Constructing node pies...31%   Constructing node pies...33%   Constructing node pies...35%   Constructing node pies...37%   Constructing node pies...38%   Constructing node pies...40%   Constructing node pies...42%   Constructing node pies...44%   Constructing node pies...46%   Constructing node pies...48%   Constructing node pies...50%   Constructing node pies...51%   Constructing node pies...53%   Constructing node pies...55%   Constructing node pies...57%   Constructing node pies...59%   Constructing node pies...61%   Constructing node pies...62%   Constructing node pies...64%   Constructing node pies...66%   Constructing node pies...68%   Constructing node pies...70%   Constructing node pies...72%   Constructing node pies...74%   Constructing node pies...75%   Constructing node pies...77%   Constructing node pies...79%   Constructing node pies...81%   Constructing node pies...83%   Constructing node pies...85%   Constructing node pies...87%   Constructing node pies...88%   Constructing node pies...90%   Constructing node pies...92%   Constructing node pies...94%   Constructing node pies...96%   Constructing node pies...98%   Constructing node pies...100%
+                  verbose = FALSE)
 ```
 
 <img src="chapter3_files/figure-html/unnamed-chunk-15-2.png" width="672" />
@@ -462,7 +460,7 @@ rm(list = ls())
 ```
 
 
-Finally, let's try to reproduce an image with multiple clustering of karateka dataset ([here](https://network-science-data-and-models.github.io/phys7332_fa25/notebooks/class_08/class_08_communities1.html)) - this image is included in the slides, and is intended as an illustration of the idea that there are indeed many approaches to the problem of community detection:
+Finally, let's try to reproduce an image with multiple clustering of karateka dataset ([here](https://network-science-data-and-models.github.io/phys7332_fa25/notebooks/class_08/class_08_communities1.html){style="color: blue;"}) - this image is included in the slides, and is intended as an illustration of the idea that there are indeed many approaches to the problem of community detection:
 
 
 
@@ -709,7 +707,7 @@ Arguably, we need to adjust our searching query to obtain more meaningful commun
 ## **Networks to work in Gephi** {-}
 
 
-Install Gephi: https://gephi.org/users/download/
+Install [Gephi](https://gephi.org/users/download/){style="color: blue;"} first.
 
 
 In this short tutorial, we'll look at three datasets in Gephi (available via my github, see the code below, or the course folder) - all sent to you with this code in the archive. Below is a simple example of how to load them into R, analyze them, and save them back for analysis.
@@ -805,15 +803,17 @@ rm(list = ls())
 
 Our next dataset is about the character interactions in "Twin Peaks". We are interested in this dataset as:
 
+
   1. an example of data in an atypical format that can be converted into familiar lists of nodes and edges,
+
 
   2. from the point of view of the community search: the data already has clustering, but we will also search for communities in R and look at how to search for communities directly in Gephi.
 
 
-Load data and look at the network (download json): https://moviegalaxies.com/movies/view/851/twin-peaks/#
+[Load](https://moviegalaxies.com/movies/view/851/twin-peaks/#){style="color: blue;"} data and look at the network (download json):
 
 
-Data in the json format is already in the archive.
+Data in the json format is available via archive for today's class on [google drive](https://drive.google.com/drive/folders/1etPj5Sr1oF6k5EuyL2c30O-gV_4uZ81f){style="color: blue;"}.
 
 
 
@@ -922,7 +922,7 @@ rm(list = ls())
 ### **Dictionary of Russian writers of the 18th century: a network of personalities**  {-}
 
 
-Data source: https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2022.1-B002
+[Data source](https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2022.1-B002){style="color: blue;"}
 
 
 Although the authors of the dataset write that "data without preliminary processing can be loaded into programs for network analysis when solving educational problems", it is still better to firstly observe the files in R to get acquainted with their organization, convert them into a format familiar for work, and calculate the statistics of interest.
@@ -967,7 +967,7 @@ Data description:
 
 
 
-Data viz from the authors: https://nevmenandr.github.io/rus-dict18-persons/#
+Data viz from the authors is available [here](https://nevmenandr.github.io/rus-dict18-persons/#){style="color: blue;"}.
 
 
 
@@ -978,8 +978,7 @@ If you want, you can also look in Gephi at the second dataset from the same auth
 проследить ключевые тенденции в литературной моде XVIII века. Данные организованы в виде ненаправленного взвешенного графа. Вес ребра означает число общих для данных литераторов упоминаний европейских писателей.
 
 
-Link to the data (it contains the readme file): https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2023.4-B003
-
+[Link](https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2023.4-B003){style="color: blue;"} to the data (it contains the readme file).
 
 
 ## **Graph Commons data**  {-}
@@ -1114,7 +1113,7 @@ write.csv(twinpeaks.nodes,
 
 
 
-More about *graph commons*: https://docs.graphcommons.com/
+Read (more)[https://docs.graphcommons.com/]{style="color: blue;"} about graph commons.
 
 
 ## **Cosmograph** {-}
@@ -1123,16 +1122,16 @@ More about *graph commons*: https://docs.graphcommons.com/
 This is a free-to-use online tool from the Russian creators. Way more advanced than the previous tools.
 
 
-  - [Tutorial](https://cosmograph.app/docs/cosmograph/How%20to%20Use/)
+  - [Tutorial](https://cosmograph.app/docs/cosmograph/How%20to%20Use/){style="color: blue;"},
   
   
-  - [Website](no need to register)(https://cosmograph.app/run/)
+  - [Website](no need to register)(https://cosmograph.app/run/){style="color: blue;"},
   
   
-  - [tg-channel of one of the creators](https://t.me/dataviznews)
+  - [tg-channel of one of the creators](https://t.me/dataviznews){style="color: blue;"},
   
   
-  - [Recent example of use](https://cosmograph.app/run/?data=https://data.newsgraph.xyz/4500a184-f5bb-4e7d-a646-bfadd2b0b1db.csv&meta=https://data.newsgraph.xyz/f94dcc4b-705b-46b2-bf14-dcec8dce17e1.csv&source=source&target=target&gravity=0.25&repulsion=1&repulsionTheta=0.75&linkSpring=0.4&linkDistance=10&friction=0.85&renderLabels=true&renderHoveredLabel=true&renderLinks=true&nodeSizeScale=0.7&linkWidthScale=1&linkArrowsSizeScale=1&nodeSize=size-sum-size&nodeColor=color-type&linkWidth=width-avg-size&linkColor=color-avg-size&)
+  - [Recent example of use](https://cosmograph.app/run/?data=https://data.newsgraph.xyz/4500a184-f5bb-4e7d-a646-bfadd2b0b1db.csv&meta=https://data.newsgraph.xyz/f94dcc4b-705b-46b2-bf14-dcec8dce17e1.csv&source=source&target=target&gravity=0.25&repulsion=1&repulsionTheta=0.75&linkSpring=0.4&linkDistance=10&friction=0.85&renderLabels=true&renderHoveredLabel=true&renderLinks=true&nodeSizeScale=0.7&linkWidthScale=1&linkArrowsSizeScale=1&nodeSize=size-sum-size&nodeColor=color-type&linkWidth=width-avg-size&linkColor=color-avg-size&){style="color: blue;"}
 
 
 The data format needs:
@@ -1152,7 +1151,7 @@ To put your hands on the program, you can load the files about the connections o
 
 
 
-Choose a dataset you like ((check [**Available datasets**]) or find a network by yourself), format it appropriately (lists of nodes and edges), and draw the network in Gephi or other software (Graph Commons, Cosmograph). Think about the story you want to tell by showing your network (specific nodes’ positions, network structure, etc.). Feel free to edit the picture using other softwares (if you struggle with captions in Gephi, for example, you can annotate your picture somewhere else).
+Choose a dataset you like ((check **Available datasets**) or find a network by yourself), format it appropriately (lists of nodes and edges), and draw the network in Gephi or other software (Graph Commons, Cosmograph). Think about the story you want to tell by showing your network (specific nodes’ positions, network structure, etc.). Feel free to edit the picture using other softwares (if you struggle with captions in Gephi, for example, you can annotate your picture somewhere else).
 
 
 Insert your graph to pdf/word and write 5-6 sentences about your thought process and story behind the image. Refer to network properties we discussed in class (diameter, homophily, core/peripherical structure) to support your arguments.

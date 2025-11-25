@@ -1,9 +1,9 @@
-# **3 - Topology & communities** {-}
+# **3 - topology & communities** {-}
 
 
 
 
-The notes below accompany the third lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) as well, as some technical details and examples are discussed there. During this session, we will:
+The notes below accompany the third lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing){style="color: blue;"} as well, as some technical details and examples are discussed there. During this session, we will:
 
 
   - take a look at graph-level characheristics of the networks,
@@ -12,7 +12,7 @@ The notes below accompany the third lecture of the course. It might be a good id
   - community detection algorithms,
   
   
-  - and learn how to export network data to environments outside R and visualize it. The final section of this page contains notes on sources (we would cover [Gephi](https://gephi.org/), [GraphCommons](https://graphcommons.com/), and [Cosmograph](https://cosmograph.app/)) and code to prepare your data for the export (mainly, column renaming).
+  - and learn how to export network data to environments outside R and visualize it. The final section of this page contains notes on sources (we would cover [Gephi](https://gephi.org/){style="color: blue;"}, [GraphCommons](https://graphcommons.com/), and [Cosmograph](https://cosmograph.app/){style="color: blue;"}) and code to prepare your data for the export (mainly, column renaming).
 
 
 
@@ -177,6 +177,8 @@ n_vertices <- c(V(g.advice) %>%
 data.frame(networks, n_edges, n_vertices, diameters)
 ```
 
+***
+
 Next, let's discuss centralization and density.
 
 **Centralization** - the measure of concentration of the network around the nodes with high values of degree centality.
@@ -301,7 +303,7 @@ g.friends %>%
 
 
 
-... and here is the community detection function, reproducing the Louvain algorithm (see the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) for details):
+... and here is the community detection function, reproducing the Louvain algorithm (see the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) for details){style="color: blue;"}:
 
 
 ```{r}
@@ -353,17 +355,16 @@ g.friends %>%
 
 
 
-Also, we can search for overlapping communities. I decided not to cover this topic in depth, so, if you are interested, check the ["linkcomm" package documentation](https://alextkalinka.github.io/linkcomm/):
+Also, we can search for overlapping communities. I decided not to cover this topic in depth, so, if you are interested, check the ["linkcomm" package documentation](https://alextkalinka.github.io/linkcomm/){style="color: blue;"}:
 
-```{r, warning=F, message=F}
+```{r, warning=F, message=F, results='hide'}
 lc <- getLinkCommunities((asDF(g.friends))$edge[,1:2],
                          hcmethod = "single",
                          plot = TRUE, #...or false
                          verbose = F)
-
+#lc
 plotLinkCommGraph(lc,
-                  verbose = FALSE,
-                  vlabel = F)
+                  verbose = FALSE)
 
 #plot(lc, type = "graph", layout = "spencer.circle")
 ## see package documentation for more details
@@ -377,7 +378,7 @@ rm(list = ls())
 ```
 
 
-Finally, let's try to reproduce an image with multiple clustering of karateka dataset ([here](https://network-science-data-and-models.github.io/phys7332_fa25/notebooks/class_08/class_08_communities1.html)) - this image is included in the slides, and is intended as an illustration of the idea that there are indeed many approaches to the problem of community detection:
+Finally, let's try to reproduce an image with multiple clustering of karateka dataset ([here](https://network-science-data-and-models.github.io/phys7332_fa25/notebooks/class_08/class_08_communities1.html){style="color: blue;"}) - this image is included in the slides, and is intended as an illustration of the idea that there are indeed many approaches to the problem of community detection:
 
 
 ```{r}
@@ -575,7 +576,7 @@ Arguably, we need to adjust our searching query to obtain more meaningful commun
 ## **Networks to work in Gephi** {-}
 
 
-Install Gephi: https://gephi.org/users/download/
+Install [Gephi](https://gephi.org/users/download/){style="color: blue;"} first.
 
 
 In this short tutorial, we'll look at three datasets in Gephi (available via my github, see the code below, or the course folder) - all sent to you with this code in the archive. Below is a simple example of how to load them into R, analyze them, and save them back for analysis.
@@ -665,15 +666,17 @@ rm(list = ls())
 
 Our next dataset is about the character interactions in "Twin Peaks". We are interested in this dataset as:
 
+
   1. an example of data in an atypical format that can be converted into familiar lists of nodes and edges,
+
 
   2. from the point of view of the community search: the data already has clustering, but we will also search for communities in R and look at how to search for communities directly in Gephi.
 
 
-Load data and look at the network (download json): https://moviegalaxies.com/movies/view/851/twin-peaks/#
+[Load](https://moviegalaxies.com/movies/view/851/twin-peaks/#){style="color: blue;"} data and look at the network (download json):
 
 
-Data in the json format is already in the archive.
+Data in the json format is available via archive for today's class on [google drive](https://drive.google.com/drive/folders/1etPj5Sr1oF6k5EuyL2c30O-gV_4uZ81f){style="color: blue;"}.
 
 
 
@@ -776,7 +779,7 @@ rm(list = ls())
 ### **Dictionary of Russian writers of the 18th century: a network of personalities**  {-}
 
 
-Data source: https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2022.1-B002
+[Data source](https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2022.1-B002){style="color: blue;"}
 
 
 Although the authors of the dataset write that "data without preliminary processing can be loaded into programs for network analysis when solving educational problems", it is still better to firstly observe the files in R to get acquainted with their organization, convert them into a format familiar for work, and calculate the statistics of interest.
@@ -812,7 +815,7 @@ Data description:
 
 
 
-Data viz from the authors: https://nevmenandr.github.io/rus-dict18-persons/#
+Data viz from the authors is available [here](https://nevmenandr.github.io/rus-dict18-persons/#){style="color: blue;"}.
 
 
 
@@ -823,8 +826,7 @@ If you want, you can also look in Gephi at the second dataset from the same auth
 проследить ключевые тенденции в литературной моде XVIII века. Данные организованы в виде ненаправленного взвешенного графа. Вес ребра означает число общих для данных литераторов упоминаний европейских писателей.
 
 
-Link to the data (it contains the readme file): https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2023.4-B003
-
+[Link](https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2023.4-B003){style="color: blue;"} to the data (it contains the readme file).
 
 
 ## **Graph Commons data**  {-}
@@ -957,7 +959,7 @@ write.csv(twinpeaks.nodes,
 
 
 
-More about *graph commons*: https://docs.graphcommons.com/
+Read (more)[https://docs.graphcommons.com/]{style="color: blue;"} about graph commons.
 
 
 ## **Cosmograph** {-}
@@ -966,16 +968,16 @@ More about *graph commons*: https://docs.graphcommons.com/
 This is a free-to-use online tool from the Russian creators. Way more advanced than the previous tools.
 
 
-  - [Tutorial](https://cosmograph.app/docs/cosmograph/How%20to%20Use/)
+  - [Tutorial](https://cosmograph.app/docs/cosmograph/How%20to%20Use/){style="color: blue;"},
   
   
-  - [Website](no need to register)(https://cosmograph.app/run/)
+  - [Website](no need to register)(https://cosmograph.app/run/){style="color: blue;"},
   
   
-  - [tg-channel of one of the creators](https://t.me/dataviznews)
+  - [tg-channel of one of the creators](https://t.me/dataviznews){style="color: blue;"},
   
   
-  - [Recent example of use](https://cosmograph.app/run/?data=https://data.newsgraph.xyz/4500a184-f5bb-4e7d-a646-bfadd2b0b1db.csv&meta=https://data.newsgraph.xyz/f94dcc4b-705b-46b2-bf14-dcec8dce17e1.csv&source=source&target=target&gravity=0.25&repulsion=1&repulsionTheta=0.75&linkSpring=0.4&linkDistance=10&friction=0.85&renderLabels=true&renderHoveredLabel=true&renderLinks=true&nodeSizeScale=0.7&linkWidthScale=1&linkArrowsSizeScale=1&nodeSize=size-sum-size&nodeColor=color-type&linkWidth=width-avg-size&linkColor=color-avg-size&)
+  - [Recent example of use](https://cosmograph.app/run/?data=https://data.newsgraph.xyz/4500a184-f5bb-4e7d-a646-bfadd2b0b1db.csv&meta=https://data.newsgraph.xyz/f94dcc4b-705b-46b2-bf14-dcec8dce17e1.csv&source=source&target=target&gravity=0.25&repulsion=1&repulsionTheta=0.75&linkSpring=0.4&linkDistance=10&friction=0.85&renderLabels=true&renderHoveredLabel=true&renderLinks=true&nodeSizeScale=0.7&linkWidthScale=1&linkArrowsSizeScale=1&nodeSize=size-sum-size&nodeColor=color-type&linkWidth=width-avg-size&linkColor=color-avg-size&){style="color: blue;"}
 
 
 The data format needs:
@@ -995,7 +997,7 @@ To put your hands on the program, you can load the files about the connections o
 
 
 
-Choose a dataset you like ((check [**Available datasets**]) or find a network by yourself), format it appropriately (lists of nodes and edges), and draw the network in Gephi or other software (Graph Commons, Cosmograph). Think about the story you want to tell by showing your network (specific nodes’ positions, network structure, etc.). Feel free to edit the picture using other softwares (if you struggle with captions in Gephi, for example, you can annotate your picture somewhere else).
+Choose a dataset you like ((check **Available datasets**) or find a network by yourself), format it appropriately (lists of nodes and edges), and draw the network in Gephi or other software (Graph Commons, Cosmograph). Think about the story you want to tell by showing your network (specific nodes’ positions, network structure, etc.). Feel free to edit the picture using other softwares (if you struggle with captions in Gephi, for example, you can annotate your picture somewhere else).
 
 
 Insert your graph to pdf/word and write 5-6 sentences about your thought process and story behind the image. Refer to network properties we discussed in class (diameter, homophily, core/peripherical structure) to support your arguments.

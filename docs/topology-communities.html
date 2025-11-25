@@ -4,15 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>3 - Topology &amp; communities | yet another SNA coursebook</title>
+<title>3 - topology &amp; communities | yet another SNA coursebook</title>
 <meta name="author" content="Arthur Pecherskikh">
 <meta name="description" content="The notes below accompany the third lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. During this...">
 <meta name="generator" content="bookdown 0.45 with bs4_book()">
-<meta property="og:title" content="3 - Topology &amp; communities | yet another SNA coursebook">
+<meta property="og:title" content="3 - topology &amp; communities | yet another SNA coursebook">
 <meta property="og:type" content="book">
 <meta property="og:description" content="The notes below accompany the third lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. During this...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="3 - Topology &amp; communities | yet another SNA coursebook">
+<meta name="twitter:title" content="3 - topology &amp; communities | yet another SNA coursebook">
 <meta name="twitter:description" content="The notes below accompany the third lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. During this...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -51,9 +51,9 @@
 <li><a class="" href="formalities.html">Formalities</a></li>
 <li><a class="" href="course-outline.html">Course outline</a></li>
 <li class="book-part">Seminars</li>
-<li><a class="" href="intro.html">1 - Intro</a></li>
-<li><a class="" href="centrality-measures.html">2 - Centrality measures</a></li>
-<li><a class="active" href="topology-communities.html">3 - Topology &amp; communities</a></li>
+<li><a class="" href="intro.html">1 - intro</a></li>
+<li><a class="" href="centrality-measures.html">2 - centrality measures</a></li>
+<li><a class="active" href="topology-communities.html">3 - topology &amp; communities</a></li>
 <li><a class="" href="two-mode-networks.html">4 - two-mode networks</a></li>
 <li class="book-part">Appendices</li>
 <li><a class="" href="available-datasets.html">Available datasets</a></li>
@@ -68,13 +68,13 @@
 </div>
   </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="topology-communities" class="section level1 unnumbered">
 <h1>
-<strong>3 - Topology &amp; communities</strong><a class="anchor" aria-label="anchor" href="#topology-communities"><i class="fas fa-link"></i></a>
+<strong>3 - topology &amp; communities</strong><a class="anchor" aria-label="anchor" href="#topology-communities"><i class="fas fa-link"></i></a>
 </h1>
-<p>The notes below accompany the third lecture of the course. It might be a good idea to consult the <a href="https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing">lecture slides</a> as well, as some technical details and examples are discussed there. During this session, we will:</p>
+<p>The notes below accompany the third lecture of the course. It might be a good idea to consult the <a href="https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing" style="color: blue;">lecture slides</a> as well, as some technical details and examples are discussed there. During this session, we will:</p>
 <ul>
 <li><p>take a look at graph-level characheristics of the networks,</p></li>
 <li><p>community detection algorithms,</p></li>
-<li><p>and learn how to export network data to environments outside R and visualize it. The final section of this page contains notes on sources (we would cover <a href="https://gephi.org/">Gephi</a>, <a href="https://graphcommons.com/">GraphCommons</a>, and <a href="https://cosmograph.app/">Cosmograph</a>) and code to prepare your data for the export (mainly, column renaming).</p></li>
+<li><p>and learn how to export network data to environments outside R and visualize it. The final section of this page contains notes on sources (we would cover <a href="https://gephi.org/" style="color: blue;">Gephi</a>, <a href="https://graphcommons.com/">GraphCommons</a>, and <a href="https://cosmograph.app/" style="color: blue;">Cosmograph</a>) and code to prepare your data for the export (mainly, column renaming).</p></li>
 </ul>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>    </span>
@@ -218,6 +218,7 @@
 <span><span class="co">#&gt; 1   advice     892         71         7</span></span>
 <span><span class="co">#&gt; 2  friends     575         71         8</span></span>
 <span><span class="co">#&gt; 3   cowork    1104         71         5</span></span></code></pre></div>
+<hr>
 <p>Next, let’s discuss centralization and density.</p>
 <p><strong>Centralization</strong> - the measure of concentration of the network around the nodes with high values of degree centality.</p>
 <p><strong>Density</strong> - number ob observed ties / number of possible ties. You can interpret it directly, as the measure of number of relations present in the network. Note the maths here: The maximum number of possible edges in a graph can be calculated using the formula <span class="math inline">\(E_{max} = \frac{n(n-1)}{2}\)</span>, where <span class="math inline">\(n\)</span> represents the number of nodes in the network.</p>
@@ -327,11 +328,11 @@
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; IGRAPH 69f3a2b UN-- 71 399 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 11c5fd7 UN-- 71 399 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), status (v/c), gender (v/c),</span></span>
 <span><span class="co">#&gt; | office (v/c), seniority (v/n), age (v/n), practice</span></span>
 <span><span class="co">#&gt; | (v/c), school (v/c)</span></span>
-<span><span class="co">#&gt; + edges from 69f3a2b (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 11c5fd7 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1 --2  1 --4  2 --4  3 --4  3 --7  5 --7  1 --8  4 --9 </span></span>
 <span><span class="co">#&gt;  [9] 2 --10 8 --10 9 --10 4 --11 8 --11 9 --11 10--11 1 --12</span></span>
 <span><span class="co">#&gt; [17] 2 --12 4 --12 5 --12 8 --12 9 --12 10--12 11--12 4 --13</span></span>
@@ -339,7 +340,7 @@
 <span><span class="co">#&gt; [33] 13--15 2 --16 4 --16 12--16 13--16 14--16 15--16 1 --17</span></span>
 <span><span class="co">#&gt; [41] 2 --17 4 --17 8 --17 9 --17 10--17 11--17 12--17 13--17</span></span>
 <span><span class="co">#&gt; + ... omitted several edges</span></span></code></pre></div>
-<p>… and here is the community detection function, reproducing the Louvain algorithm (see the <a href="https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing">lecture slides</a> for details):</p>
+<p>… and here is the community detection function, reproducing the Louvain algorithm (see the <a href="https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing">lecture slides</a> for details){style=“color: blue;”}:</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">22</span><span class="op">)</span> <span class="co">## to reproduce</span></span>
 <span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -382,126 +383,17 @@
 <span>       main <span class="op">=</span> <span class="st">"\n\nresolution = 0.75"</span>,</span>
 <span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span><span class="op">$</span><span class="va">cl0.75</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-14-1.png" width="672"></div>
-<p>Also, we can search for overlapping communities. I decided not to cover this topic in depth, so, if you are interested, check the <a href="https://alextkalinka.github.io/linkcomm/">“linkcomm” package documentation</a>:</p>
+<p>Also, we can search for overlapping communities. I decided not to cover this topic in depth, so, if you are interested, check the <a href="https://alextkalinka.github.io/linkcomm/" style="color: blue;">“linkcomm” package documentation</a>:</p>
 <div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://alextkalinka.github.io/linkcomm/reference/getLinkCommunities.html">getLinkCommunities</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="va">g.friends</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">edge</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,</span>
 <span>                         hcmethod <span class="op">=</span> <span class="st">"single"</span>,</span>
 <span>                         plot <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co">#...or false</span></span>
 <span>                         verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-15-1.png" width="672"></div>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="topology-communities.html#cb67-1" tabindex="-1"></a></span>
-<span id="cb67-2"><a href="topology-communities.html#cb67-2" tabindex="-1"></a><span class="fu">plotLinkCommGraph</span>(lc,</span>
-<span id="cb67-3"><a href="topology-communities.html#cb67-3" tabindex="-1"></a>                  <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb67-4"><a href="topology-communities.html#cb67-4" tabindex="-1"></a>                  <span class="at">vlabel =</span> F)</span>
-<span id="cb67-5"><a href="topology-communities.html#cb67-5" tabindex="-1"></a><span class="co">#&gt;    Getting node community edge density...1%</span></span>
-<span id="cb67-6"><a href="topology-communities.html#cb67-6" tabindex="-1"></a>   Getting node community edge density...<span class="dv">3</span>%</span>
-<span id="cb67-7"><a href="topology-communities.html#cb67-7" tabindex="-1"></a>   Getting node community edge density...<span class="dv">5</span>%</span>
-<span id="cb67-8"><a href="topology-communities.html#cb67-8" tabindex="-1"></a>   Getting node community edge density...<span class="dv">7</span>%</span>
-<span id="cb67-9"><a href="topology-communities.html#cb67-9" tabindex="-1"></a>   Getting node community edge density...<span class="dv">9</span>%</span>
-<span id="cb67-10"><a href="topology-communities.html#cb67-10" tabindex="-1"></a>   Getting node community edge density...<span class="dv">11</span>%</span>
-<span id="cb67-11"><a href="topology-communities.html#cb67-11" tabindex="-1"></a>   Getting node community edge density...<span class="dv">12</span>%</span>
-<span id="cb67-12"><a href="topology-communities.html#cb67-12" tabindex="-1"></a>   Getting node community edge density...<span class="dv">14</span>%</span>
-<span id="cb67-13"><a href="topology-communities.html#cb67-13" tabindex="-1"></a>   Getting node community edge density...<span class="dv">16</span>%</span>
-<span id="cb67-14"><a href="topology-communities.html#cb67-14" tabindex="-1"></a>   Getting node community edge density...<span class="dv">18</span>%</span>
-<span id="cb67-15"><a href="topology-communities.html#cb67-15" tabindex="-1"></a>   Getting node community edge density...<span class="dv">20</span>%</span>
-<span id="cb67-16"><a href="topology-communities.html#cb67-16" tabindex="-1"></a>   Getting node community edge density...<span class="dv">22</span>%</span>
-<span id="cb67-17"><a href="topology-communities.html#cb67-17" tabindex="-1"></a>   Getting node community edge density...<span class="dv">24</span>%</span>
-<span id="cb67-18"><a href="topology-communities.html#cb67-18" tabindex="-1"></a>   Getting node community edge density...<span class="dv">25</span>%</span>
-<span id="cb67-19"><a href="topology-communities.html#cb67-19" tabindex="-1"></a>   Getting node community edge density...<span class="dv">27</span>%</span>
-<span id="cb67-20"><a href="topology-communities.html#cb67-20" tabindex="-1"></a>   Getting node community edge density...<span class="dv">29</span>%</span>
-<span id="cb67-21"><a href="topology-communities.html#cb67-21" tabindex="-1"></a>   Getting node community edge density...<span class="dv">31</span>%</span>
-<span id="cb67-22"><a href="topology-communities.html#cb67-22" tabindex="-1"></a>   Getting node community edge density...<span class="dv">33</span>%</span>
-<span id="cb67-23"><a href="topology-communities.html#cb67-23" tabindex="-1"></a>   Getting node community edge density...<span class="dv">35</span>%</span>
-<span id="cb67-24"><a href="topology-communities.html#cb67-24" tabindex="-1"></a>   Getting node community edge density...<span class="dv">37</span>%</span>
-<span id="cb67-25"><a href="topology-communities.html#cb67-25" tabindex="-1"></a>   Getting node community edge density...<span class="dv">38</span>%</span>
-<span id="cb67-26"><a href="topology-communities.html#cb67-26" tabindex="-1"></a>   Getting node community edge density...<span class="dv">40</span>%</span>
-<span id="cb67-27"><a href="topology-communities.html#cb67-27" tabindex="-1"></a>   Getting node community edge density...<span class="dv">42</span>%</span>
-<span id="cb67-28"><a href="topology-communities.html#cb67-28" tabindex="-1"></a>   Getting node community edge density...<span class="dv">44</span>%</span>
-<span id="cb67-29"><a href="topology-communities.html#cb67-29" tabindex="-1"></a>   Getting node community edge density...<span class="dv">46</span>%</span>
-<span id="cb67-30"><a href="topology-communities.html#cb67-30" tabindex="-1"></a>   Getting node community edge density...<span class="dv">48</span>%</span>
-<span id="cb67-31"><a href="topology-communities.html#cb67-31" tabindex="-1"></a>   Getting node community edge density...<span class="dv">50</span>%</span>
-<span id="cb67-32"><a href="topology-communities.html#cb67-32" tabindex="-1"></a>   Getting node community edge density...<span class="dv">51</span>%</span>
-<span id="cb67-33"><a href="topology-communities.html#cb67-33" tabindex="-1"></a>   Getting node community edge density...<span class="dv">53</span>%</span>
-<span id="cb67-34"><a href="topology-communities.html#cb67-34" tabindex="-1"></a>   Getting node community edge density...<span class="dv">55</span>%</span>
-<span id="cb67-35"><a href="topology-communities.html#cb67-35" tabindex="-1"></a>   Getting node community edge density...<span class="dv">57</span>%</span>
-<span id="cb67-36"><a href="topology-communities.html#cb67-36" tabindex="-1"></a>   Getting node community edge density...<span class="dv">59</span>%</span>
-<span id="cb67-37"><a href="topology-communities.html#cb67-37" tabindex="-1"></a>   Getting node community edge density...<span class="dv">61</span>%</span>
-<span id="cb67-38"><a href="topology-communities.html#cb67-38" tabindex="-1"></a>   Getting node community edge density...<span class="dv">62</span>%</span>
-<span id="cb67-39"><a href="topology-communities.html#cb67-39" tabindex="-1"></a>   Getting node community edge density...<span class="dv">64</span>%</span>
-<span id="cb67-40"><a href="topology-communities.html#cb67-40" tabindex="-1"></a>   Getting node community edge density...<span class="dv">66</span>%</span>
-<span id="cb67-41"><a href="topology-communities.html#cb67-41" tabindex="-1"></a>   Getting node community edge density...<span class="dv">68</span>%</span>
-<span id="cb67-42"><a href="topology-communities.html#cb67-42" tabindex="-1"></a>   Getting node community edge density...<span class="dv">70</span>%</span>
-<span id="cb67-43"><a href="topology-communities.html#cb67-43" tabindex="-1"></a>   Getting node community edge density...<span class="dv">72</span>%</span>
-<span id="cb67-44"><a href="topology-communities.html#cb67-44" tabindex="-1"></a>   Getting node community edge density...<span class="dv">74</span>%</span>
-<span id="cb67-45"><a href="topology-communities.html#cb67-45" tabindex="-1"></a>   Getting node community edge density...<span class="dv">75</span>%</span>
-<span id="cb67-46"><a href="topology-communities.html#cb67-46" tabindex="-1"></a>   Getting node community edge density...<span class="dv">77</span>%</span>
-<span id="cb67-47"><a href="topology-communities.html#cb67-47" tabindex="-1"></a>   Getting node community edge density...<span class="dv">79</span>%</span>
-<span id="cb67-48"><a href="topology-communities.html#cb67-48" tabindex="-1"></a>   Getting node community edge density...<span class="dv">81</span>%</span>
-<span id="cb67-49"><a href="topology-communities.html#cb67-49" tabindex="-1"></a>   Getting node community edge density...<span class="dv">83</span>%</span>
-<span id="cb67-50"><a href="topology-communities.html#cb67-50" tabindex="-1"></a>   Getting node community edge density...<span class="dv">85</span>%</span>
-<span id="cb67-51"><a href="topology-communities.html#cb67-51" tabindex="-1"></a>   Getting node community edge density...<span class="dv">87</span>%</span>
-<span id="cb67-52"><a href="topology-communities.html#cb67-52" tabindex="-1"></a>   Getting node community edge density...<span class="dv">88</span>%</span>
-<span id="cb67-53"><a href="topology-communities.html#cb67-53" tabindex="-1"></a>   Getting node community edge density...<span class="dv">90</span>%</span>
-<span id="cb67-54"><a href="topology-communities.html#cb67-54" tabindex="-1"></a>   Getting node community edge density...<span class="dv">92</span>%</span>
-<span id="cb67-55"><a href="topology-communities.html#cb67-55" tabindex="-1"></a>   Getting node community edge density...<span class="dv">94</span>%</span>
-<span id="cb67-56"><a href="topology-communities.html#cb67-56" tabindex="-1"></a>   Getting node community edge density...<span class="dv">96</span>%</span>
-<span id="cb67-57"><a href="topology-communities.html#cb67-57" tabindex="-1"></a>   Getting node community edge density...<span class="dv">98</span>%</span>
-<span id="cb67-58"><a href="topology-communities.html#cb67-58" tabindex="-1"></a>   Getting node community edge density...<span class="dv">100</span>%</span>
-<span id="cb67-59"><a href="topology-communities.html#cb67-59" tabindex="-1"></a><span class="co">#&gt;    Getting node layout...</span></span>
-<span id="cb67-60"><a href="topology-communities.html#cb67-60" tabindex="-1"></a><span class="co">#&gt;    Constructing node pies...1%</span></span>
-<span id="cb67-61"><a href="topology-communities.html#cb67-61" tabindex="-1"></a>   Constructing node pies...<span class="dv">3</span>%</span>
-<span id="cb67-62"><a href="topology-communities.html#cb67-62" tabindex="-1"></a>   Constructing node pies...<span class="dv">5</span>%</span>
-<span id="cb67-63"><a href="topology-communities.html#cb67-63" tabindex="-1"></a>   Constructing node pies...<span class="dv">7</span>%</span>
-<span id="cb67-64"><a href="topology-communities.html#cb67-64" tabindex="-1"></a>   Constructing node pies...<span class="dv">9</span>%</span>
-<span id="cb67-65"><a href="topology-communities.html#cb67-65" tabindex="-1"></a>   Constructing node pies...<span class="dv">11</span>%</span>
-<span id="cb67-66"><a href="topology-communities.html#cb67-66" tabindex="-1"></a>   Constructing node pies...<span class="dv">12</span>%</span>
-<span id="cb67-67"><a href="topology-communities.html#cb67-67" tabindex="-1"></a>   Constructing node pies...<span class="dv">14</span>%</span>
-<span id="cb67-68"><a href="topology-communities.html#cb67-68" tabindex="-1"></a>   Constructing node pies...<span class="dv">16</span>%</span>
-<span id="cb67-69"><a href="topology-communities.html#cb67-69" tabindex="-1"></a>   Constructing node pies...<span class="dv">18</span>%</span>
-<span id="cb67-70"><a href="topology-communities.html#cb67-70" tabindex="-1"></a>   Constructing node pies...<span class="dv">20</span>%</span>
-<span id="cb67-71"><a href="topology-communities.html#cb67-71" tabindex="-1"></a>   Constructing node pies...<span class="dv">22</span>%</span>
-<span id="cb67-72"><a href="topology-communities.html#cb67-72" tabindex="-1"></a>   Constructing node pies...<span class="dv">24</span>%</span>
-<span id="cb67-73"><a href="topology-communities.html#cb67-73" tabindex="-1"></a>   Constructing node pies...<span class="dv">25</span>%</span>
-<span id="cb67-74"><a href="topology-communities.html#cb67-74" tabindex="-1"></a>   Constructing node pies...<span class="dv">27</span>%</span>
-<span id="cb67-75"><a href="topology-communities.html#cb67-75" tabindex="-1"></a>   Constructing node pies...<span class="dv">29</span>%</span>
-<span id="cb67-76"><a href="topology-communities.html#cb67-76" tabindex="-1"></a>   Constructing node pies...<span class="dv">31</span>%</span>
-<span id="cb67-77"><a href="topology-communities.html#cb67-77" tabindex="-1"></a>   Constructing node pies...<span class="dv">33</span>%</span>
-<span id="cb67-78"><a href="topology-communities.html#cb67-78" tabindex="-1"></a>   Constructing node pies...<span class="dv">35</span>%</span>
-<span id="cb67-79"><a href="topology-communities.html#cb67-79" tabindex="-1"></a>   Constructing node pies...<span class="dv">37</span>%</span>
-<span id="cb67-80"><a href="topology-communities.html#cb67-80" tabindex="-1"></a>   Constructing node pies...<span class="dv">38</span>%</span>
-<span id="cb67-81"><a href="topology-communities.html#cb67-81" tabindex="-1"></a>   Constructing node pies...<span class="dv">40</span>%</span>
-<span id="cb67-82"><a href="topology-communities.html#cb67-82" tabindex="-1"></a>   Constructing node pies...<span class="dv">42</span>%</span>
-<span id="cb67-83"><a href="topology-communities.html#cb67-83" tabindex="-1"></a>   Constructing node pies...<span class="dv">44</span>%</span>
-<span id="cb67-84"><a href="topology-communities.html#cb67-84" tabindex="-1"></a>   Constructing node pies...<span class="dv">46</span>%</span>
-<span id="cb67-85"><a href="topology-communities.html#cb67-85" tabindex="-1"></a>   Constructing node pies...<span class="dv">48</span>%</span>
-<span id="cb67-86"><a href="topology-communities.html#cb67-86" tabindex="-1"></a>   Constructing node pies...<span class="dv">50</span>%</span>
-<span id="cb67-87"><a href="topology-communities.html#cb67-87" tabindex="-1"></a>   Constructing node pies...<span class="dv">51</span>%</span>
-<span id="cb67-88"><a href="topology-communities.html#cb67-88" tabindex="-1"></a>   Constructing node pies...<span class="dv">53</span>%</span>
-<span id="cb67-89"><a href="topology-communities.html#cb67-89" tabindex="-1"></a>   Constructing node pies...<span class="dv">55</span>%</span>
-<span id="cb67-90"><a href="topology-communities.html#cb67-90" tabindex="-1"></a>   Constructing node pies...<span class="dv">57</span>%</span>
-<span id="cb67-91"><a href="topology-communities.html#cb67-91" tabindex="-1"></a>   Constructing node pies...<span class="dv">59</span>%</span>
-<span id="cb67-92"><a href="topology-communities.html#cb67-92" tabindex="-1"></a>   Constructing node pies...<span class="dv">61</span>%</span>
-<span id="cb67-93"><a href="topology-communities.html#cb67-93" tabindex="-1"></a>   Constructing node pies...<span class="dv">62</span>%</span>
-<span id="cb67-94"><a href="topology-communities.html#cb67-94" tabindex="-1"></a>   Constructing node pies...<span class="dv">64</span>%</span>
-<span id="cb67-95"><a href="topology-communities.html#cb67-95" tabindex="-1"></a>   Constructing node pies...<span class="dv">66</span>%</span>
-<span id="cb67-96"><a href="topology-communities.html#cb67-96" tabindex="-1"></a>   Constructing node pies...<span class="dv">68</span>%</span>
-<span id="cb67-97"><a href="topology-communities.html#cb67-97" tabindex="-1"></a>   Constructing node pies...<span class="dv">70</span>%</span>
-<span id="cb67-98"><a href="topology-communities.html#cb67-98" tabindex="-1"></a>   Constructing node pies...<span class="dv">72</span>%</span>
-<span id="cb67-99"><a href="topology-communities.html#cb67-99" tabindex="-1"></a>   Constructing node pies...<span class="dv">74</span>%</span>
-<span id="cb67-100"><a href="topology-communities.html#cb67-100" tabindex="-1"></a>   Constructing node pies...<span class="dv">75</span>%</span>
-<span id="cb67-101"><a href="topology-communities.html#cb67-101" tabindex="-1"></a>   Constructing node pies...<span class="dv">77</span>%</span>
-<span id="cb67-102"><a href="topology-communities.html#cb67-102" tabindex="-1"></a>   Constructing node pies...<span class="dv">79</span>%</span>
-<span id="cb67-103"><a href="topology-communities.html#cb67-103" tabindex="-1"></a>   Constructing node pies...<span class="dv">81</span>%</span>
-<span id="cb67-104"><a href="topology-communities.html#cb67-104" tabindex="-1"></a>   Constructing node pies...<span class="dv">83</span>%</span>
-<span id="cb67-105"><a href="topology-communities.html#cb67-105" tabindex="-1"></a>   Constructing node pies...<span class="dv">85</span>%</span>
-<span id="cb67-106"><a href="topology-communities.html#cb67-106" tabindex="-1"></a>   Constructing node pies...<span class="dv">87</span>%</span>
-<span id="cb67-107"><a href="topology-communities.html#cb67-107" tabindex="-1"></a>   Constructing node pies...<span class="dv">88</span>%</span>
-<span id="cb67-108"><a href="topology-communities.html#cb67-108" tabindex="-1"></a>   Constructing node pies...<span class="dv">90</span>%</span>
-<span id="cb67-109"><a href="topology-communities.html#cb67-109" tabindex="-1"></a>   Constructing node pies...<span class="dv">92</span>%</span>
-<span id="cb67-110"><a href="topology-communities.html#cb67-110" tabindex="-1"></a>   Constructing node pies...<span class="dv">94</span>%</span>
-<span id="cb67-111"><a href="topology-communities.html#cb67-111" tabindex="-1"></a>   Constructing node pies...<span class="dv">96</span>%</span>
-<span id="cb67-112"><a href="topology-communities.html#cb67-112" tabindex="-1"></a>   Constructing node pies...<span class="dv">98</span>%</span>
-<span id="cb67-113"><a href="topology-communities.html#cb67-113" tabindex="-1"></a>   Constructing node pies...<span class="dv">100</span>%</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#lc</span></span>
+<span><span class="fu"><a href="https://alextkalinka.github.io/linkcomm/reference/plotLinkCommGraph.html">plotLinkCommGraph</a></span><span class="op">(</span><span class="va">lc</span>,</span>
+<span>                  verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="chapter3_files/figure-html/unnamed-chunk-15-2.png" width="672"></div>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -510,7 +402,7 @@
 <p>Clean environment:</p>
 <div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, let’s try to reproduce an image with multiple clustering of karateka dataset (<a href="https://network-science-data-and-models.github.io/phys7332_fa25/notebooks/class_08/class_08_communities1.html">here</a>) - this image is included in the slides, and is intended as an illustration of the idea that there are indeed many approaches to the problem of community detection:</p>
+<p>Finally, let’s try to reproduce an image with multiple clustering of karateka dataset (<a href="https://network-science-data-and-models.github.io/phys7332_fa25/notebooks/class_08/class_08_communities1.html" style="color: blue;">here</a>) - this image is included in the slides, and is intended as an illustration of the idea that there are indeed many approaches to the problem of community detection:</p>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## karateka graph</span></span>
 <span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">ison_karateka</span></span>
@@ -715,7 +607,7 @@
 <h2>
 <strong>Networks to work in Gephi</strong><a class="anchor" aria-label="anchor" href="#networks-to-work-in-gephi"><i class="fas fa-link"></i></a>
 </h2>
-<p>Install Gephi: <a href="https://gephi.org/users/download/" class="uri">https://gephi.org/users/download/</a></p>
+<p>Install <a href="https://gephi.org/users/download/" style="color: blue;">Gephi</a> first.</p>
 <p>In this short tutorial, we’ll look at three datasets in Gephi (available via my github, see the code below, or the course folder) - all sent to you with this code in the archive. Below is a simple example of how to load them into R, analyze them, and save them back for analysis.</p>
 <div id="insna" class="section level3 unnumbered">
 <h3>
@@ -783,8 +675,8 @@
 <li><p>an example of data in an atypical format that can be converted into familiar lists of nodes and edges,</p></li>
 <li><p>from the point of view of the community search: the data already has clustering, but we will also search for communities in R and look at how to search for communities directly in Gephi.</p></li>
 </ol>
-<p>Load data and look at the network (download json): <a href="https://moviegalaxies.com/movies/view/851/twin-peaks/#" class="uri">https://moviegalaxies.com/movies/view/851/twin-peaks/#</a></p>
-<p>Data in the json format is already in the archive.</p>
+<p><a href="https://moviegalaxies.com/movies/view/851/twin-peaks/#" style="color: blue;">Load</a> data and look at the network (download json):</p>
+<p>Data in the json format is available via archive for today’s class on <a href="https://drive.google.com/drive/folders/1etPj5Sr1oF6k5EuyL2c30O-gV_4uZ81f" style="color: blue;">google drive</a>.</p>
 <div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## to read json-files:</span></span>
 <span><span class="co"># install.packages("jsonlite")</span></span>
@@ -867,7 +759,7 @@
 <h3>
 <strong>Dictionary of Russian writers of the 18th century: a network of personalities</strong><a class="anchor" aria-label="anchor" href="#dictionary-of-russian-writers-of-the-18th-century-a-network-of-personalities"><i class="fas fa-link"></i></a>
 </h3>
-<p>Data source: <a href="https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2022.1-B002" class="uri">https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2022.1-B002</a></p>
+<p><a href="https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2022.1-B002" style="color: blue;">Data source</a></p>
 <p>Although the authors of the dataset write that “data without preliminary processing can be loaded into programs for network analysis when solving educational problems”, it is still better to firstly observe the files in R to get acquainted with their organization, convert them into a format familiar for work, and calculate the statistics of interest.</p>
 <p>Following the authors’ advice, however, we will immediately go to Gephi with this dataset and try to do the entire analysis there.</p>
 <div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
@@ -897,13 +789,13 @@
 <blockquote>
 <p>По словам составителей: «В биографиях лиц, вошедших в историю гуманитарной культуры в качестве государственных деятелей, церковных и светских ораторов, ученых (экономистов, географов, правоведов, историков, лингвистов и пр.), издателей журналов и газет, публицистов, составителей сборников литературного содержания и вместе с тем попадающих в “Словарь”, выделяются и рассматриваются прежде всего сочинения, так или иначе повлиявшие на развитие художественной литературы» (Словарь русских писателей XVIII века. Принципы составления. Словник / сост. В. П. Степанов. Л.: Наука, 1975. С. 11). Таким образом, связи в построенной на данных Словаря сети отражают <em>взаимодействие агентов в поле русской литературы XVIII века.</em></p>
 </blockquote>
-<p>Data viz from the authors: <a href="https://nevmenandr.github.io/rus-dict18-persons/#" class="uri">https://nevmenandr.github.io/rus-dict18-persons/#</a></p>
+<p>Data viz from the authors is available <a href="https://nevmenandr.github.io/rus-dict18-persons/#" style="color: blue;">here</a>.</p>
 <p>If you want, you can also look in Gephi at the second dataset from the same authors, <code>foreign_EDGES.csv</code>, and compare it with the previous data:</p>
 <blockquote>
 <p>Узлами сети выступают русские писатели XVIII века, ребрами — общность их обращения к одним и тем же европейским литераторам. &lt;…&gt; Такая сеть позволяет
 проследить ключевые тенденции в литературной моде XVIII века. Данные организованы в виде ненаправленного взвешенного графа. Вес ребра означает число общих для данных литераторов упоминаний европейских писателей.</p>
 </blockquote>
-<p>Link to the data (it contains the readme file): <a href="https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2023.4-B003" class="uri">https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2023.4-B003</a></p>
+<p><a href="https://dataverse.pushdom.ru/dataset.xhtml?persistentId=doi:10.31860/openlit-2023.4-B003" style="color: blue;">Link</a> to the data (it contains the readme file).</p>
 </div>
 </div>
 <div id="graph-commons-data" class="section level2 unnumbered">
@@ -1002,7 +894,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">twinpeaks.nodes</span>,</span>
 <span>          <span class="st">"GC.twinpeaks.nodelist.csv"</span>,</span>
 <span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
-<p>More about <em>graph commons</em>: <a href="https://docs.graphcommons.com/" class="uri">https://docs.graphcommons.com/</a></p>
+<p>Read (more)<span style="color: blue;"><a href="https://docs.graphcommons.com/" class="uri">https://docs.graphcommons.com/</a></span> about graph commons.</p>
 </div>
 <div id="cosmograph" class="section level2 unnumbered">
 <h2>
@@ -1010,10 +902,10 @@
 </h2>
 <p>This is a free-to-use online tool from the Russian creators. Way more advanced than the previous tools.</p>
 <ul>
-<li><p><a href="https://cosmograph.app/docs/cosmograph/How%20to%20Use/">Tutorial</a></p></li>
-<li><p><a href="no%20need%20to%20register">Website</a>(<a href="https://cosmograph.app/run/" class="uri">https://cosmograph.app/run/</a>)</p></li>
-<li><p><a href="https://t.me/dataviznews">tg-channel of one of the creators</a></p></li>
-<li><p><a href="https://cosmograph.app/run/?data=https://data.newsgraph.xyz/4500a184-f5bb-4e7d-a646-bfadd2b0b1db.csv&amp;meta=https://data.newsgraph.xyz/f94dcc4b-705b-46b2-bf14-dcec8dce17e1.csv&amp;source=source&amp;target=target&amp;gravity=0.25&amp;repulsion=1&amp;repulsionTheta=0.75&amp;linkSpring=0.4&amp;linkDistance=10&amp;friction=0.85&amp;renderLabels=true&amp;renderHoveredLabel=true&amp;renderLinks=true&amp;nodeSizeScale=0.7&amp;linkWidthScale=1&amp;linkArrowsSizeScale=1&amp;nodeSize=size-sum-size&amp;nodeColor=color-type&amp;linkWidth=width-avg-size&amp;linkColor=color-avg-size&amp;">Recent example of use</a></p></li>
+<li><p><a href="https://cosmograph.app/docs/cosmograph/How%20to%20Use/" style="color: blue;">Tutorial</a>,</p></li>
+<li><p><a href="no%20need%20to%20register">Website</a>(<a href="https://cosmograph.app/run/" class="uri">https://cosmograph.app/run/</a>){style=“color: blue;”},</p></li>
+<li><p><a href="https://t.me/dataviznews" style="color: blue;">tg-channel of one of the creators</a>,</p></li>
+<li><p><a href="https://cosmograph.app/run/?data=https://data.newsgraph.xyz/4500a184-f5bb-4e7d-a646-bfadd2b0b1db.csv&amp;meta=https://data.newsgraph.xyz/f94dcc4b-705b-46b2-bf14-dcec8dce17e1.csv&amp;source=source&amp;target=target&amp;gravity=0.25&amp;repulsion=1&amp;repulsionTheta=0.75&amp;linkSpring=0.4&amp;linkDistance=10&amp;friction=0.85&amp;renderLabels=true&amp;renderHoveredLabel=true&amp;renderLinks=true&amp;nodeSizeScale=0.7&amp;linkWidthScale=1&amp;linkArrowsSizeScale=1&amp;nodeSize=size-sum-size&amp;nodeColor=color-type&amp;linkWidth=width-avg-size&amp;linkColor=color-avg-size&amp;" style="color: blue;">Recent example of use</a></p></li>
 </ul>
 <p>The data format needs:</p>
 <ul>
@@ -1026,7 +918,7 @@
 <h2>
 <strong>Home assignment 3</strong><a class="anchor" aria-label="anchor" href="#home-assignment-3"><i class="fas fa-link"></i></a>
 </h2>
-<p>Choose a dataset you like ((check <a href="available-datasets.html#available-datasets"><strong>Available datasets</strong></a>) or find a network by yourself), format it appropriately (lists of nodes and edges), and draw the network in Gephi or other software (Graph Commons, Cosmograph). Think about the story you want to tell by showing your network (specific nodes’ positions, network structure, etc.). Feel free to edit the picture using other softwares (if you struggle with captions in Gephi, for example, you can annotate your picture somewhere else).</p>
+<p>Choose a dataset you like ((check <strong>Available datasets</strong>) or find a network by yourself), format it appropriately (lists of nodes and edges), and draw the network in Gephi or other software (Graph Commons, Cosmograph). Think about the story you want to tell by showing your network (specific nodes’ positions, network structure, etc.). Feel free to edit the picture using other softwares (if you struggle with captions in Gephi, for example, you can annotate your picture somewhere else).</p>
 <p>Insert your graph to pdf/word and write 5-6 sentences about your thought process and story behind the image. Refer to network properties we discussed in class (diameter, homophily, core/peripherical structure) to support your arguments.</p>
 <p>If you want to practice more, you can accompany your work with a short report about the most central nodes in the network and/or the structure of the network, including your interpretation of these results.</p>
 <p>Deadline: before next class | send to <a href="mailto:aapecherskikh@hse.ru" class="email">aapecherskikh@hse.ru</a></p>
@@ -1034,12 +926,12 @@
 </div>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="centrality-measures.html">2 - Centrality measures</a></div>
+<div class="prev"><a href="centrality-measures.html">2 - centrality measures</a></div>
 <div class="next"><a href="two-mode-networks.html">4 - two-mode networks</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#topology-communities">3 - Topology &amp; communities</a></li>
+<li><a class="nav-link" href="#topology-communities">3 - topology &amp; communities</a></li>
 <li><a class="nav-link" href="#graph-level-indicators">Graph-level indicators</a></li>
 <li><a class="nav-link" href="#community-detection-algorithms">Community detection algorithms</a></li>
 <li><a class="nav-link" href="#case-study-last-week-openalex-network">Case study: last week OpenAlex network</a></li>

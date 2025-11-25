@@ -1,7 +1,7 @@
 # (PART\*) **Seminars** {-}
 
 
-# **1 - Intro** {-}
+# **1 - intro** {-}
 
 
 The notes below accompany the first lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1oyyUwEo9PstlD5-2DGyFILB-6poT0IdSI2AG3y592OU/edit?usp=drive_link){style="color: blue;"} as well, as some technical details and examples are discussed there.

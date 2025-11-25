@@ -1,7 +1,7 @@
 # (PART\*) **Seminars** {-}
 
 
-# **1 - Intro** {-}
+# **1 - intro** {-}
 
 
 The notes below accompany the first lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1oyyUwEo9PstlD5-2DGyFILB-6poT0IdSI2AG3y592OU/edit?usp=drive_link){style="color: blue;"} as well, as some technical details and examples are discussed there.
@@ -240,7 +240,7 @@ str(ison_karateka)
 #>   .. ..$ allegiance: num [1:34] 1 1 1 1 1 1 1 1 2 2 ...
 #>   ..$ :List of 1
 #>   .. ..$ weight: num [1:78] 4 5 6 3 3 3 3 3 3 2 ...
-#>  $ :<environment: 0x000002214991ba70> 
+#>  $ :<environment: 0x0000018713b13bc0> 
 #>  - attr(*, "active")= chr "nodes"
 ```
 
@@ -263,9 +263,9 @@ karate_recreated <- karate_edges %>%
 ## now, as it is pure igraph, network is "printed" in a standard igraph-way:
 
 karate_recreated
-#> IGRAPH 63feb96 DNW- 34 78 -- 
+#> IGRAPH 0c42a89 DNW- 34 78 -- 
 #> + attr: name (v/c), weight (e/n)
-#> + edges from 63feb96 (vertex names):
+#> + edges from 0c42a89 (vertex names):
 #>  [1] 1 ->2  1 ->3  2 ->3  1 ->4  2 ->4  3 ->4  1 ->5  1 ->6 
 #>  [9] 1 ->7  5 ->7  6 ->7  1 ->8  2 ->8  3 ->8  4 ->8  1 ->9 
 #> [17] 3 ->9  3 ->10 1 ->11 5 ->11 6 ->11 1 ->12 1 ->13 4 ->13
@@ -290,9 +290,9 @@ karate_recreated <- karate_edges %>%
                         vertices = karate_nodes)
 
 karate_recreated
-#> IGRAPH 6404bb2 DNW- 34 78 -- 
+#> IGRAPH 0c47ade DNW- 34 78 -- 
 #> + attr: name (v/c), allegiance (v/n), weight (e/n)
-#> + edges from 6404bb2 (vertex names):
+#> + edges from 0c47ade (vertex names):
 #>  [1] Mr Hi->2  Mr Hi->3  2    ->3  Mr Hi->4  2    ->4 
 #>  [6] 3    ->4  Mr Hi->5  Mr Hi->6  Mr Hi->7  5    ->7 
 #> [11] 6    ->7  Mr Hi->8  2    ->8  3    ->8  4    ->8 
@@ -538,7 +538,7 @@ lawfirm %>%
 #>   .. ..$ school   : chr [1:71] "Harvard/Yale" "Harvard/Yale" "Harvard/Yale" "Other" ...
 #>   ..$ :List of 1
 #>   .. ..$ type: chr [1:2571] "friends" "advice" "friends" "friends" ...
-#>  $ :<environment: 0x000002213f303b50> 
+#>  $ :<environment: 0x0000018709503b50> 
 #>  - attr(*, "active")= chr "nodes"
 ```
 
@@ -599,11 +599,11 @@ lawfirm2 <- graph_from_data_frame(
   )
 
 lawfirm2
-#> IGRAPH 64cf32b DN-- 71 2571 -- 
+#> IGRAPH 0d0419f DN-- 71 2571 -- 
 #> + attr: name (v/c), status (v/c), gender (v/c),
 #> | office (v/c), seniority (v/n), age (v/n), practice
 #> | (v/c), school (v/c), type (e/c)
-#> + edges from 64cf32b (vertex names):
+#> + edges from 0d0419f (vertex names):
 #>  [1] 1->2  1->2  1->4  1->8  1->17 1->17 1->17 1->20 1->39
 #> [10] 1->40 1->41 1->56 1->57 2->1  2->6  2->7  2->10 2->16
 #> [19] 2->16 2->17 2->17 2->17 2->20 2->22 2->22 2->22 2->24

@@ -4,15 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>1 - Intro | yet another SNA coursebook</title>
+<title>1 - intro | yet another SNA coursebook</title>
 <meta name="author" content="Arthur Pecherskikh">
 <meta name="description" content="The notes below accompany the first lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. During today’s...">
 <meta name="generator" content="bookdown 0.45 with bs4_book()">
-<meta property="og:title" content="1 - Intro | yet another SNA coursebook">
+<meta property="og:title" content="1 - intro | yet another SNA coursebook">
 <meta property="og:type" content="book">
 <meta property="og:description" content="The notes below accompany the first lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. During today’s...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="1 - Intro | yet another SNA coursebook">
+<meta name="twitter:title" content="1 - intro | yet another SNA coursebook">
 <meta name="twitter:description" content="The notes below accompany the first lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. During today’s...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -51,9 +51,9 @@
 <li><a class="" href="formalities.html">Formalities</a></li>
 <li><a class="" href="course-outline.html">Course outline</a></li>
 <li class="book-part">Seminars</li>
-<li><a class="active" href="intro.html">1 - Intro</a></li>
-<li><a class="" href="centrality-measures.html">2 - Centrality measures</a></li>
-<li><a class="" href="topology-communities.html">3 - Topology &amp; communities</a></li>
+<li><a class="active" href="intro.html">1 - intro</a></li>
+<li><a class="" href="centrality-measures.html">2 - centrality measures</a></li>
+<li><a class="" href="topology-communities.html">3 - topology &amp; communities</a></li>
 <li><a class="" href="two-mode-networks.html">4 - two-mode networks</a></li>
 <li class="book-part">Appendices</li>
 <li><a class="" href="available-datasets.html">Available datasets</a></li>
@@ -68,7 +68,7 @@
 </div>
   </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="intro" class="section level1 unnumbered">
 <h1>
-<strong>1 - Intro</strong><a class="anchor" aria-label="anchor" href="#intro"><i class="fas fa-link"></i></a>
+<strong>1 - intro</strong><a class="anchor" aria-label="anchor" href="#intro"><i class="fas fa-link"></i></a>
 </h1>
 <p>The notes below accompany the first lecture of the course. It might be a good idea to consult the <a href="https://docs.google.com/presentation/d/1oyyUwEo9PstlD5-2DGyFILB-6poT0IdSI2AG3y592OU/edit?usp=drive_link" style="color: blue;">lecture slides</a> as well, as some technical details and examples are discussed there.</p>
 <p>During today’s meeting we are going to cover the very basics of doing network analysis in R. Relying on commonly used <code>igraph</code> package for data manipulation, we would learn about typical network data formats (edgelists, nodelists, and matrices) and how to convert them to (and from) typical tabular formats, and ways to manipulate and refer to edges and nodes of the constructed networks. We will also make our first attempts at analysis of the two exemplar datasets. After this session, you will be prepared for more concrete discussions of the network-related topics.</p>
@@ -257,7 +257,7 @@
 <span><span class="co">#&gt;   .. ..$ allegiance: num [1:34] 1 1 1 1 1 1 1 1 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ :List of 1</span></span>
 <span><span class="co">#&gt;   .. ..$ weight: num [1:78] 4 5 6 3 3 3 3 3 3 2 ...</span></span>
-<span><span class="co">#&gt;  $ :&lt;environment: 0x000002214991ba70&gt; </span></span>
+<span><span class="co">#&gt;  $ :&lt;environment: 0x0000018713b13bc0&gt; </span></span>
 <span><span class="co">#&gt;  - attr(*, "active")= chr "nodes"</span></span></code></pre></div>
 <p>Next, we use the aforementioned <code><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF()</a></code> function to deconstruct a network object into two standard data frames: one for edges and one for nodes. You can re-assemble these data frames into a new igraph object using the <code><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame()</a></code> function from <code>igraph</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -276,9 +276,9 @@
 <span><span class="co">## now, as it is pure igraph, network is "printed" in a standard igraph-way:</span></span>
 <span></span>
 <span><span class="va">karate_recreated</span></span>
-<span><span class="co">#&gt; IGRAPH 63feb96 DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 0c42a89 DNW- 34 78 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), weight (e/n)</span></span>
-<span><span class="co">#&gt; + edges from 63feb96 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 0c42a89 (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1 -&gt;2  1 -&gt;3  2 -&gt;3  1 -&gt;4  2 -&gt;4  3 -&gt;4  1 -&gt;5  1 -&gt;6 </span></span>
 <span><span class="co">#&gt;  [9] 1 -&gt;7  5 -&gt;7  6 -&gt;7  1 -&gt;8  2 -&gt;8  3 -&gt;8  4 -&gt;8  1 -&gt;9 </span></span>
 <span><span class="co">#&gt; [17] 3 -&gt;9  3 -&gt;10 1 -&gt;11 5 -&gt;11 6 -&gt;11 1 -&gt;12 1 -&gt;13 4 -&gt;13</span></span>
@@ -296,9 +296,9 @@
 <span>                        vertices <span class="op">=</span> <span class="va">karate_nodes</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">karate_recreated</span></span>
-<span><span class="co">#&gt; IGRAPH 6404bb2 DNW- 34 78 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 0c47ade DNW- 34 78 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), allegiance (v/n), weight (e/n)</span></span>
-<span><span class="co">#&gt; + edges from 6404bb2 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 0c47ade (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] Mr Hi-&gt;2  Mr Hi-&gt;3  2    -&gt;3  Mr Hi-&gt;4  2    -&gt;4 </span></span>
 <span><span class="co">#&gt;  [6] 3    -&gt;4  Mr Hi-&gt;5  Mr Hi-&gt;6  Mr Hi-&gt;7  5    -&gt;7 </span></span>
 <span><span class="co">#&gt; [11] 6    -&gt;7  Mr Hi-&gt;8  2    -&gt;8  3    -&gt;8  4    -&gt;8 </span></span>
@@ -479,7 +479,7 @@
 <span><span class="co">#&gt;   .. ..$ school   : chr [1:71] "Harvard/Yale" "Harvard/Yale" "Harvard/Yale" "Other" ...</span></span>
 <span><span class="co">#&gt;   ..$ :List of 1</span></span>
 <span><span class="co">#&gt;   .. ..$ type: chr [1:2571] "friends" "advice" "friends" "friends" ...</span></span>
-<span><span class="co">#&gt;  $ :&lt;environment: 0x000002213f303b50&gt; </span></span>
+<span><span class="co">#&gt;  $ :&lt;environment: 0x0000018709503b50&gt; </span></span>
 <span><span class="co">#&gt;  - attr(*, "active")= chr "nodes"</span></span></code></pre></div>
 <p>As you can see, the laoded object is already a network. Note how the data is structured:</p>
 <ol style="list-style-type: decimal">
@@ -524,11 +524,11 @@
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">lawfirm2</span></span>
-<span><span class="co">#&gt; IGRAPH 64cf32b DN-- 71 2571 -- </span></span>
+<span><span class="co">#&gt; IGRAPH 0d0419f DN-- 71 2571 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), status (v/c), gender (v/c),</span></span>
 <span><span class="co">#&gt; | office (v/c), seniority (v/n), age (v/n), practice</span></span>
 <span><span class="co">#&gt; | (v/c), school (v/c), type (e/c)</span></span>
-<span><span class="co">#&gt; + edges from 64cf32b (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from 0d0419f (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1-&gt;2  1-&gt;2  1-&gt;4  1-&gt;8  1-&gt;17 1-&gt;17 1-&gt;17 1-&gt;20 1-&gt;39</span></span>
 <span><span class="co">#&gt; [10] 1-&gt;40 1-&gt;41 1-&gt;56 1-&gt;57 2-&gt;1  2-&gt;6  2-&gt;7  2-&gt;10 2-&gt;16</span></span>
 <span><span class="co">#&gt; [19] 2-&gt;16 2-&gt;17 2-&gt;17 2-&gt;17 2-&gt;20 2-&gt;22 2-&gt;22 2-&gt;22 2-&gt;24</span></span>
@@ -747,11 +747,11 @@
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="course-outline.html">Course outline</a></div>
-<div class="next"><a href="centrality-measures.html">2 - Centrality measures</a></div>
+<div class="next"><a href="centrality-measures.html">2 - centrality measures</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#intro">1 - Intro</a></li>
+<li><a class="nav-link" href="#intro">1 - intro</a></li>
 <li><a class="nav-link" href="#libraries">Libraries</a></li>
 <li><a class="nav-link" href="#common-data-structures-and-procedures">Common data structures and procedures</a></li>
 <li><a class="nav-link" href="#working-through-another-example">Working through another example</a></li>

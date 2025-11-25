@@ -1,4 +1,4 @@
-# **2 - Centrality measures** {-}
+# **2 - centrality measures** {-}
 
 
 

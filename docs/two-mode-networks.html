@@ -51,9 +51,9 @@
 <li><a class="" href="formalities.html">Formalities</a></li>
 <li><a class="" href="course-outline.html">Course outline</a></li>
 <li class="book-part">Seminars</li>
-<li><a class="" href="intro.html">1 - Intro</a></li>
-<li><a class="" href="centrality-measures.html">2 - Centrality measures</a></li>
-<li><a class="" href="topology-communities.html">3 - Topology &amp; communities</a></li>
+<li><a class="" href="intro.html">1 - intro</a></li>
+<li><a class="" href="centrality-measures.html">2 - centrality measures</a></li>
+<li><a class="" href="topology-communities.html">3 - topology &amp; communities</a></li>
 <li><a class="active" href="two-mode-networks.html">4 - two-mode networks</a></li>
 <li class="book-part">Appendices</li>
 <li><a class="" href="available-datasets.html">Available datasets</a></li>
@@ -73,10 +73,10 @@
 <p>Two-mode networks, or bipartite networks, or affiliation networks (these are used interchangeably sometimes), consist of <strong>two distinct sets of nodes, where ties exist only between nodes of different sets</strong> (e.g., people and events, authors and papers). This structure is particularly useful for representing affiliations, co-occurrences, or memberships, while preserving the relationships between these categories. Unlike one-mode networks, analyzing two-mode networks requires specialized workflows and metrics to account for their unique structure. In this session, we will walk through the steps of construction, vizualization, and analysis of a two-mode network.</p>
 <p>If you want to consult the other sources, check:</p>
 <ol style="list-style-type: decimal">
-<li><p><a href="https://toreopsahl.com/tnet/two-mode-networks/projection/">this discussion of projections</a>,</p></li>
-<li><p><a href="https://rpubs.com/pjmurphy/317838">this</a> or <a href="https://schochastics.github.io/R4SNA/two-mode-networks.html">that</a> pages with the workflow in R. Partially, we will take a look at the data from the first source below.</p></li>
+<li><p><a href="https://toreopsahl.com/tnet/two-mode-networks/projection/" style="color: blue;">this discussion of projections</a>,</p></li>
+<li><p><a href="https://rpubs.com/pjmurphy/317838" style="color: blue;">this</a> or <a href="https://schochastics.github.io/R4SNA/two-mode-networks.html" style="color: blue;">that</a> pages with the workflow in R. Partially, we will take a look at the data from the first source below.</p></li>
 </ol>
-<p>Today’s lecture slides are available <a href="https://docs.google.com/presentation/d/1a7bgijjxv3r3-VjLjCoCmrf1wtlbZZpM9b3xtZGFD58/edit?usp=sharing">here</a>.</p>
+<p>Today’s lecture slides are available <a href="https://docs.google.com/presentation/d/1a7bgijjxv3r3-VjLjCoCmrf1wtlbZZpM9b3xtZGFD58/edit?usp=sharing" style="color: blue;">here</a>.</p>
 <p>Libraries for this session:</p>
 <div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>    <span class="co">## general workflow</span></span>
@@ -109,7 +109,7 @@
 <strong>Basic example</strong><a class="anchor" aria-label="anchor" href="#basic-example"><i class="fas fa-link"></i></a>
 </h2>
 <p>The data for the first part of today’s session comes from the famous study conducted by Davis and his colleagues (1941). It represents attendance data from 14 social events hosted by 18 women in the American South during the 1930s. This bipartite network captures the <em>affiliations between women and events</em>, highlighting patterns of social interaction, group formation, and shared affiliations. It is a classical dataset to tell students about the two-mode network analysis.</p>
-<p>This data is available via the <code>networkdata</code> package that you should already be aware of. Just in case, this same dataset is attached to the zip-folder I sent you, so, below I load it directly from this file.</p>
+<p>This data is available via the <code>networkdata</code> package that you should already be aware of. Just in case, this same dataset (in .RData extension) is attached to the zip-folder available via <a href="https://drive.google.com/drive/folders/1etPj5Sr1oF6k5EuyL2c30O-gV_4uZ81f" style="color: blue;">our google drive folder</a>.</p>
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ?southern_women # - to know more aboout the data</span></span>
 <span></span>
@@ -318,7 +318,7 @@ NORA
 </table></div>
 <p>The code from above computes the degree centrality scores (nothing new to you) and produce a table with the nodes of each class which possess the highest degree values. It should be interpreted as “Evelyn attended 8 events”, or “event on 16th of September was attended by 14 women (all who are present in the data attended it)”.</p>
 <p>The second option we have is to apply metrics developed specifically for two-mode networks. They allow researchers to investigate each set of nodes individually while preserving their connections to the other set. For instance, bipartite density measures the proportion of possible ties in the network, while metrics like two-mode clustering coefficients examine how groups form across the sets. <strong>Analyzing modes separately ensures that the unique nature of bipartite ties is not lost.</strong></p>
-<p>Unfortunately for us, this line of the possible workflows is not currently well-developed for R. The only available reliable package we have at the moment is <code>tnet</code> developed by <a href="https://toreopsahl.com/">Tore Opsahl</a>. We would not cover it today (although, you can consult external sources on <code>tnet</code> or work in the other softwares, like Pajek, to work in this style).</p>
+<p>Unfortunately for us, this line of the possible workflows is not currently well-developed for R. The only available reliable package we have at the moment is <code>tnet</code> developed by <a href="https://toreopsahl.com/" style="color: blue;">Tore Opsahl</a>. We would not cover it today (although, you can consult external sources on <code>tnet</code> or work in the other softwares, like Pajek, to work in this style).</p>
 <p>The third option is the one we focus on below. It implies a common strategy to project the two-mode network onto one or both sets of nodes, resulting in one-mode networks. <strong>In the projection, nodes from one set are connected if they share a common neighbor in the other set.</strong> For example, women could be connected if they attended the same event, or events could be connected if they were attended by the same women. This approach facilitates the use of standard one-mode network analysis tools but <strong>risks introducing bias, as projections often inflate edge weights and lose important bipartite context.</strong> Careful interpretation is required to avoid overestimating connectivity.</p>
 <p>The simplest way to get the projections is to multiply two-mode matrice to its transposed version (i.e., the matrix where rows become columns and columns become rows). This is a way to get one of the one-mode networks, or projections. Once we change the order of multiplication, we get the second desired one-mode network. The code below shows these steps in details:</p>
 <div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
@@ -1087,7 +1087,7 @@ FRANCES
 </h2>
 <div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Read more about the data: <a href="https://github.com/artpech23/russian_sociology_abstracts.sequel" class="uri">https://github.com/artpech23/russian_sociology_abstracts.sequel</a></p>
+<p>Read more about the data <a href="https://github.com/artpech23/russian_sociology_abstracts.sequel" style="color: blue;">here</a>.</p>
 <p>load data:</p>
 <div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"datasets/journals_nodes.csv"</span><span class="op">)</span></span>
@@ -1687,8 +1687,8 @@ west
 </h2>
 <p>The goal of this assignment is to analyze the structure and relationships within a two-mode network, understand its properties, and derive meaningful conclusions based on the patterns observed. Choose a dataset you like:</p>
 <ul>
-<li><p><a href="https://sites.google.com/site/ucinetsoftware/datasets/corporate-interlocks-in-scotland-1904-5">Corporate interlocks in Scotland</a></p></li>
-<li><p><a href="https://sites.google.com/site/ucinetsoftware/datasets/hollywood-film-music">Hollywood film music</a></p></li>
+<li><p><a href="https://sites.google.com/site/ucinetsoftware/datasets/corporate-interlocks-in-scotland-1904-5" style="color: blue;">Corporate interlocks in Scotland</a>,</p></li>
+<li><p><a href="https://sites.google.com/site/ucinetsoftware/datasets/hollywood-film-music" style="color: blue;">Hollywood film music</a>,</p></li>
 <li><p>data you find/construct by your own (github, google, etc.)</p></li>
 </ul>
 <p>Describe the network: who/what are the nodes? Vizualize it the way you prefer (in R or in Gephi, do not forget about different layouts possible). Select the mode of analysis: choose to work with either two-mode network or one-mode projections. In the second scenario, provide vizualizations of both projections. Discuss whether you want to work with one specific projection or not. Do the analysis you consider relevant: compute centrality measures, search for communities, core/periphery, etc.</p>
@@ -1701,7 +1701,7 @@ Deadline - before your next class.</p>
 
 
   <div class="chapter-nav">
-<div class="prev"><a href="topology-communities.html">3 - Topology &amp; communities</a></div>
+<div class="prev"><a href="topology-communities.html">3 - topology &amp; communities</a></div>
 <div class="next"><a href="available-datasets.html">Available datasets</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>

@@ -13,14 +13,14 @@ Two-mode networks, or bipartite networks, or affiliation networks (these are use
 If you want to consult the other sources, check:
 
 
-  1. [this discussion of projections](https://toreopsahl.com/tnet/two-mode-networks/projection/),
+  1. [this discussion of projections](https://toreopsahl.com/tnet/two-mode-networks/projection/){style="color: blue;"},
   
   
-  2. [this](https://rpubs.com/pjmurphy/317838) or [that](https://schochastics.github.io/R4SNA/two-mode-networks.html) pages with the workflow in R. Partially, we will take a look at the data from the first source below.
+  2. [this](https://rpubs.com/pjmurphy/317838){style="color: blue;"} or [that](https://schochastics.github.io/R4SNA/two-mode-networks.html){style="color: blue;"} pages with the workflow in R. Partially, we will take a look at the data from the first source below.
   
 
 
-Today's lecture slides are available [here](https://docs.google.com/presentation/d/1a7bgijjxv3r3-VjLjCoCmrf1wtlbZZpM9b3xtZGFD58/edit?usp=sharing).
+Today's lecture slides are available [here](https://docs.google.com/presentation/d/1a7bgijjxv3r3-VjLjCoCmrf1wtlbZZpM9b3xtZGFD58/edit?usp=sharing){style="color: blue;"}.
 
 Libraries for this session:
 
@@ -61,7 +61,7 @@ library(stringr)
 The data for the first part of today's session comes from the famous study conducted by Davis and his colleagues (1941). It represents attendance data from 14 social events hosted by 18 women in the American South during the 1930s. This bipartite network captures the *affiliations between women and events*, highlighting patterns of social interaction, group formation, and shared affiliations. It is a classical dataset to tell students about the two-mode network analysis.
 
 
-This data is available via the `networkdata` package that you should already be aware of. Just in case, this same dataset is attached to the zip-folder I sent you, so, below I load it directly from this file.
+This data is available via the `networkdata` package that you should already be aware of. Just in case, this same dataset (in .RData extension) is attached to the zip-folder available via [our google drive folder](https://drive.google.com/drive/folders/1etPj5Sr1oF6k5EuyL2c30O-gV_4uZ81f){style="color: blue;"}.
 
 
 
@@ -282,7 +282,7 @@ The code from above computes the degree centrality scores (nothing new to you) a
 The second option we have is to apply metrics developed specifically for two-mode networks. They allow researchers to investigate each set of nodes individually while preserving their connections to the other set. For instance, bipartite density measures the proportion of possible ties in the network, while metrics like two-mode clustering coefficients examine how groups form across the sets. **Analyzing modes separately ensures that the unique nature of bipartite ties is not lost.**
 
 
-Unfortunately for us, this line of the possible workflows is not currently well-developed for R. The only available reliable package we have at the moment is `tnet` developed by [Tore Opsahl](https://toreopsahl.com/). We would not cover it today (although, you can consult external sources on `tnet` or work in the other softwares, like Pajek, to work in this style).
+Unfortunately for us, this line of the possible workflows is not currently well-developed for R. The only available reliable package we have at the moment is `tnet` developed by [Tore Opsahl](https://toreopsahl.com/){style="color: blue;"}. We would not cover it today (although, you can consult external sources on `tnet` or work in the other softwares, like Pajek, to work in this style).
 
 
 The third option is the one we focus on below. It implies a common strategy to project the two-mode network onto one or both sets of nodes, resulting in one-mode networks. **In the projection, nodes from one set are connected if they share a common neighbor in the other set.** For example, women could be connected if they attended the same event, or events could be connected if they were attended by the same women. This approach facilitates the use of standard one-mode network analysis tools but **risks introducing bias, as projections often inflate edge weights and lose important bipartite context.** Careful interpretation is required to avoid overestimating connectivity.
@@ -925,7 +925,7 @@ rm(list = ls())
 ```
 
 
-Read more about the data: https://github.com/artpech23/russian_sociology_abstracts.sequel
+Read more about the data [here](https://github.com/artpech23/russian_sociology_abstracts.sequel){style="color: blue;"}.
 
 
 load data:
@@ -1465,10 +1465,10 @@ sessionInfo()
 The goal of this assignment is to analyze the structure and relationships within a two-mode network, understand its properties, and derive meaningful conclusions based on the patterns observed. Choose a dataset you like:
 
 
-  - [Corporate interlocks in Scotland](https://sites.google.com/site/ucinetsoftware/datasets/corporate-interlocks-in-scotland-1904-5)
+  - [Corporate interlocks in Scotland](https://sites.google.com/site/ucinetsoftware/datasets/corporate-interlocks-in-scotland-1904-5){style="color: blue;"},
   
   
-  - [Hollywood film music](https://sites.google.com/site/ucinetsoftware/datasets/hollywood-film-music)
+  - [Hollywood film music](https://sites.google.com/site/ucinetsoftware/datasets/hollywood-film-music){style="color: blue;"},
 
 
   - data you find/construct by your own (github, google, etc.)
