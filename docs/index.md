@@ -1,7 +1,7 @@
 --- 
 title: "yet another SNA coursebook"
 author: "Arthur Pecherskikh"
-date: "2025-11-17"
+date: "2025-11-25"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -21,7 +21,7 @@ csl: chicago-fullnote-bibliography.csl
 
 
 Arthur Pecherskikh ([apecherskikh\@eu.spb.ru](aapecherskikh\@eu.spb.ru){style="color: blue;"} | [aapecherskikh\@hse.ru](aapecherskikh\@hse.ru){style="color: blue;"})\
-*last update:* 2025-11-17
+*last update:* 2025-11-25
 
 
 

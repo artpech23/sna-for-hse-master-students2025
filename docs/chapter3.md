@@ -3,7 +3,7 @@
 
 
 
-The notes below accompany the second lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) as well, as some technical details and examples are discussed there. During this session, we will:
+The notes below accompany the third lecture of the course. It might be a good idea to consult the [lecture slides](https://docs.google.com/presentation/d/1ff0JjV7v2tNI3oCqFgGmMtGzkmFk2cpGZumOudxm2MM/edit?usp=sharing) as well, as some technical details and examples are discussed there. During this session, we will:
 
 
   - take a look at graph-level characheristics of the networks,
@@ -349,11 +349,11 @@ Finally, here is a possible solution to community detection task. Note that it w
 ``` r
 g.friends %>% 
   as_undirected()
-#> IGRAPH e566cc1 UN-- 71 399 -- 
+#> IGRAPH 69f3a2b UN-- 71 399 -- 
 #> + attr: name (v/c), status (v/c), gender (v/c),
 #> | office (v/c), seniority (v/n), age (v/n), practice
 #> | (v/c), school (v/c)
-#> + edges from e566cc1 (vertex names):
+#> + edges from 69f3a2b (vertex names):
 #>  [1] 1 --2  1 --4  2 --4  3 --4  3 --7  5 --7  1 --8  4 --9 
 #>  [9] 2 --10 8 --10 9 --10 4 --11 8 --11 9 --11 10--11 1 --12
 #> [17] 2 --12 4 --12 5 --12 8 --12 9 --12 10--12 11--12 4 --13
@@ -679,15 +679,18 @@ To dive into the obtained clusters, we can group some attributes of the articles
   summarise(n = n(),
             share.core = round(mean(core),2),
             mean.age = mean(publication_year, na.rm = T))
-#> # A tibble: 6 × 4
+#> # A tibble: 9 × 4
 #>   cl1            n share.core mean.age
 #>   <membrshp> <int>      <dbl>    <dbl>
-#> 1 1            259       0.19    2019.
-#> 2 2            145       0.17    2019.
-#> 3 3            174       0.18    2017.
-#> 4 4            107       0.04    2020.
-#> 5 5             11       0       2014.
-#> 6 6              3       0       2022.
+#> 1 1            210       0.17    2019.
+#> 2 2            130       0.06    2020.
+#> 3 3            240       0.24    2018.
+#> 4 4             69       0.07    2019.
+#> 5 5             31       0.06    2018.
+#> 6 6              4       0       2019 
+#> 7 7              2       0       2018.
+#> 8 8              2       0       2021 
+#> 9 9             11       0       2014.
 
 #(oa_g.biggest %>% 
 #  asDF())$vertex %>% 
