@@ -16,6 +16,7 @@ rmd_files: [
   "chapter2.Rmd",
   "chapter3.Rmd",
   "chapter4.Rmd",
+  "chapter5.Rmd",
   
   "appendix-datasets.Rmd",
   "appendix-scraping.Rmd",

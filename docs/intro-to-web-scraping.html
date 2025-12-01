@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Intro to web-scraping | yet another SNA coursebook</title>
 <meta name="author" content="Arthur Pecherskikh">
-<meta name="description" content="work-in-progress">
+<meta name="description" content="work-in-progress It is hard to tell about the web-scraping given a limited lecture &amp; seminar time. Here, I include two examples of data which is easy to collect when you are determined to do that....">
 <meta name="generator" content="bookdown 0.45 with bs4_book()">
 <meta property="og:title" content="Intro to web-scraping | yet another SNA coursebook">
 <meta property="og:type" content="book">
-<meta property="og:description" content="work-in-progress">
+<meta property="og:description" content="work-in-progress It is hard to tell about the web-scraping given a limited lecture &amp; seminar time. Here, I include two examples of data which is easy to collect when you are determined to do that....">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Intro to web-scraping | yet another SNA coursebook">
-<meta name="twitter:description" content="work-in-progress">
+<meta name="twitter:description" content="work-in-progress It is hard to tell about the web-scraping given a limited lecture &amp; seminar time. Here, I include two examples of data which is easy to collect when you are determined to do that....">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -55,6 +55,7 @@
 <li><a class="" href="centrality-measures.html">2 - centrality measures</a></li>
 <li><a class="" href="topology-communities.html">3 - topology &amp; communities</a></li>
 <li><a class="" href="two-mode-networks.html">4 - two-mode networks</a></li>
+<li><a class="" href="blockmodeling.html">5 - blockmodeling</a></li>
 <li class="book-part">Appendices</li>
 <li><a class="" href="available-datasets.html">Available datasets</a></li>
 <li><a class="active" href="intro-to-web-scraping.html">Intro to web-scraping</a></li>
@@ -73,14 +74,457 @@
 <blockquote>
 <p><em><font color="red">work-in-progress</font></em></p>
 </blockquote>
+<p>It is hard to tell about the web-scraping given a limited lecture &amp; seminar time. Here, I include two examples of data which is easy to collect when you are determined to do that. The code is commented inside the chunks, but make sure to google each function you do not understand, watch tutotials, and put these skills to practice.</p>
+<p>We will build two networks:</p>
+<ul>
+<li><p>wikipedia links among the pages devoted to 950 <a href="https://en.wikipedia.org/wiki/List_of_sociologists" style="color: blue;">sociologists</a>,</p></li>
+<li><p>relations among the <a href="datasciencemeta.com/rpackages" style="color: blue;">500 R packages</a>.</p></li>
+</ul>
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rvest.tidyverse.org/">rvest</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/">igraph</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/schochastics/netUtils/">netUtils</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jabiru/tictoc">tictoc</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://juliasilge.github.io/tidytext/">tidytext</a></span><span class="op">)</span></span></code></pre></div>
+<div id="wikipedia-example-relations-among-950-pages-about-sociologists" class="section level2 unnumbered">
+<h2>
+<strong>Wikipedia example: relations among 950 pages about sociologists</strong><a class="anchor" aria-label="anchor" href="#wikipedia-example-relations-among-950-pages-about-sociologists"><i class="fas fa-link"></i></a>
+</h2>
+<p>I took this set of pages because (1) it is a relatively small list of pages that (2) actually constitutes a medium-sized network. So, it takes little time to parse and simultaneously allows to show you how to proceed with data collection.</p>
+<p>Note that there is a specialized package <code>WikipediR</code> that simplifies the process of collecting data from the Wikipedia. I use <code>rvest</code> just because it is a generalizable solution which can be tailored to be used in other websites containing many interconnected pages. To learn more about <code>rvest</code>, you can consult:</p>
+<ul>
+<li><p><a href="https://rvest.tidyverse.org/" style="color: blue;">https://rvest.tidyverse.org/</a></p></li>
+<li><p><a href="https://www.r-bloggers.com/2020/04/tutorial-web-scraping-in-r-with-rvest/" style="color: blue;">https://www.r-bloggers.com/2020/04/tutorial-web-scraping-in-r-with-rvest/</a></p></li>
+<li><p><a href="https://r4ds.hadley.nz/webscraping" style="color: blue;">https://r4ds.hadley.nz/webscraping</a></p></li>
+</ul>
+<p>See the code chunks below to learn the process. First, we need <strong>to get the list of pages we want to get data about</strong>. Usually, these pages are equal to agents who will take part in our networks. So, we initially get the nodelist:</p>
+<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## ---------------------------------</span></span>
+<span><span class="co">## link to the list of sociologists:</span></span>
+<span><span class="co">## ---------------------------------</span></span>
+<span><span class="va">url</span> <span class="op">=</span> <span class="st">"https://en.wikipedia.org/wiki/List_of_sociologists"</span></span>
+<span></span>
+<span><span class="co">## get their names and links to wikipedia pages:</span></span>
+<span><span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>link <span class="op">=</span> <span class="va">url</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>             <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>             <span class="fu"><a href="https://rvest.tidyverse.org/reference/rename.html">html_nodes</a></span><span class="op">(</span>css <span class="op">=</span> <span class="st">'.noprint+ ul li &gt; a:nth-child(1)'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>             <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_attr.html">html_attr</a></span><span class="op">(</span><span class="st">"href"</span><span class="op">)</span>,</span>
+<span>           person <span class="op">=</span> <span class="va">url</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>             <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>             <span class="fu"><a href="https://rvest.tidyverse.org/reference/rename.html">html_nodes</a></span><span class="op">(</span>css <span class="op">=</span> <span class="st">'.noprint+ ul li &gt; a:nth-child(1)'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>             <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## descriptions:</span></span>
+<span><span class="va">df2</span> <span class="op">&lt;-</span> <span class="va">url</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/rename.html">html_nodes</a></span><span class="op">(</span>css <span class="op">=</span> <span class="st">'.noprint+ ul li'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>person_info <span class="op">=</span> <span class="va">.</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## remove a single person without a personal page:</span></span>
+<span><span class="va">df3</span> <span class="op">&lt;-</span> <span class="va">df1</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span><span class="va">df2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">person_info</span> <span class="op">!=</span> <span class="st">"Rodrigo Jokisch (born 1946), German-Mexican sociologist and social theorist"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">df1</span>, <span class="va">df2</span>, <span class="va">url</span><span class="op">)</span></span></code></pre></div>
+<p>Next, our task is to get the data about the <strong>connections present among these pages (actors) - an edgelist</strong>. We can get it by (1) collecting the links included in the nodes’ pages and (2) filter the obtained list of ties by the nodelist. Here is how we can do that.</p>
+<p>Note that I use parallelization to collect all these pages. I utilize the <code>furrr</code> package, but (1) there are other options, like <code>doParallel</code>, (2) and more optimal script variants</p>
+<ul>
+<li><p>(it’s best not to run it all together in the classroom, to avoid ruining Wikipedia)</p></li>
+<li><p>(once again, there are also special packages for working with the Wikipedia API; you can download it through them as well. However, the general-purpose code is an example of working with static, non-banned sites)</p></li>
+</ul>
+<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## ----------------------------------</span></span>
+<span><span class="co">## get links from the personal pages:</span></span>
+<span><span class="co">## ----------------------------------</span></span>
+<span></span>
+<span><span class="co">## this solution might be not very ethnical due to speed:</span></span>
+<span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="fu"><a href="https://future.futureverse.org/reference/multisession.html">multisession</a></span><span class="op">(</span>workers <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span> <span class="co">## library(furrr), n parallel sessions</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">tic</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">results_wiki</span> <span class="op">=</span> <span class="fu"><a href="https://furrr.futureverse.org/reference/future_map.html">future_map</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"https://en.wikipedia.org"</span>,</span>
+<span>                                <span class="va">df3</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">953</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="co">## vector of links</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/conditions.html">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      </span>
+<span>      <span class="va">links_to</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rvest.tidyverse.org/reference/rename.html">html_nodes</a></span><span class="op">(</span>css <span class="op">=</span> <span class="st">"a"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>       <span class="co">## get ALL links present</span></span>
+<span>        <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_attr.html">html_attr</a></span><span class="op">(</span><span class="st">"href"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>to <span class="op">=</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">to</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">df3</span><span class="op">$</span><span class="va">link</span><span class="op">)</span>        <span class="co">## filter links by our initial list</span></span>
+<span>      </span>
+<span>      <span class="co">## page id:</span></span>
+<span>      <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">links_to</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">{</span></span>
+<span>        <span class="va">links_to</span><span class="op">$</span><span class="va">from</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>      <span class="op">}</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">links_to</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span></span>
+<span>      </span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span> <span class="co">## 37 seconds on 953 pages, on my local device and local connection</span></span></code></pre></div>
+<p>We can now extract all the collected links into one long list of edges:</p>
+<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#write_rds(results_wiki,</span></span>
+<span><span class="co">#          "results_wiki.rds")</span></span>
+<span></span>
+<span><span class="va">results_wiki</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="st">"datasets/results_wiki.rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">results_binded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html">Reduce</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>,</span>
+<span>                         <span class="va">results_wiki</span><span class="op">)</span></span></code></pre></div>
+<p>Next, remove the so-called loops (connections of a node to itself) and duplicate connections (multiple links to the same page from the same page):</p>
+<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="va">results_binded</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">from</span>,</span>
+<span>                               <span class="st">"https\\:\\/\\/en\\.wikipedia\\.org"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">to</span> <span class="op">!=</span> <span class="va">from</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">from</span>, <span class="va">to</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">as_data_frame</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"edges"</span><span class="op">)</span> <span class="co">## 10,622 edges</span></span></code></pre></div>
+<p>Before we proceed with the network, let’s extract from the sociologists’ short descriptions their countries of origin:</p>
+<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#df3 %&gt;%</span></span>
+<span><span class="co">#  group_by(link, person) %&gt;%</span></span>
+<span><span class="co">#  slice(1) %&gt;%</span></span>
+<span><span class="co">#  ungroup() %&gt;% </span></span>
+<span><span class="co">#  unnest_tokens(token,person_info) %&gt;% </span></span>
+<span><span class="co">#  count(token) %&gt;%</span></span>
+<span><span class="co">#  filter(!token %in% stopwords::stopwords("en")) %&gt;% </span></span>
+<span><span class="co">#  arrange(desc(n))</span></span>
+<span></span>
+<span></span>
+<span><span class="va">df3</span> <span class="op">&lt;-</span> <span class="va">df3</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>background <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html">tolower</a></span><span class="op">(</span><span class="va">person_info</span><span class="op">)</span>, <span class="co">## does not account for mixed cases</span></span>
+<span>                                  <span class="st">"american|french|british|german|canadian|russian|indian|italian|mexican|austrian|danish|english|polish|brazilian|argentinian"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>background <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">background</span> <span class="op">==</span> <span class="st">"english"</span>,</span>
+<span>                             <span class="st">"british"</span>,</span>
+<span>                             <span class="va">background</span><span class="op">)</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">df3</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">background</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     background   n</span></span>
+<span><span class="co">#&gt; 1     american 371</span></span>
+<span><span class="co">#&gt; 2         &lt;NA&gt; 136</span></span>
+<span><span class="co">#&gt; 3      british 106</span></span>
+<span><span class="co">#&gt; 4       french 100</span></span>
+<span><span class="co">#&gt; 5       german  85</span></span>
+<span><span class="co">#&gt; 6      russian  20</span></span>
+<span><span class="co">#&gt; 7     canadian  19</span></span>
+<span><span class="co">#&gt; 8       indian  18</span></span>
+<span><span class="co">#&gt; 9      italian  18</span></span>
+<span><span class="co">#&gt; 10    austrian  16</span></span>
+<span><span class="co">#&gt; 11      danish  15</span></span>
+<span><span class="co">#&gt; 12     mexican  14</span></span>
+<span><span class="co">#&gt; 13      polish  13</span></span>
+<span><span class="co">#&gt; 14   brazilian  12</span></span>
+<span><span class="co">#&gt; 15 argentinian  10</span></span></code></pre></div>
+<p>Create <code>igraph</code> object:</p>
+<div class="sourceCode" id="cb158"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g.wiki.soc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="va">edges</span>,</span>
+<span>                                    vertices <span class="op">=</span> <span class="va">df3</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                                      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">link</span>, <span class="va">person</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                                      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                                      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                                    directed <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">g.wiki.soc</span></span>
+<span><span class="co">#&gt; IGRAPH 30fec6c DN-- 950 10622 -- </span></span>
+<span><span class="co">#&gt; + attr: name (v/c), person (v/c), person_info (v/c),</span></span>
+<span><span class="co">#&gt; | background (v/c)</span></span>
+<span><span class="co">#&gt; + edges from 30fec6c (vertex names):</span></span>
+<span><span class="co">#&gt; [1] /wiki/Andrew_Abbott_(sociologist)-&gt;/wiki/Morris_Janowitz                         </span></span>
+<span><span class="co">#&gt; [2] /wiki/Andrew_Abbott_(sociologist)-&gt;/wiki/Edward_Shils                            </span></span>
+<span><span class="co">#&gt; [3] /wiki/Mark_Abrams                -&gt;/wiki/R._H._Tawney                            </span></span>
+<span><span class="co">#&gt; [4] /wiki/Mark_Abrams                -&gt;/wiki/Michael_Young,_Baron_Young_of_Dartington</span></span>
+<span><span class="co">#&gt; + ... omitted several edges</span></span></code></pre></div>
+<p>Since the network is not integral, we should look at the component sizes (to justify the further work with only the largest component):</p>
+<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/components.html">components</a></span><span class="op">(</span><span class="va">g.wiki.soc</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="op">)</span><span class="co">## 226 components --&gt; one large component, one dyad, others isolated</span></span>
+<span><span class="co">#&gt; List of 3</span></span>
+<span><span class="co">#&gt;  $ membership: Named num [1:950] 1 1 1 1 1 1 1 2 1 1 ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "names")= chr [1:950] "/wiki/%C3%81gnes_Heller" "/wiki/%C3%89lisabeth_Badinter" "/wiki/%C3%89mile_Durkheim" "/wiki/%C3%89mile_Littr%C3%A9" ...</span></span>
+<span><span class="co">#&gt;  $ csize     : num [1:226] 718 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ no        : num 226</span></span>
+<span></span>
+<span><span class="va">g.wiki.soc.biggest</span> <span class="op">&lt;-</span> <span class="fu">netUtils</span><span class="fu">::</span><span class="fu"><a href="https://schochastics.github.io/netUtils/reference/helpers.html">biggest_component</a></span><span class="op">(</span><span class="va">g.wiki.soc</span><span class="op">)</span></span>
+<span><span class="va">g.wiki.soc.biggest</span></span>
+<span><span class="co">#&gt; IGRAPH 310f48d DN-- 718 10613 -- </span></span>
+<span><span class="co">#&gt; + attr: name (v/c), person (v/c), person_info (v/c),</span></span>
+<span><span class="co">#&gt; | background (v/c)</span></span>
+<span><span class="co">#&gt; + edges from 310f48d (vertex names):</span></span>
+<span><span class="co">#&gt; [1] /wiki/Andrew_Abbott_(sociologist)-&gt;/wiki/Morris_Janowitz                         </span></span>
+<span><span class="co">#&gt; [2] /wiki/Andrew_Abbott_(sociologist)-&gt;/wiki/Edward_Shils                            </span></span>
+<span><span class="co">#&gt; [3] /wiki/Mark_Abrams                -&gt;/wiki/R._H._Tawney                            </span></span>
+<span><span class="co">#&gt; [4] /wiki/Mark_Abrams                -&gt;/wiki/Michael_Young,_Baron_Young_of_Dartington</span></span>
+<span><span class="co">#&gt; + ... omitted several edges</span></span></code></pre></div>
+<p>Done!</p>
+<p>Although the results can be more interesting once you find a more intriguing list of actors. It can be about cultural production (lists of writers, lists of architects), countries’ relations (generalized, not concrete), chemical elements, or anything else. If you want to collect Wikipedia data for your project, though, remember that these ties should be interpreted carefully as the referecing in Wikipedia can be weird (we cannot say, for example, that ties among the writers’ pages constitute the relations of respect or friendship - they in fact consitute a long-long list of possible types of relations).</p>
+<p>Just for fun, below is a small analysis of the given graph. I start by computing some measures already familiar to you:</p>
+<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/diameter.html">diameter</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span>    <span class="co">## 10</span></span>
+<span><span class="co">#&gt; [1] 10</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/distances.html">mean_distance</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span> <span class="co">## 3.31</span></span>
+<span><span class="co">#&gt; [1] 3.313099</span></span>
+<span></span>
+<span><span class="fu">netseg</span><span class="fu">::</span><span class="fu"><a href="https://mbojan.github.io/netseg/reference/orwg.html">orwg</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span>,</span>
+<span>             <span class="st">"background"</span><span class="op">)</span> <span class="co">## 3.54, homophily, interpret as odds-ratios</span></span>
+<span><span class="co">#&gt; [1] 3.54002</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/reciprocity.html">reciprocity</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span> <span class="co">## 0.72, meaning 72% of ties are mutual</span></span>
+<span><span class="co">#&gt; [1] 0.7236408</span></span></code></pre></div>
+<p>Check for the core/periphery:</p>
+<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cp</span> <span class="op">&lt;-</span> <span class="fu">netUtils</span><span class="fu">::</span><span class="fu"><a href="https://schochastics.github.io/netUtils/reference/core_periphery.html">core_periphery</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span></span>
+<span><span class="co">#cp %&gt;% </span></span>
+<span><span class="co">#  str()</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">core.periphery</span> <span class="op">=</span> <span class="va">cp</span><span class="op">$</span><span class="va">vec</span></span>
+<span></span>
+<span><span class="co">#g.wiki.soc.biggest %&gt;% </span></span>
+<span><span class="co">#  as_data_frame(what = "vertices") %&gt;% </span></span>
+<span><span class="co">#  count(core.periphery)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span><span class="va">g.wiki.soc.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">core.periphery</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>                             <span class="st">"coral1"</span>,</span>
+<span>                             <span class="st">"grey60"</span><span class="op">)</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>       edge.size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>       edge.arrow.size <span class="op">=</span> <span class="fl">0.5</span>, edge.arrow.width <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="appendix-scraping_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
+<p>Something seems to be off with the produced core/periphery partition. What about the community structure?</p>
+<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span>, <span class="fl">1.2</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span>  <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                        <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                      resolution <span class="op">=</span> <span class="va">i</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span> <span class="op">=</span> <span class="va">cl</span><span class="op">$</span><span class="va">membership</span></span>
+<span>  </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span>  <span class="va">g.wiki.soc.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>         vertex.size <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>         vertex.color <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span>,</span>
+<span>         edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>         edge.size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>         main <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"\ni = "</span>,</span>
+<span>                      <span class="va">i</span>,</span>
+<span>                      <span class="st">"#: "</span>,</span>
+<span>                      <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>                        <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         edge.arrow.size <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>         edge.arrow.width <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="inline-figure"><img src="appendix-scraping_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
+<p>I attach to our graph object the solution with only three communities (also there are clearly 2: U.S. vs. European communities, in historical perspective):</p>
+<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span></span>
+<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                        <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                      resolution <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span> <span class="op">=</span> <span class="va">cl</span><span class="op">$</span><span class="va">membership</span></span></code></pre></div>
+<p>Centrality measures:</p>
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">indegree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span>, mode <span class="op">=</span> <span class="st">"in"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">outdegree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span>, mode <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">betweenness</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">closeness</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/closeness.html">closeness</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">eigen</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="va">g.wiki.soc.biggest</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span></span></code></pre></div>
+<p>Degree centrality vs. betweenness (to detect, as you know, globally central, locally central, brokering, and margianl nodes):</p>
+<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g.wiki.soc.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">as_data_frame</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"vertices"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">indegree</span>,<span class="va">betweenness</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html">geom_text_repel</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">person</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2.8</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="appendix-scraping_files/figure-html/unnamed-chunk-14-1.png" width="672"></div>
+<p>Highest eigenvector scores:</p>
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g.wiki.soc.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">as_data_frame</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"vertices"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html">top_n</a></span><span class="op">(</span><span class="fl">15</span>, <span class="va">eigen</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">person</span>, <span class="va">indegree</span>, <span class="va">outdegree</span>, <span class="va">eigen</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">eigen</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                                                   person</span></span>
+<span><span class="co">#&gt; /wiki/Talcott_Parsons                    Talcott Parsons</span></span>
+<span><span class="co">#&gt; /wiki/Erving_Goffman                      Erving Goffman</span></span>
+<span><span class="co">#&gt; /wiki/Robert_K._Merton                  Robert K. Merton</span></span>
+<span><span class="co">#&gt; /wiki/Erik_Olin_Wright                  Erik Olin Wright</span></span>
+<span><span class="co">#&gt; /wiki/Lester_Frank_Ward                Lester Frank Ward</span></span>
+<span><span class="co">#&gt; /wiki/Seymour_Martin_Lipset        Seymour Martin Lipset</span></span>
+<span><span class="co">#&gt; /wiki/Alejandro_Portes                  Alejandro Portes</span></span>
+<span><span class="co">#&gt; /wiki/Douglas_Massey                      Douglas Massey</span></span>
+<span><span class="co">#&gt; /wiki/Neil_Smelser                          Neil Smelser</span></span>
+<span><span class="co">#&gt; /wiki/William_Graham_Sumner        William Graham Sumner</span></span>
+<span><span class="co">#&gt; /wiki/James_Samuel_Coleman          James Samuel Coleman</span></span>
+<span><span class="co">#&gt; /wiki/Patricia_Hill_Collins        Patricia Hill Collins</span></span>
+<span><span class="co">#&gt; /wiki/Florian_Znaniecki                Florian Znaniecki</span></span>
+<span><span class="co">#&gt; /wiki/George_C._Homans                  George C. Homans</span></span>
+<span><span class="co">#&gt; /wiki/Everett_Hughes_(sociologist)        Everett Hughes</span></span>
+<span><span class="co">#&gt;                                    indegree outdegree</span></span>
+<span><span class="co">#&gt; /wiki/Talcott_Parsons                   110       123</span></span>
+<span><span class="co">#&gt; /wiki/Erving_Goffman                     92        74</span></span>
+<span><span class="co">#&gt; /wiki/Robert_K._Merton                   97        74</span></span>
+<span><span class="co">#&gt; /wiki/Erik_Olin_Wright                   78        67</span></span>
+<span><span class="co">#&gt; /wiki/Lester_Frank_Ward                  73        65</span></span>
+<span><span class="co">#&gt; /wiki/Seymour_Martin_Lipset              75        68</span></span>
+<span><span class="co">#&gt; /wiki/Alejandro_Portes                   72        65</span></span>
+<span><span class="co">#&gt; /wiki/Douglas_Massey                     73        65</span></span>
+<span><span class="co">#&gt; /wiki/Neil_Smelser                       70        65</span></span>
+<span><span class="co">#&gt; /wiki/William_Graham_Sumner              68        66</span></span>
+<span><span class="co">#&gt; /wiki/James_Samuel_Coleman               72        61</span></span>
+<span><span class="co">#&gt; /wiki/Patricia_Hill_Collins              72        69</span></span>
+<span><span class="co">#&gt; /wiki/Florian_Znaniecki                  64        63</span></span>
+<span><span class="co">#&gt; /wiki/George_C._Homans                   68        63</span></span>
+<span><span class="co">#&gt; /wiki/Everett_Hughes_(sociologist)       67        62</span></span>
+<span><span class="co">#&gt;                                        eigen</span></span>
+<span><span class="co">#&gt; /wiki/Talcott_Parsons              1.0000000</span></span>
+<span><span class="co">#&gt; /wiki/Erving_Goffman               0.9772865</span></span>
+<span><span class="co">#&gt; /wiki/Robert_K._Merton             0.9763853</span></span>
+<span><span class="co">#&gt; /wiki/Erik_Olin_Wright             0.9685004</span></span>
+<span><span class="co">#&gt; /wiki/Lester_Frank_Ward            0.9653630</span></span>
+<span><span class="co">#&gt; /wiki/Seymour_Martin_Lipset        0.9631846</span></span>
+<span><span class="co">#&gt; /wiki/Alejandro_Portes             0.9626278</span></span>
+<span><span class="co">#&gt; /wiki/Douglas_Massey               0.9625743</span></span>
+<span><span class="co">#&gt; /wiki/Neil_Smelser                 0.9624601</span></span>
+<span><span class="co">#&gt; /wiki/William_Graham_Sumner        0.9618256</span></span>
+<span><span class="co">#&gt; /wiki/James_Samuel_Coleman         0.9595931</span></span>
+<span><span class="co">#&gt; /wiki/Patricia_Hill_Collins        0.9594090</span></span>
+<span><span class="co">#&gt; /wiki/Florian_Znaniecki            0.9593397</span></span>
+<span><span class="co">#&gt; /wiki/George_C._Homans             0.9589332</span></span>
+<span><span class="co">#&gt; /wiki/Everett_Hughes_(sociologist) 0.9585830</span></span></code></pre></div>
+</div>
+<div id="cran-packages-related" class="section level2 unnumbered">
+<h2>
+<strong>500 CRAN packages, related</strong><a class="anchor" aria-label="anchor" href="#cran-packages-related"><i class="fas fa-link"></i></a>
+</h2>
+<p>For the second example utilizing the same logic, I collect the data from <a href="http://datasciencemeta.com/rpackages" style="color: blue;">the Comprehensive R Archive Network (CRAN)</a></p>
+<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cran</span> <span class="op">&lt;-</span> <span class="st">"https://www.datasciencemeta.com/rpackages"</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">links</span> <span class="op">&lt;-</span> <span class="va">cran</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/rename.html">html_nodes</a></span><span class="op">(</span><span class="st">'a'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_attr.html">html_attr</a></span><span class="op">(</span><span class="st">'href'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">texts</span> <span class="op">&lt;-</span> <span class="va">cran</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/rename.html">html_nodes</a></span><span class="op">(</span><span class="st">'a'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">downloads</span> <span class="op">&lt;-</span> <span class="va">cran</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/rename.html">html_nodes</a></span><span class="op">(</span><span class="st">'td:nth-child(3)'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_text.html">html_text</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cran</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>package <span class="op">=</span> <span class="va">texts</span>,</span>
+<span>                   link <span class="op">=</span> <span class="va">links</span>,</span>
+<span>                   downloads <span class="op">=</span> <span class="va">downloads</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>package_id <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">link</span>,</span>
+<span>                                     <span class="st">"https://cran.r-project.org/web/packages"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The script below collects the data for the first 500 packages (by the number of downloads). The approach is similar, but this time with a regular loop (no parallel execution):</p>
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">tic</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">links_to</span> <span class="op">&lt;-</span> <span class="va">cran</span><span class="op">[</span><span class="va">i</span>,<span class="fl">2</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>        <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rvest.tidyverse.org/reference/rename.html">html_nodes</a></span><span class="op">(</span>css <span class="op">=</span> <span class="st">"a, .CRAN"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_attr.html">html_attr</a></span><span class="op">(</span><span class="st">"href"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>to <span class="op">=</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">to</span>, <span class="st">"/index.html$"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>to <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">to</span>, <span class="st">"/.+/index\\.html$"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">to</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">cran</span><span class="op">$</span><span class="va">package_id</span><span class="op">)</span>  </span>
+<span>  </span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">links_to</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">{</span></span>
+<span>        <span class="va">links_to</span><span class="op">$</span><span class="va">from</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">cran</span><span class="op">[</span><span class="va">i</span>,<span class="fl">4</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="va">edges</span> <span class="op">&lt;-</span> <span class="va">edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="va">links_to</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#print(i)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span> <span class="co">## 194 seconds</span></span></code></pre></div>
+<p>Construct the <code>igraph</code> object:</p>
+<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#write_rds(edges, "datasets/cran-network.rds")</span></span>
+<span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="st">"datasets/cran-network.rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">g.cran</span> <span class="op">&lt;-</span> <span class="va">edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">to</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">cran</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span>,<span class="fl">4</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Compute centrality measures and detect communities (no Sherlocking for this example):</p>
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.cran</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">g.cran</span>, mode <span class="op">=</span> <span class="st">"in"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">32</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.cran</span><span class="op">)</span><span class="op">$</span><span class="va">group</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">g.cran</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>                                    <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                                  resolution <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/communities.html">membership</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">g.cran</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.cran</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span><span class="op">/</span><span class="fl">15</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.cran</span><span class="op">)</span><span class="op">$</span><span class="va">group</span>,</span>
+<span>       edge.color <span class="op">=</span> <span class="st">"grey"</span>,</span>
+<span>       edge.arrow.width <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>       edge.width <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="appendix-scraping_files/figure-html/unnamed-chunk-18-1.png" width="672"></div>
+<p>Compare the distributions of “downloads” scores:</p>
+<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span></span>
+<span><span class="va">g.cran</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">as_data_frame</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"vertices"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>package_id <span class="op">=</span> <span class="va">name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">cran</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>downloads <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">downloads</span>, <span class="st">","</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">group</span>, <span class="va">downloads</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html">geom_text_repel</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">package</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html">scale_x_discrete</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1st group"</span>, <span class="st">"2nd group"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="appendix-scraping_files/figure-html/unnamed-chunk-19-1.png" width="672"></div>
 
+</div>
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="available-datasets.html">Available datasets</a></div>
 <div class="next"><a href="recommended-literature.html">Recommended literature</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#intro-to-web-scraping">Intro to web-scraping</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#intro-to-web-scraping">Intro to web-scraping</a></li>
+<li><a class="nav-link" href="#wikipedia-example-relations-among-950-pages-about-sociologists">Wikipedia example: relations among 950 pages about sociologists</a></li>
+<li><a class="nav-link" href="#cran-packages-related">500 CRAN packages, related</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
@@ -97,7 +541,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-11-25.</p>
+    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-12-01.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>5 - blockmodeling | yet another SNA coursebook</title>
+<meta name="author" content="Arthur Pecherskikh">
+<meta name="description" content="The notes below accompany the fifth lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. Relational...">
+<meta name="generator" content="bookdown 0.45 with bs4_book()">
+<meta property="og:title" content="5 - blockmodeling | yet another SNA coursebook">
+<meta property="og:type" content="book">
+<meta property="og:description" content="The notes below accompany the fifth lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. Relational...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="5 - blockmodeling | yet another SNA coursebook">
+<meta name="twitter:description" content="The notes below accompany the fifth lecture of the course. It might be a good idea to consult the lecture slides as well, as some technical details and examples are discussed there. Relational...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="libs/plotly-binding-4.10.4/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="libs/d3-4.9.1/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4.1/forceNetwork.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">yet another SNA coursebook</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">About</a></li>
+<li><a class="" href="formalities.html">Formalities</a></li>
+<li><a class="" href="course-outline.html">Course outline</a></li>
+<li class="book-part">Seminars</li>
+<li><a class="" href="intro.html">1 - intro</a></li>
+<li><a class="" href="centrality-measures.html">2 - centrality measures</a></li>
+<li><a class="" href="topology-communities.html">3 - topology &amp; communities</a></li>
+<li><a class="" href="two-mode-networks.html">4 - two-mode networks</a></li>
+<li><a class="active" href="blockmodeling.html">5 - blockmodeling</a></li>
+<li class="book-part">Appendices</li>
+<li><a class="" href="available-datasets.html">Available datasets</a></li>
+<li><a class="" href="intro-to-web-scraping.html">Intro to web-scraping</a></li>
+<li><a class="" href="recommended-literature.html">Recommended literature</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/artpech23/sna-for-hse-master-students2025">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="blockmodeling" class="section level1 unnumbered">
+<h1>
+<strong>5 - blockmodeling</strong><a class="anchor" aria-label="anchor" href="#blockmodeling"><i class="fas fa-link"></i></a>
+</h1>
+<p>The notes below accompany the fifth lecture of the course. It might be a good idea to consult the <a href="https://docs.google.com/presentation/d/1C4NmQQ8Z9Am8Oz-T9CXowI6xYITYs3tZdFBt0BX5Ysk/edit?usp=sharing" style="color: blue;">lecture slides</a> as well, as some technical details and examples are discussed there.</p>
+<p>Relational blockmodeling is a distinct approach in network analysis that shifts the focus from analyzing individual nodes or edges to understanding the structural patterns and roles within a network. Unlike classical methods like centrality calculations, which evaluate the importance of individual nodes, or community detection, which identifies cohesive subgroups, blockmodeling examines how actors are grouped based on <strong>structural equivalence</strong> — the idea that nodes occupying similar positions in a network should display similar patterns of relationships to others. By doing so, it is a generalized approach to analyze network structures as it is not constrained by any specific optimized measure (like density in the Girvan-Newman community detection) or individual focus (like centrality measures).</p>
+<p>Developed by Harrison White and further advanced by scholars like Ronald Breiger, Linton Freeman, François Lorrain, and James Moody, among with the many-many other authors, blockmodeling introduced <strong>a formal mathematical framework to study how the structure of a network is organized into blocks or positions</strong>. This method is particularly suited for identifying underlying roles and patterns that might not be immediately apparent, such as hierarchies, core-periphery structures, or functional differentiation.</p>
+<p>Some vocabulary (the list is not complete, though we would not use all of these):</p>
+<ul>
+<li><p><strong>Structural Equivalence:</strong> Nodes are structurally equivalent if they have identical relationships to other nodes.</p></li>
+<li><p><strong>Role Equivalence:</strong> A broader concept where nodes have similar, though not identical, roles within the network.</p></li>
+<li><p><strong>Blocks:</strong> Matrix subregions that represent relational patterns between groups of nodes (e.g., dense connections, absence of ties).</p></li>
+<li><p><strong>Image Matrix:</strong> A simplified representation of the network, summarizing relationships between blocks rather than individual nodes.</p></li>
+<li><p><strong>Fit Function:</strong> A measure of how well the blockmodel explains the observed network data.</p></li>
+</ul>
+<p>Relational blockmodeling is particularly powerful for understanding social roles in networks, such as actors in an organization who perform similar tasks or members of a network who share analogous positions (e.g., gatekeepers, brokers). This approach moves beyond individual-level metrics to illuminate the macro-level structure of the network as a whole.</p>
+<p>If you want to consult the other sources, check:</p>
+<ol style="list-style-type: decimal">
+<li><p>recent <a href="https://youtu.be/Mq3-bYSPjqQ?si=1_z3DkETkKiU3lLD" style="color: blue;">youtube lecture by James Moody</a>, less than an hour long (it is not focused on coding, though, unlike the other sources),</p></li>
+<li><p>the <a href="https://inarwhal.github.io/NetworkAnalysisR-book/ch10-Positions-Roles-R.html#structural-equivalence" style="color: blue;">structural equivalence chapter</a> from the book Moody and his colleagues wrote (you can also read the chapter 10 “Positions and Roles” in Rawlings et al. (2023), which this linked page accompanies),</p></li>
+<li><p>the <a href="https://schochastics.github.io/R4SNA/clustering.html#blockmodeling" style="color: blue;">blockmodeling chapter</a> from the other book,</p></li>
+<li><p>the <a href="http://mrvar.fdv.uni-lj.si/sola/info4/nusa/doc/blockmodeling-2.pdf" style="color: blue;">blockmodeling slides</a> by Anushka Ferligoj,</p></li>
+<li><p>Phil Murphy &amp; Brendan Knapp <a href="https://rpubs.com/pjmurphy/325575" style="color: blue;">post on RPubs on blockmodeling</a>.</p></li>
+</ol>
+<p>The slides I have shown and the code below are partially based on these materials as well.</p>
+<p>Libraries for this session:</p>
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#########################</span></span>
+<span><span class="co">## previously covered: ##</span></span>
+<span><span class="co">#########################</span></span>
+<span></span>
+<span><span class="co">## general:</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>    <span class="co">## general workflow</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>      <span class="co">## general for vizualizations</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggrepel.slowkow.com/">ggrepel</a></span><span class="op">)</span>      <span class="co">## captions in ggplot</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>   <span class="co">## beautiful tables</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span>   <span class="co">## load csv fast</span></span>
+<span></span>
+<span><span class="co">## for network analysis:</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/">igraph</a></span><span class="op">)</span>       <span class="co">## core package to work with networks</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mbojan.github.io/intergraph/">intergraph</a></span><span class="op">)</span>   <span class="co">## to convert graphs to data frames and back</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stocnet.github.io/manynet/">manynet</a></span><span class="op">)</span>      <span class="co">## data package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/schochastics/netUtils/">netUtils</a></span><span class="op">)</span>     <span class="co">## to compute network statistics</span></span>
+<span></span>
+<span><span class="co">## data:</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/schochastics/networkdata">networkdata</a></span><span class="op">)</span>  <span class="co">## exteremely large library! take time to install in once</span></span>
+<span><span class="co">#remotes::install_github("schochastics/networkdata") ## installation</span></span>
+<span></span>
+<span><span class="co">########################</span></span>
+<span><span class="co">## for blockmodeling: ##</span></span>
+<span><span class="co">########################</span></span>
+<span></span>
+<span><span class="co">#install.packages("concorR")</span></span>
+<span><span class="co">#devtools::install_github("aslez/concoR")</span></span>
+<span><span class="co">#install.packages("blockmodeling")</span></span>
+<span><span class="co">#install.packages("statnet")</span></span>
+<span><span class="co">#install.packages("sna")</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ATraxLab/concorR">concorR</a></span><span class="op">)</span>        <span class="co">## classical package (concor algorithm)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">concoR</span><span class="op">)</span>         <span class="co">## supplementary functions</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">blockmodeling</span><span class="op">)</span>  <span class="co">## for signed networks</span></span>
+<span></span>
+<span><span class="co">## general packages, suitable for network analysis in general</span></span>
+<span><span class="co">## igraph does not allow you to compute these models,</span></span>
+<span><span class="co">## so we move to the other paradigm of work with networks in R</span></span>
+<span><span class="co">#library(statnet)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://statnet.org">sna</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr">FactoMineR</a></span><span class="op">)</span>     <span class="co">## correspondence analysis</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
+<span><span class="co">#remotes::install_version("ggimage", version = "0.3.3")</span></span>
+<span><span class="co">#library(ggimage) ---&gt; did not work for me for some reasons yeasterday...</span></span>
+<span></span>
+<span><span class="co">#install.packages("ggimg")</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/statsmaths/ggimg">ggimg</a></span><span class="op">)</span></span></code></pre></div>
+<div id="concor" class="section level2 unnumbered">
+<h2>
+<strong>CONCOR</strong><a class="anchor" aria-label="anchor" href="#concor"><i class="fas fa-link"></i></a>
+</h2>
+<p>The CONCOR (CONvergence of iterated CORrelations) algorithm is a classic method in network analysis used to identify groups of nodes with similar structural roles. Developed in the 1970s, it iteratively calculates correlations between the rows (or columns) of an adjacency matrix to group nodes based on their relational patterns. CONCOR is particularly well-suited for blockmodeling and understanding equivalence, as it focuses on similarity in how nodes relate to others rather than direct connections.</p>
+<p>This algorithm is often used in contexts like organizational studies or social role analysis, where grouping actors by their patterns of ties provides meaningful insights. Unlike clustering methods based on distance, CONCOR relies on correlations, making it ideal for detecting subtle relational similarities.</p>
+<p>To run CONCOR, we first need to get a matrix representation of our network, or stack of matrices if we have data on multiple relations. To start with a simple example, let’s find the roles / blocks / positions in <code>the Big Lebowski</code>(1998) characters’ network. First, we need to get an adjacency matrix:</p>
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">networkdata</span><span class="fu">::</span><span class="va"><a href="https://schochastics.github.io/networkdata/reference/movie_103.html">movie_103</a></span></span>
+<span><span class="co">#write_rds(g, "datasets/big-lebowski.rds") ## you can get it from github!</span></span>
+<span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">networkdata</span><span class="fu">::</span><span class="va"><a href="https://schochastics.github.io/networkdata/reference/movie_103.html">movie_103</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_adjacency_matrix.html">as_adjacency_matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="co">## first 5 rows and columns</span></span>
+<span><span class="co">#&gt;           ALLAN BARTENDER BLOND MAN BRANDT BUNNY</span></span>
+<span><span class="co">#&gt; ALLAN         0         0         0      0     0</span></span>
+<span><span class="co">#&gt; BARTENDER     0         0         0      0     0</span></span>
+<span><span class="co">#&gt; BLOND MAN     0         0         0      0     0</span></span>
+<span><span class="co">#&gt; BRANDT        0         0         0      0     1</span></span>
+<span><span class="co">#&gt; BUNNY         0         0         0      1     0</span></span></code></pre></div>
+<p>To apply the CONCOR algorithm, we can simply run <code><a href="https://rdrr.io/pkg/concoR/man/concor_hca.html">concor_hca()</a></code> function and set the desired number of partitions (p). Note that this function works with lists of martices, meaning we need to put a single matrix inside the <code><a href="https://rdrr.io/r/base/list.html">list()</a></code>. The package author’s intention is clearly to run blockmodel when we have multiple ties in our network.</p>
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Apply the CONCOR algorithm:</span></span>
+<span><span class="va">blks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/concoR/man/concor_hca.html">concor_hca</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, max.iter <span class="op">=</span> <span class="fl">100</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> </span>
+<span></span>
+<span></span>
+<span><span class="co">## to vizualise, we need to build the block model:</span></span>
+<span><span class="va">blk_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sna/man/blockmodel.html">blockmodel</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>                      <span class="va">blks</span><span class="op">$</span><span class="va">block</span>,</span>
+<span>                      mode<span class="op">=</span><span class="st">"graph"</span>,</span>
+<span>                   <span class="co">#  plabels=blks$vertex,</span></span>
+<span>                      glabels<span class="op">=</span><span class="st">"the Big Lebowski characters"</span>,</span>
+<span>                   </span>
+<span>                      <span class="co">#plabels = rownames(data[[1]]),</span></span>
+<span>                   plabels <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">name</span></span>
+<span>                   <span class="op">)</span></span>
+<span></span>
+<span><span class="co">## see the results:</span></span>
+<span><span class="va">blk_mod</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Network Blockmodel:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Block membership:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;        ALLAN    BARTENDER    BLOND MAN       BRANDT </span></span>
+<span><span class="co">#&gt;            1            1            1            1 </span></span>
+<span><span class="co">#&gt;        BUNNY        CHIEF  CHINESE MAN      DA FINO </span></span>
+<span><span class="co">#&gt;            1            1            1            1 </span></span>
+<span><span class="co">#&gt;       DIETER     DONNELLY        DONNY       DRIVER </span></span>
+<span><span class="co">#&gt;            3            1            3            1 </span></span>
+<span><span class="co">#&gt;         DUDE    FIRST MAN        FRANZ         GARY </span></span>
+<span><span class="co">#&gt;            4            2            3            1 </span></span>
+<span><span class="co">#&gt;      HALLWAY      KIEFFER          MAN        MAUDE </span></span>
+<span><span class="co">#&gt;            1            3            3            3 </span></span>
+<span><span class="co">#&gt;    OLDER COP        PILAR    POLICEMAN     QUINTANA </span></span>
+<span><span class="co">#&gt;            1            1            1            3 </span></span>
+<span><span class="co">#&gt;   SECOND MAN       SMOKEY THE STRANGER    THIRD MAN </span></span>
+<span><span class="co">#&gt;            2            3            1            2 </span></span>
+<span><span class="co">#&gt;         TONY     TREEHORN     WAITRESS       WALTER </span></span>
+<span><span class="co">#&gt;            1            1            3            3 </span></span>
+<span><span class="co">#&gt;        WOMAN          WOO    YOUNG MAN  YOUNG WOMAN </span></span>
+<span><span class="co">#&gt;            3            1            1            1 </span></span>
+<span><span class="co">#&gt;  YOUNGER COP </span></span>
+<span><span class="co">#&gt;            1 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Reduced form blockmodel:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   the Big Lebowski characters </span></span>
+<span><span class="co">#&gt;            Block 1    Block 2    Block 3   Block 4</span></span>
+<span><span class="co">#&gt; Block 1 0.04329004 0.00000000 0.02892562 1.0000000</span></span>
+<span><span class="co">#&gt; Block 2 0.00000000 1.00000000 0.09090909 1.0000000</span></span>
+<span><span class="co">#&gt; Block 3 0.02892562 0.09090909 0.41818182 0.9090909</span></span>
+<span><span class="co">#&gt; Block 4 1.00000000 1.00000000 0.90909091       NaN</span></span></code></pre></div>
+<p>The function output contains (1) block membership (you can think of it as any other output we got in this course - membership in communities, degree, etc., - it is just a calculated attribute for our nodes), (2) image matrix. To get the image matrix separately, we can run:</p>
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">blk_mod</span><span class="op">$</span><span class="va">block.model</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         Block 1 Block 2 Block 3 Block 4</span></span>
+<span><span class="co">#&gt; Block 1    0.04    0.00    0.03    1.00</span></span>
+<span><span class="co">#&gt; Block 2    0.00    1.00    0.09    1.00</span></span>
+<span><span class="co">#&gt; Block 3    0.03    0.09    0.42    0.91</span></span>
+<span><span class="co">#&gt; Block 4    1.00    1.00    0.91     NaN</span></span></code></pre></div>
+<p>We can now plot the whole block model:</p>
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">blk_mod</span>, main <span class="op">=</span> <span class="st">"Big Lebowski blockmodel"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-5-1.png" width="960"></div>
+<p>Though it is not an accurate image due to the number of nodes and overlapping names, we can distinguish core/peripherial characters and the main character, dude, who has connection to all the other characters thus constituting a special “role” in the film. In addition to the network topology (core/periphery or community structure, if you want to distinguish first-second-third men as a separate group), we get the approximate “role” (as set of relations) split in the movie.</p>
+<p>Here is a way to beautify the matrix:</p>
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">column_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"grey60"</span>, <span class="st">"lightblue"</span>, <span class="st">"darkgreen"</span>, <span class="st">"coral1"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="va">blk_mod</span><span class="op">$</span><span class="va">blocked.data</span>,</span>
+<span>        Rowv <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>        Colv <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>        revC <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>        col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">6</span>, <span class="st">"Blues"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">25</span><span class="op">)</span>,</span>
+<span>        ColSideColors <span class="op">=</span> <span class="va">column_cols</span><span class="op">[</span><span class="va">blk_mod</span><span class="op">$</span><span class="va">block.membership</span><span class="op">]</span>,</span>
+<span>        RowSideColors <span class="op">=</span> <span class="va">column_cols</span><span class="op">[</span><span class="va">blk_mod</span><span class="op">$</span><span class="va">block.membership</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-6-1.png" width="672"></div>
+<p>Note that the network we are working with is weighted, so some of the ties are darker than the others.</p>
+<p>When plotted on the network, it looks like this:</p>
+<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">networkdata</span><span class="fu">::</span><span class="va"><a href="https://schochastics.github.io/networkdata/reference/movie_103.html">movie_103</a></span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">blocks</span> <span class="op">&lt;-</span> <span class="va">blks</span><span class="op">$</span><span class="va">block</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">32</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/plot.igraph.html">plot.igraph</a></span><span class="op">(</span><span class="va">g</span>,</span>
+<span>            vertex.color<span class="op">=</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">blocks</span>,</span>
+<span>            vertex.size <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>            edge.color <span class="op">=</span> <span class="st">"grey60"</span>,</span>
+<span>       edge.width <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>       vertex.label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">5</span>,</span>
+<span>                             <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>,</span>
+<span>                             <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>       layout <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/layout_with_mds.html">layout_with_mds</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span>,</span>
+<span>       vertex.label.size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>       vertex.label.color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
+<p>So, the dude has a special role, and there are 3 other blocks of characters.</p>
+<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="regular-equivalence-with-cluster-analysis" class="section level2 unnumbered">
+<h2>
+<strong>Regular equivalence with cluster analysis</strong><a class="anchor" aria-label="anchor" href="#regular-equivalence-with-cluster-analysis"><i class="fas fa-link"></i></a>
+</h2>
+<p>Next, we would run the other blockmodeling algorithm on the projection of the network we discussed last week. It comes comes from the famous study conducted by Davis and his colleagues (1941). It represents attendance data from 14 social events hosted by 18 women in the American South during the 1930s. This bipartite network captures the affiliations between women and events, highlighting patterns of social interaction, group formation, and shared affiliations. Again, we will work with just one of the projections.</p>
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## load the data in appropriate format</span></span>
+<span><span class="va">bimod.matrix</span> <span class="op">&lt;-</span> <span class="va">southern_women</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/as_biadjacency_matrix.html">as_biadjacency_matrix</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 2. get the projections by matrices multiplications:</span></span>
+<span></span>
+<span><span class="va">women_matrix</span> <span class="op">&lt;-</span> <span class="va">bimod.matrix</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">bimod.matrix</span><span class="op">)</span></span>
+<span><span class="va">event_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">bimod.matrix</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">bimod.matrix</span></span>
+<span><span class="co">## the order of multiplication is important!</span></span>
+<span></span>
+<span><span class="co">## remove the artificial loops:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">women_matrix</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">event_matrix</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span></span>
+<span><span class="co">## 3. structure of the new one-mode women network:</span></span>
+<span><span class="co">#women_matrix %&gt;% </span></span>
+<span><span class="co">#  graph_from_adjacency_matrix(mode = "undirected")</span></span>
+<span></span>
+<span><span class="co">## get igraph objects:</span></span>
+<span><span class="va">g.women</span> <span class="op">&lt;-</span> <span class="va">women_matrix</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_adjacency_matrix.html">graph_from_adjacency_matrix</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"undirected"</span>,</span>
+<span>                              weighted <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="co">## calculate simple centralities:</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.women</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">g.women</span>, mode <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## plotting:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">32</span><span class="op">)</span></span>
+<span><span class="va">g.women</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.label.cex <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>       vertex.label.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.women</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span>,</span>
+<span>       vertex.color <span class="op">=</span> <span class="st">"coral1"</span>,</span>
+<span>       vertex.shape <span class="op">=</span> <span class="st">"square"</span>,</span>
+<span>       layout <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/layout_with_dh.html">layout_with_dh</a></span><span class="op">(</span><span class="va">g.women</span><span class="op">)</span>,</span>
+<span>       main <span class="op">=</span> <span class="st">"women projection"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-9-1.png" width="672"></div>
+<p>After getting the projection, we delete the weight of the nodes (as opposed to the previous example) and create the matrix object:</p>
+<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g.women2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/delete_edge_attr.html">delete_edge_attr</a></span><span class="op">(</span><span class="va">g.women</span>, <span class="st">'weight'</span><span class="op">)</span></span>
+<span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/get.adjacency.html">get.adjacency</a></span><span class="op">(</span><span class="va">g.women2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Next, we have 2 options:</p>
+<ul>
+<li><p><code><a href="https://rdrr.io/pkg/sna/man/equiv.clust.html">equiv.clust()</a></code> function comes from the <code>sna</code> package and produces the solution with so-called approximate equivalence (something in-between structural equivalence and regular equivalence),</p></li>
+<li><p><code><a href="https://rdrr.io/pkg/blockmodeling/man/REGE.html">REGE.ownm.for()</a></code> function comes from the <code>blockmodeling</code> package and produces the solution with regular equivalence.</p></li>
+</ul>
+<p>Let’s first look at the approximate equivalence. We literally ask an algorithm to run the hierarchical clustering on the matrix at hand:</p>
+<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># automorphic equivalence</span></span>
+<span><span class="va">eq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sna/man/equiv.clust.html">equiv.clust</a></span><span class="op">(</span><span class="va">mat</span>,method<span class="op">=</span><span class="st">"euclidean"</span>,mode<span class="op">=</span><span class="st">"graph"</span><span class="op">)</span> <span class="co"># specify "graph" for undirected graphs, or "digraph" for directed graphs</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">eq</span>, labels<span class="op">=</span><span class="va">eq</span><span class="op">$</span><span class="va">glabels</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sna/man/blockmodel.html">blockmodel</a></span><span class="op">(</span><span class="va">mat</span>, <span class="va">eq</span>, k <span class="op">=</span> <span class="fl">3</span>, mode <span class="op">=</span> <span class="st">"graph"</span><span class="op">)</span> <span class="co"># how many splits to produce (k)</span></span></code></pre></div>
+<p>If you recall the previous class, there are familiar couples of closely positioned women (Olivia and Flora, for example). Charlotte is early clustered away, meaning she is really distinct from the others. In the context of this research, we can say that she attended the gatherings with a pattern distinct from the rest of the sample (probably, these other groups of women agreed to come to certain events).</p>
+<p>Second, regular equivalence:</p>
+<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># regular equivalence</span></span>
+<span></span>
+<span><span class="co">#install.packages("blockmodeling", dependencies=TRUE)</span></span>
+<span><span class="co">#library(blockmodeling)</span></span>
+<span></span>
+<span><span class="co">#?REGE.ownm.for</span></span>
+<span></span>
+<span><span class="va">REGE.cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/blockmodeling/man/REGE.html">REGE.ownm.for</a></span><span class="op">(</span>M<span class="op">=</span><span class="va">mat</span><span class="op">)</span><span class="op">$</span><span class="va">E</span> </span>
+<span><span class="va">REGE.part2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/blockmodeling/man/optRandomParC.html">optRandomParC</a></span><span class="op">(</span>M<span class="op">=</span><span class="va">REGE.cat</span>,</span>
+<span>                            k<span class="op">=</span><span class="fl">3</span>, <span class="co"># k = number of subgroups we want to find</span></span>
+<span>                            rep<span class="op">=</span><span class="fl">10</span>,</span>
+<span>                            approaches <span class="op">=</span> <span class="st">"hom"</span>,</span>
+<span>                            homFun <span class="op">=</span> <span class="st">"ss"</span>,</span>
+<span>                            blocks<span class="op">=</span><span class="st">"com"</span>,</span>
+<span>                            printRep <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Optimization of all partitions completed</span></span>
+<span><span class="co">#&gt; 1 solution(s) with minimal error = 0.07968413 found.</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g.women</span><span class="op">)</span><span class="op">$</span><span class="va">REGE.class</span> <span class="op">&lt;-</span> <span class="va">REGE.part2</span><span class="op">$</span><span class="va">best</span><span class="op">$</span><span class="va">best1</span><span class="op">$</span><span class="va">clu</span> <span class="co">## assign partition</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="va">REGE.part2</span><span class="op">$</span><span class="va">M</span>,</span>
+<span>        <span class="co">#blk_mod$block.model</span></span>
+<span>  <span class="co">#round(blk_mod$block.model, 2),</span></span>
+<span>        Rowv <span class="op">=</span> <span class="cn">NA</span>, Colv <span class="op">=</span> <span class="cn">NA</span>, revC <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>        col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">6</span>, <span class="st">"Blues"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">25</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-12-1.png" width="672"></div>
+<p>This solution is mode detailed as we can see now the relations between different groups of women and their joint participation in collective life.</p>
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="last-week-network-example" class="section level2 unnumbered">
+<h2>
+<strong>Last week network example</strong><a class="anchor" aria-label="anchor" href="#last-week-network-example"><i class="fas fa-link"></i></a>
+</h2>
+<p>It is another portion of blockmodeling on the data we have seen earlier - it is a two-mode network of Russian sociological journals and their (interlocking) editors. I’ll get the journals’ projection and run one of the algorithms from above on it:</p>
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## load:</span></span>
+<span><span class="va">g_journals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"datasets/journals_edges.csv"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                        vertices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"datasets/journals_nodes.csv"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## community detection:</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="va">cl3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">g_journals</span>,</span>
+<span>                       resolution <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">$</span><span class="va">cl3</span> <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/communities.html">membership</a></span><span class="op">(</span><span class="va">cl3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">g_journals</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co">## solution preview:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">g_journals</span>,</span>
+<span>     vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">$</span><span class="va">cl3</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>                           <span class="st">"#988F2A"</span>,</span>
+<span>                           <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">$</span><span class="va">cl3</span> <span class="op">==</span> <span class="fl">2</span>,</span>
+<span>                                  <span class="st">"coral1"</span>,</span>
+<span>                                  <span class="st">"#30638E"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>     vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>     vertex.size <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">*</span> <span class="fl">0.6</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-14-1.png" width="672"></div>
+<p>Blocks?</p>
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># automorphic equivalence</span></span>
+<span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://r.igraph.org/reference/get.adjacency.html">get.adjacency</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># journal partition in blocks:</span></span>
+<span><span class="co">#(asDF(g_journals))$vertex %&gt;% </span></span>
+<span><span class="co">#  group_by(blocks) %&gt;% </span></span>
+<span><span class="co">#  summarise(journals_included = toString(journal_name)) %&gt;% </span></span>
+<span><span class="co">#  kable() %&gt;% </span></span>
+<span><span class="co">#  kable_styling(full_width = F)</span></span>
+<span></span>
+<span><span class="va">eq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sna/man/equiv.clust.html">equiv.clust</a></span><span class="op">(</span><span class="va">mat</span>,method<span class="op">=</span><span class="st">"euclidean"</span>,mode<span class="op">=</span><span class="st">"graph"</span><span class="op">)</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sna/man/blockmodel.html">blockmodel</a></span><span class="op">(</span><span class="va">mat</span>, <span class="va">eq</span>, k <span class="op">=</span> <span class="fl">3</span>, mode <span class="op">=</span> <span class="st">"graph"</span>,</span>
+<span>                glabels <span class="op">=</span> <span class="st">"Russian sociology journals"</span>,</span>
+<span>                plabels <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">column_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"grey60"</span>, <span class="st">"lightblue"</span>, <span class="st">"coral1"</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">blocked.data</span>,</span>
+<span>        col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">3</span>, <span class="st">"Blues"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">25</span><span class="op">)</span>,</span>
+<span>        ColSideColors <span class="op">=</span> <span class="va">column_cols</span><span class="op">[</span><span class="va">b</span><span class="op">$</span><span class="va">block.membership</span><span class="op">]</span>,</span>
+<span>        RowSideColors <span class="op">=</span> <span class="va">column_cols</span><span class="op">[</span><span class="va">b</span><span class="op">$</span><span class="va">block.membership</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-15-1.png" width="672"></div>
+<p>Let’s compare the community detection results with the blockmodeling solution:</p>
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">$</span><span class="va">block</span> <span class="op">=</span> <span class="va">b</span><span class="op">$</span><span class="va">block.membership</span></span>
+<span></span>
+<span><span class="op">(</span><span class="fu">intergraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">journal_name</span>, <span class="va">cl3</span>, <span class="va">block</span>, <span class="va">degree</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cl3</span>, <span class="va">block</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   cl3 block  n</span></span>
+<span><span class="co">#&gt; 1   1     1 22</span></span>
+<span><span class="co">#&gt; 2   1     2  4</span></span>
+<span><span class="co">#&gt; 3   2     1 13</span></span>
+<span><span class="co">#&gt; 4   2     2  3</span></span>
+<span><span class="co">#&gt; 5   3     1 15</span></span>
+<span><span class="co">#&gt; 6   3     2  8</span></span>
+<span><span class="co">#&gt; 7   3     3  1</span></span></code></pre></div>
+<p>The first two clusters include nodes of two types: those from the first and the second blocks. The third cluster contains all roles presented in the network: the single node, “Sociological Research” journal, is the true central node <em>that even gets a separate block</em>.</p>
+<p>Again, combining these algorithms can give us insightful results, though sometimes blockmodeling can mirror the more typical network clustering solutions.</p>
+<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">$</span><span class="va">block</span> <span class="op">&lt;-</span> <span class="va">b</span><span class="op">$</span><span class="va">block.membership</span></span>
+<span></span>
+<span><span class="va">new_nodelist</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu">intergraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="op">(</span><span class="fu">intergraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asDF.html">asDF</a></span><span class="op">(</span><span class="va">g_journals</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">vertex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">journal_name</span>, <span class="va">cl3</span>, <span class="va">block</span>, <span class="va">degree</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cl3</span>, <span class="va">block</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>joined.cluster.block <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">g_journals</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/get.edgelist.html">get.edgelist</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                        vertices <span class="op">=</span> <span class="va">new_nodelist</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.color <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">$</span><span class="va">joined.cluster.block</span>,</span>
+<span>       vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>       vertex.size <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-17-1.png" width="672"></div>
+</div>
+<div id="insna-teacher-student-network---a-tribute-to-harrison-white" class="section level2 unnumbered">
+<h2>
+<strong>INSNA teacher-student network - a tribute to Harrison White</strong><a class="anchor" aria-label="anchor" href="#insna-teacher-student-network---a-tribute-to-harrison-white"><i class="fas fa-link"></i></a>
+</h2>
+<p>Data description from the package <code>networkdata</code>:</p>
+<blockquote>
+<p>When Barry Wellman founded the International Network for Social Network Analysis (INSNA) in 1977, he sent a questionnaire to all the founding members. Included were questions on who taught each founder and who each founder taught. This data set is based on their responses.</p>
+</blockquote>
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#?networkdata::insna</span></span>
+<span></span>
+<span><span class="va">insna</span> <span class="op">&lt;-</span> <span class="va">insna</span></span>
+<span><span class="co">#write_rds(insna, "insna.rds")</span></span>
+<span><span class="va">insna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="st">"datasets/insna.rds"</span><span class="op">)</span></span></code></pre></div>
+<p>This network:</p>
+<ul>
+<li><p>contains 60 nodes and 94 directed edges,</p></li>
+<li><p>describes the relations among the founding figures in the International Network for Social Network Analysis (INSNA) in 1977, - literally, who taught whom and who learned from the basics of SNA.</p></li>
+</ul>
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## centrality measures:</span></span>
+<span><span class="co">## --------------------</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">outdegree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">insna</span>, mode <span class="op">=</span> <span class="st">"out"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">totaldegree</span> <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/degree.html">degree</a></span><span class="op">(</span><span class="va">insna</span>, mode <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## highlighting Harrison White:</span></span>
+<span><span class="co">## ----------------------------</span></span>
+<span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">as_data_frame</a></span><span class="op">(</span>what <span class="op">=</span> <span class="st">"vertices"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Harrison White"</span>,</span>
+<span>                        <span class="st">"coral1"</span>,</span>
+<span>                        <span class="st">"grey40"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## plot: </span></span>
+<span><span class="co">## -----</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>            </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span></span>
+<span>    vertex.label <span class="op">=</span> <span class="cn">NA</span>,  </span>
+<span>    vertex.size <span class="op">=</span> <span class="op">(</span><span class="fl">5</span> <span class="op">+</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">outdegree</span><span class="op">*</span><span class="fl">1.3</span><span class="op">)</span>,</span>
+<span>    vertex.color <span class="op">=</span> <span class="va">edges</span><span class="op">$</span><span class="va">color</span>,</span>
+<span>    edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>    edge.arrow.width <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-19-1.png" width="672"></div>
+<p>Let’s try to determine the “roles” of each node on this network.</p>
+<p>Converting data to matrix form (since the network is directed, we are interested in both the regular matrix and the transposed one; we will use columns as in regular data analysis to calculate correlations/distances):</p>
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">insna2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/as_adjacency_matrix.html">as_adjacency_matrix</a></span><span class="op">(</span><span class="va">insna</span>,</span>
+<span>                              sparse <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="va">insna2.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">insna2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">insna3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">insna2</span>,</span>
+<span>                <span class="va">insna2.1</span><span class="op">)</span> </span></code></pre></div>
+<p>Next, we calculate the distances between nodes, reduce the dimensionality, and see how our authors are ranked:</p>
+<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">euclid_dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">insna3</span>,</span>
+<span>                   method <span class="op">=</span> <span class="st">"euclidean"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cmdscale.html">cmdscale</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">euclid_dist</span>,</span>
+<span>                k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>person <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">X1</span>, <span class="va">X2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span><span class="op">(</span><span class="va">person</span>, <span class="fl">1</span>, <span class="fl">15</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-21-1.png" width="672"></div>
+<p>We see on this plot that Chad Gordon and Harrison White are indeed quite distinct from the rest of the network (though there is also some variation on <em>y</em> axis).</p>
+<p>Option for presentation through hierarchical clustering (once again, Gordon and White are quite distinct):</p>
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="va">euclid_dist</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">hc</span>,</span>
+<span>     cex <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-22-1.png" width="672"></div>
+<p>Draw a network with the role coloring (at different degrees of granularity):</p>
+<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">roles1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">hc</span>, h <span class="op">=</span> <span class="fl">3.8</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">roles2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">hc</span>, h <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>            </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>     </span>
+<span><span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span></span>
+<span>    vertex.label <span class="op">=</span> <span class="cn">NA</span>,  </span>
+<span>    vertex.size <span class="op">=</span> <span class="op">(</span><span class="fl">5</span> <span class="op">+</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">outdegree</span><span class="op">*</span><span class="fl">1.3</span><span class="op">)</span>,</span>
+<span>    vertex.color <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">roles1</span>,</span>
+<span>    edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>    edge.arrow.width <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>    main <span class="op">=</span> <span class="st">"\n\nh = 3.8"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span></span>
+<span>    vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>    vertex.size <span class="op">=</span> <span class="op">(</span><span class="fl">5</span> <span class="op">+</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">outdegree</span><span class="op">*</span><span class="fl">1.3</span><span class="op">)</span>,</span>
+<span>    vertex.color <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html">V</a></span><span class="op">(</span><span class="va">insna</span><span class="op">)</span><span class="op">$</span><span class="va">roles2</span>,</span>
+<span>    edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>    edge.arrow.width <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>    main <span class="op">=</span> <span class="st">"\n\nh = 2.5"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-23-1.png" width="672"></div>
+</div>
+<div id="scaling-options" class="section level2 unnumbered">
+<h2>
+<strong>Scaling options</strong><a class="anchor" aria-label="anchor" href="#scaling-options"><i class="fas fa-link"></i></a>
+</h2>
+<p>All the triads (16) differentiated by the ego’s positions:</p>
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">possible.triads</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html">str_split</a></span><span class="op">(</span><span class="st">"1 Ego, A1, A2</span></span>
+<span><span class="st">2 Ego-&gt;A1, A2</span></span>
+<span><span class="st">3 Ego-&gt;A1, Ego-&gt;A2</span></span>
+<span><span class="st">4 Ego&lt;-A1</span></span>
+<span><span class="st">5 Ego&lt;-A1, Ego&lt;-A2</span></span>
+<span><span class="st">6 Ego&lt;-&gt;A1</span></span>
+<span><span class="st">7 Ego&lt;-&gt;A1, Ego&lt;-&gt;A2</span></span>
+<span><span class="st">8 Ego&lt;-A1, Ego-&gt;A2</span></span>
+<span><span class="st">9 Ego&lt;-&gt;A1, Ego-&gt;A2</span></span>
+<span><span class="st">10 Ego&lt;-&gt;A1, Ego&lt;-A2</span></span>
+<span><span class="st">11 A1&lt;-&gt;A2</span></span>
+<span><span class="st">12 Ego-&gt;A1, A1&lt;-&gt;A2</span></span>
+<span><span class="st">13 Ego-&gt;A1, Ego-&gt;A2, A1&lt;-&gt;A2</span></span>
+<span><span class="st">14 Ego&lt;-A1, A1&lt;-&gt;A2</span></span>
+<span><span class="st">15 Ego&lt;-A1, Ego&lt;-A2, A1&lt;-&gt;A2</span></span>
+<span><span class="st">16 Ego&lt;-&gt;A1, A1&lt;-&gt;A2</span></span>
+<span><span class="st">17 Ego&lt;-&gt;A1, Ego&lt;-&gt;A2, A1&lt;-&gt;A2</span></span>
+<span><span class="st">18 Ego&lt;-A1, Ego-&gt;A2, A1&lt;-&gt;A2</span></span>
+<span><span class="st">19 Ego&lt;-&gt;A1, Ego-&gt;A2, A1&lt;-&gt;A2</span></span>
+<span><span class="st">20 Ego&lt;-&gt;A1, Ego&lt;-A2, A1&lt;-&gt;A2</span></span>
+<span><span class="st">21 A1-&gt;A2 (or A1&lt;-A2)</span></span>
+<span><span class="st">22 Ego-&gt;A1, A1-&gt;A2</span></span>
+<span><span class="st">23 Ego-&gt;A1, Ego-&gt;A2, A1-&gt;A2 (or A1&lt;-A2 )</span></span>
+<span><span class="st">24 Ego&lt;-A1, A1-&gt;A2</span></span>
+<span><span class="st">25 Ego&lt;-A1, Ego&lt;-A2, A1-&gt;A2 (or A1&lt;-A2 )</span></span>
+<span><span class="st">26 Ego&lt;-&gt;A1, A1-&gt;A2</span></span>
+<span><span class="st">27 Ego&lt;-&gt;A1, Ego&lt;-&gt;A2, A1-&gt;A2 (or A1&lt;-A2 )</span></span>
+<span><span class="st">28 Ego&lt;-A1, Ego-&gt;A2, A1-&gt;A2</span></span>
+<span><span class="st">29 Ego&lt;-&gt;A1, Ego-&gt;A2, A1-&gt;A2</span></span>
+<span><span class="st">30 Ego&lt;-&gt;A1, Ego&lt;-A2, A1-&gt;A2</span></span>
+<span><span class="st">31 Ego-&gt;A1, A1&lt;-A2</span></span>
+<span><span class="st">32 Ego&lt;-A1, A1&lt;-A2</span></span>
+<span><span class="st">33 Ego&lt;-&gt;A1, A1&lt;-A2</span></span>
+<span><span class="st">34 Ego&lt;-A1, Ego-&gt;A2, A1&lt;-A2</span></span>
+<span><span class="st">35 Ego&lt;-&gt;A1, Ego-&gt;A2, A1&lt;-A2</span></span>
+<span><span class="st">36 Ego&lt;-&gt;A1, Ego&lt;-A2, A1&lt;-A2"</span>,</span>
+<span><span class="st">"\\n"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>triad <span class="op">=</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>id_triad <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>,</span>
+<span>         triad <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">triad</span>,</span>
+<span>                                <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, <span class="st">" "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">parse_network_notation</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">notation</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Split by lines and remove empty lines</span></span>
+<span>  <span class="va">lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="va">notation</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">lines</span> <span class="op">&lt;-</span> <span class="va">lines</span><span class="op">[</span><span class="va">lines</span> <span class="op">!=</span> <span class="st">""</span><span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">all_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ego"</span><span class="op">)</span>  <span class="co"># Start with Ego as default</span></span>
+<span>  </span>
+<span>  <span class="kw">for</span><span class="op">(</span><span class="va">line</span> <span class="kw">in</span> <span class="va">lines</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># Case 1: Just node list (no ties) - "Ego, A1, A2"</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"-&gt;|&lt;-|&lt;-&gt;"</span>, <span class="va">line</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="va">line</span>, <span class="st">","</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="va">all_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">all_nodes</span>, <span class="va">nodes</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="kw">next</span>  <span class="co"># No edges to process, move to next line</span></span>
+<span>    <span class="op">}</span></span>
+<span>    </span>
+<span>    <span class="co"># Case 2: Contains edge specifications</span></span>
+<span>    <span class="co"># Split by commas to get individual edge specifications</span></span>
+<span>    <span class="va">edge_specs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="va">line</span>, <span class="st">","</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="kw">for</span><span class="op">(</span><span class="va">edge_spec</span> <span class="kw">in</span> <span class="va">edge_specs</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">edge_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="va">edge_spec</span><span class="op">)</span></span>
+<span>      </span>
+<span>      <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"-&gt;"</span>, <span class="va">edge_spec</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"&lt;-&gt;"</span>, <span class="va">edge_spec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="co"># Directed edge: Ego-&gt;A1</span></span>
+<span>        <span class="va">parts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="va">edge_spec</span>, <span class="st">"-&gt;"</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="va">from</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="va">parts</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="va">to</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="va">parts</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="va">edges</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">edges</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">from</span>, <span class="va">to</span><span class="op">)</span></span>
+<span>        <span class="va">all_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">all_nodes</span>, <span class="va">from</span>, <span class="va">to</span><span class="op">)</span><span class="op">)</span></span>
+<span>        </span>
+<span>      <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"&lt;-"</span>, <span class="va">edge_spec</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"&lt;-&gt;"</span>, <span class="va">edge_spec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="co"># Directed edge: Ego&lt;-A1</span></span>
+<span>        <span class="va">parts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="va">edge_spec</span>, <span class="st">"&lt;-"</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="va">from</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="va">parts</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>  <span class="co"># Reverse direction</span></span>
+<span>        <span class="va">to</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="va">parts</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="va">edges</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">edges</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">from</span>, <span class="va">to</span><span class="op">)</span></span>
+<span>        <span class="va">all_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">all_nodes</span>, <span class="va">from</span>, <span class="va">to</span><span class="op">)</span><span class="op">)</span></span>
+<span>        </span>
+<span>      <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"&lt;-&gt;"</span>, <span class="va">edge_spec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="co"># Mutual edge: Ego&lt;-&gt;A1</span></span>
+<span>        <span class="va">parts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="va">edge_spec</span>, <span class="st">"&lt;-&gt;"</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="va">node1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="va">parts</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="va">node2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="va">parts</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="co"># Add both directions for mutual connection</span></span>
+<span>        <span class="va">edges</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">edges</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">node1</span>, <span class="va">node2</span><span class="op">)</span></span>
+<span>        <span class="va">edges</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">edges</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">node2</span>, <span class="va">node1</span><span class="op">)</span></span>
+<span>        <span class="va">all_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">all_nodes</span>, <span class="va">node1</span>, <span class="va">node2</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">}</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="co"># Create edge data frame (empty if no edges)</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">edges</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">edge_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">edges</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">edge_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"from"</span>, <span class="st">"to"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">edge_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>edges <span class="op">=</span> <span class="va">edge_df</span>, nodes <span class="op">=</span> <span class="va">all_nodes</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">possible.triads2</span> <span class="op">&lt;-</span> <span class="va">possible.triads</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>triad <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">triad</span>, <span class="st">" \\(or.+"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">9</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">36</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">parse_network_notation</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">possible.triads2</span><span class="op">[</span><span class="va">i</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## save image to use in plotting later:</span></span>
+<span>  <span class="co">## ------------------------------------</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"images/triadic-pictures/triad-"</span>,</span>
+<span>            <span class="va">i</span>,</span>
+<span>            <span class="st">".png"</span><span class="op">)</span>,</span>
+<span>      width     <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>    height    <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>    units     <span class="op">=</span> <span class="st">"in"</span>,</span>
+<span>    res       <span class="op">=</span> <span class="fl">400</span>,</span>
+<span>    pointsize <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    bg <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">g</span><span class="op">$</span><span class="va">edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                          vertices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ego"</span>, <span class="st">"A1"</span>, <span class="st">"A2"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"coral1"</span>, <span class="st">"black"</span>, <span class="st">"black"</span><span class="op">)</span>,</span>
+<span>         edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>         edge.width <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>         vertex.size <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>         vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>         edge.arrow.size <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>         layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>, <span class="fl">1</span>,<span class="fl">0</span>, <span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## plot here:</span></span>
+<span>  <span class="co">## ---------</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">g</span><span class="op">$</span><span class="va">edges</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>directed <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                          vertices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ego"</span>, <span class="st">"A1"</span>, <span class="st">"A2"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>vertex.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"coral1"</span>, <span class="st">"black"</span>, <span class="st">"black"</span><span class="op">)</span>,</span>
+<span>         edge.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>         edge.width <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>         vertex.size <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>         vertex.label <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>         main <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="va">possible.triads2</span><span class="op">[</span><span class="va">i</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>         layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>, <span class="fl">2</span>,<span class="fl">1</span>, <span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>         main.cex <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>         edge.arrow.size <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span>    </span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-24-1.png" width="768"></div>
+<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">parse_network_notation</span>, <span class="va">possible.triads2</span>, <span class="va">g</span><span class="op">)</span></span></code></pre></div>
+<p>Relate to the data.frame for plotting:</p>
+<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">possible.triads</span> <span class="op">&lt;-</span> <span class="va">possible.triads</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"images/triadic-pictures/triad-"</span>,</span>
+<span>                      <span class="va">id_triad</span>,</span>
+<span>                      <span class="st">".png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Function introduced by Sodeur &amp; Hummell (1987) and later presented by Burt (1990):</p>
+<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"https://github.com/JeffreyAlanSmith/Integrated_Network_Science/raw/master/R/f.rc.r"</span><span class="op">)</span></span></code></pre></div>
+<p>Apply this to just one of the networks:</p>
+<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">insna</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="st">"datasets/insna.rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">partition.in.triads</span> <span class="op">&lt;-</span> <span class="fu">f.rc</span><span class="op">(</span><span class="va">insna</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>       <span class="fu"><a href="https://r.igraph.org/reference/as_adjacency_matrix.html">as_adjacency_matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>       <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">partition.in.triads</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>       <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     X1  X2 X3  X4 X5 X6 X7 X8 X9 X10 X11 X12 X13 X14 X15</span></span>
+<span><span class="co">#&gt; 1 1510  53  0  55  0  0  0  1  0   0   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 2 1463   0  0 154  3  0  0  0  0   0   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 3 1568   0  0  50  0  0  0  0  0   0   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 4 1563  55  0   0  0  0  0  0  0   0   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 5 1505 113  1   0  0  0  0  0  0   0   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 6 1410 205  6   0  0  0  0  0  0   0   0   0   0   0   0</span></span>
+<span><span class="co">#&gt;   X16 X17 X18 X19 X20 X21 X22 X23 X24 X25 X26 X27 X28 X29</span></span>
+<span><span class="co">#&gt; 1   0   0   0   0   0  86   0   0   2   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 2   0   0   0   0   0  77   0   0   9   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 3   0   0   0   0   0  85   0   0   7   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 4   0   0   0   0   0  90   0   0   0   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 5   0   0   0   0   0  91   0   0   0   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 6   0   0   0   0   0  75   0   0   0   0   0   0   0   0</span></span>
+<span><span class="co">#&gt;   X30 X31 X32 X33 X34 X35 X36</span></span>
+<span><span class="co">#&gt; 1   0   4   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 2   0   0   5   0   0   0   0</span></span>
+<span><span class="co">#&gt; 3   0   0   1   0   0   0   0</span></span>
+<span><span class="co">#&gt; 4   0   3   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 5   0   1   0   0   0   0   0</span></span>
+<span><span class="co">#&gt; 6   0  15   0   0   0   0   0</span></span></code></pre></div>
+<p>Run correspondence analysis is utilized to get the 2d-overview of the data (although we lose somewhat 10% of the origianl variance):</p>
+<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ca.results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/CA.html">CA</a></span><span class="op">(</span><span class="va">partition.in.triads</span>,</span>
+<span>                 graph <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                 ncp <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#fviz_ca_biplot(ca.results, repel = TRUE)</span></span></code></pre></div>
+<p>Plot both triads and individuals (note how we deal with the images produced earlier and employ functions from the package <code>img</code>, which is somewhat long, but at least works for me (<code>ggimage</code> is generally a better choice, but you need to figure out how to load this to R)):</p>
+<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## prepare the data:</span></span>
+<span><span class="co">## -----------------</span></span>
+<span><span class="va">plotting.data</span> <span class="op">&lt;-</span> <span class="va">ca.results</span><span class="op">$</span><span class="va">row</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>person <span class="op">=</span> <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html">as_data_frame</a></span><span class="op">(</span><span class="va">insna</span>, what <span class="op">=</span> <span class="st">"vertices"</span><span class="op">)</span><span class="op">$</span><span class="va">name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">`coord.Dim.1`</span>, <span class="va">`coord.Dim.2`</span>, <span class="va">person</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="va">ca.results</span><span class="op">$</span><span class="va">col</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>              <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">`coord.Dim.1`</span>, <span class="va">`coord.Dim.2`</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>id_triad <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, <span class="st">"V"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">possible.triads</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"triad-type"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## plot:</span></span>
+<span><span class="co">## ----</span></span>
+<span><span class="va">plotting.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">coord.Dim.1</span>, <span class="va">coord.Dim.2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  </span>
+<span>  <span class="co">## plot images:</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggimg/man/geom_point_img.html">geom_point_img</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="va">coord.Dim.2</span>,</span>
+<span>    xmax <span class="op">=</span> <span class="va">coord.Dim.1</span>,</span>
+<span>    ymin <span class="op">=</span> <span class="va">coord.Dim.2</span>,</span>
+<span>    ymax <span class="op">=</span> <span class="va">coord.Dim.1</span>,</span>
+<span>    img <span class="op">=</span> <span class="va">path</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  </span>
+<span>  <span class="co">## plot surnames:</span></span>
+<span>  <span class="fu"><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html">geom_text_repel</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">person</span><span class="op">)</span>,</span>
+<span>            size <span class="op">=</span> <span class="fl">2.2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Triadic inclusion in the INSNA (1978) graph"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"dim-1 (75%)"</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"dim-2 (15.7%)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="chapter5_files/figure-html/unnamed-chunk-29-1.png" width="672"></div>
+<p>With such a tool &amp; workflow, you can work through dozens of networks (from different time periods or varying organizational contexts) and, through a simple loop, get a second-order clustering of your data, thus checking if there are any coherent and general blocks/roles in these networks.</p>
+<p>Read more on the topic in the 10th chapter of:</p>
+<ul>
+<li>Rawlings, C. M., Smith, J. A., Moody, J., &amp; McFarland, D. A. (2023). <em>Network analysis: integrating social network theory, method, and application with R.</em> Cambridge University Press.</li>
+</ul>
+</div>
+<div id="home-assignment-5" class="section level2 unnumbered">
+<h2>
+<strong>Home assignment 5</strong><a class="anchor" aria-label="anchor" href="#home-assignment-5"><i class="fas fa-link"></i></a>
+</h2>
+<p>Choose a dataset you like (preferrably, not very large network – movies’ characters &amp; company dynamics are fine).</p>
+<ol style="list-style-type: decimal">
+<li><p>describe your data (who are nodes, who are edges, number of both, context, etc.)</p></li>
+<li><p>run one of the blockmodeling algorithms we discussed in class</p></li>
+<li><p>does the obtained solution match the nodes’ attributes? (i.e., do variables matter?)</p></li>
+<li><p>run community detection algorithm you like</p></li>
+<li><p>compare the results to each other: do they overlap?</p></li>
+</ol>
+<p>Note: to compare communities and blocks, you may need to adjust both solutions (modularity, number of blocks &amp; algorithm selection). Make sure to compare meaningful results from both algorithms. If the results are not overlapping,</p>
+<ol start="6" style="list-style-type: decimal">
+<li>discuss (2-3 sentences, maybe with a picture) how both perspectives are productive when used together.</li>
+</ol>
+<p>Submission format: word/pdf/html. If you construct your document from R, make sure it is formatted nicely (no long outputs printed, etc.) Deadline - before your next class.</p>
+
+</div>
+</div>
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="two-mode-networks.html">4 - two-mode networks</a></div>
+<div class="next"><a href="available-datasets.html">Available datasets</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#blockmodeling">5 - blockmodeling</a></li>
+<li><a class="nav-link" href="#concor">CONCOR</a></li>
+<li><a class="nav-link" href="#regular-equivalence-with-cluster-analysis">Regular equivalence with cluster analysis</a></li>
+<li><a class="nav-link" href="#last-week-network-example">Last week network example</a></li>
+<li><a class="nav-link" href="#insna-teacher-student-network---a-tribute-to-harrison-white">INSNA teacher-student network - a tribute to Harrison White</a></li>
+<li><a class="nav-link" href="#scaling-options">Scaling options</a></li>
+<li><a class="nav-link" href="#home-assignment-5">Home assignment 5</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/artpech23/sna-for-hse-master-students2025/blob/master/chapter5.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/artpech23/sna-for-hse-master-students2025/edit/master/chapter5.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-12-01.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

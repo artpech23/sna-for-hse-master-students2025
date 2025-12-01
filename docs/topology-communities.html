@@ -55,6 +55,7 @@
 <li><a class="" href="centrality-measures.html">2 - centrality measures</a></li>
 <li><a class="active" href="topology-communities.html">3 - topology &amp; communities</a></li>
 <li><a class="" href="two-mode-networks.html">4 - two-mode networks</a></li>
+<li><a class="" href="blockmodeling.html">5 - blockmodeling</a></li>
 <li class="book-part">Appendices</li>
 <li><a class="" href="available-datasets.html">Available datasets</a></li>
 <li><a class="" href="intro-to-web-scraping.html">Intro to web-scraping</a></li>
@@ -328,11 +329,11 @@
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g.friends</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; IGRAPH 11c5fd7 UN-- 71 399 -- </span></span>
+<span><span class="co">#&gt; IGRAPH e7981bf UN-- 71 399 -- </span></span>
 <span><span class="co">#&gt; + attr: name (v/c), status (v/c), gender (v/c),</span></span>
 <span><span class="co">#&gt; | office (v/c), seniority (v/n), age (v/n), practice</span></span>
 <span><span class="co">#&gt; | (v/c), school (v/c)</span></span>
-<span><span class="co">#&gt; + edges from 11c5fd7 (vertex names):</span></span>
+<span><span class="co">#&gt; + edges from e7981bf (vertex names):</span></span>
 <span><span class="co">#&gt;  [1] 1 --2  1 --4  2 --4  3 --4  3 --7  5 --7  1 --8  4 --9 </span></span>
 <span><span class="co">#&gt;  [9] 2 --10 8 --10 9 --10 4 --11 8 --11 9 --11 10--11 1 --12</span></span>
 <span><span class="co">#&gt; [17] 2 --12 4 --12 5 --12 8 --12 9 --12 10--12 11--12 4 --13</span></span>
@@ -458,17 +459,12 @@
 <p>Last week we have discussed bibliographic networks you can obtain using OpenAlex, an open science source of articles’ metadata and citations’ information. Below is a brief illustration of today’s measures on this network:</p>
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/openalexR">openalexR</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Thank you for using openalexR!</span></span>
-<span><span class="co">#&gt; To acknowledge our work, please cite the package by calling `citation("openalexR")`.</span></span>
-<span><span class="co">#&gt; To suppress this message, add `openalexR.message = suppressed` to your .Renviron file.</span></span>
 <span></span>
 <span><span class="va">oa_sustainable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/openalexR/reference/oa_fetch.html">oa_fetch</a></span><span class="op">(</span>entity <span class="op">=</span> <span class="st">"works"</span>,</span>
 <span>         output <span class="op">=</span> <span class="st">"dataframe"</span>,</span>
 <span>         display_name.search <span class="op">=</span> <span class="st">'Sustainable Business Models'</span>,</span>
 <span>         cited_by_count <span class="op">=</span> <span class="st">"&gt;10"</span>,</span>
 <span>         verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="co">## takes around 20 seconds with my internet connection</span></span>
-<span><span class="co">#&gt; Requesting url: https://api.openalex.org/works?filter=display_name.search%3ASustainable%20Business%20Models%2Ccited_by_count%3A%3E10</span></span>
-<span><span class="co">#&gt; Getting 5 pages of results with a total of 896 records...</span></span>
 <span></span>
 <span><span class="va">oa_edges</span> <span class="op">&lt;-</span> <span class="va">oa_sustainable</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">referenced_works</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -488,17 +484,12 @@
 <span>                        vertices <span class="op">=</span> <span class="va">oa_sustainable</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>                          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">id</span>,</span>
 <span>                                                     <span class="st">"https\\:\\/\\/openalex\\.org\\/"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>                          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">title</span>, <span class="va">publication_year</span>, <span class="va">so</span>, <span class="va">cited_by_count</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>                          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">title</span>, <span class="va">publication_year</span>, <span class="va">cited_by_count</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://r.igraph.org/reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## leave biggest component only</span></span>
 <span></span>
 <span><span class="va">components</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/clusters.html">clusters</a></span><span class="op">(</span><span class="va">oa_g</span>, mode<span class="op">=</span><span class="st">"weak"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: `clusters()` was deprecated in igraph 2.0.0.</span></span>
-<span><span class="co">#&gt; ℹ Please use `components()` instead.</span></span>
-<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
-<span><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where</span></span>
-<span><span class="co">#&gt; this warning was generated.</span></span>
 <span><span class="va">biggest_cluster_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">components</span><span class="op">$</span><span class="va">csize</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># subgraph</span></span>
@@ -520,11 +511,6 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/diameter.html">diameter</a></span><span class="op">(</span><span class="va">oa_g.biggest</span><span class="op">)</span> <span class="co">## 8</span></span>
 <span><span class="co">#&gt; [1] 8</span></span>
 <span><span class="fu"><a href="https://r.igraph.org/reference/average.path.length.html">average.path.length</a></span><span class="op">(</span><span class="va">oa_g.biggest</span><span class="op">)</span> <span class="co">## 2.63</span></span>
-<span><span class="co">#&gt; Warning: `average.path.length()` was deprecated in igraph 2.0.0.</span></span>
-<span><span class="co">#&gt; ℹ Please use `mean_distance()` instead.</span></span>
-<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
-<span><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where</span></span>
-<span><span class="co">#&gt; this warning was generated.</span></span>
 <span><span class="co">#&gt; [1] 2.629412</span></span>
 <span><span class="fu"><a href="https://r.igraph.org/reference/edge_density.html">edge_density</a></span><span class="op">(</span><span class="va">oa_g.biggest</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>               <span class="fu"><a href="https://r.igraph.org/reference/as_directed.html">as_undirected</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co">## 0.02</span></span>
@@ -582,18 +568,16 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>            share.core <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span>,<span class="fl">2</span><span class="op">)</span>,</span>
 <span>            mean.age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">publication_year</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 9 × 4</span></span>
+<span><span class="co">#&gt; # A tibble: 7 × 4</span></span>
 <span><span class="co">#&gt;   cl1            n share.core mean.age</span></span>
 <span><span class="co">#&gt;   &lt;membrshp&gt; &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 1            210       0.17    2019.</span></span>
-<span><span class="co">#&gt; 2 2            130       0.06    2020.</span></span>
-<span><span class="co">#&gt; 3 3            240       0.24    2018.</span></span>
-<span><span class="co">#&gt; 4 4             69       0.07    2019.</span></span>
-<span><span class="co">#&gt; 5 5             31       0.06    2018.</span></span>
+<span><span class="co">#&gt; 1 1            219       0.12    2019.</span></span>
+<span><span class="co">#&gt; 2 2            265       0.27    2019.</span></span>
+<span><span class="co">#&gt; 3 3            120       0.06    2019.</span></span>
+<span><span class="co">#&gt; 4 4             69       0.04    2020.</span></span>
+<span><span class="co">#&gt; 5 5             11       0       2020.</span></span>
 <span><span class="co">#&gt; 6 6              4       0       2019 </span></span>
-<span><span class="co">#&gt; 7 7              2       0       2018.</span></span>
-<span><span class="co">#&gt; 8 8              2       0       2021 </span></span>
-<span><span class="co">#&gt; 9 9             11       0       2014.</span></span>
+<span><span class="co">#&gt; 7 7             11       0       2014.</span></span>
 <span></span>
 <span><span class="co">#(oa_g.biggest %&gt;% </span></span>
 <span><span class="co">#  asDF())$vertex %&gt;% </span></span>
@@ -962,7 +946,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-11-25.</p>
+    <p>"<strong>yet another SNA coursebook</strong>" was written by Arthur Pecherskikh. It was last built on 2025-12-01.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

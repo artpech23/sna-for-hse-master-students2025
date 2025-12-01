@@ -351,11 +351,11 @@ Finally, here is a possible solution to community detection task. Note that it w
 ``` r
 g.friends %>% 
   as_undirected()
-#> IGRAPH 11c5fd7 UN-- 71 399 -- 
+#> IGRAPH e7981bf UN-- 71 399 -- 
 #> + attr: name (v/c), status (v/c), gender (v/c),
 #> | office (v/c), seniority (v/n), age (v/n), practice
 #> | (v/c), school (v/c)
-#> + edges from 11c5fd7 (vertex names):
+#> + edges from e7981bf (vertex names):
 #>  [1] 1 --2  1 --4  2 --4  3 --4  3 --7  5 --7  1 --8  4 --9 
 #>  [9] 2 --10 8 --10 9 --10 4 --11 8 --11 9 --11 10--11 1 --12
 #> [17] 2 --12 4 --12 5 --12 8 --12 9 --12 10--12 11--12 4 --13
@@ -527,17 +527,12 @@ Last week we have discussed bibliographic networks you can obtain using OpenAlex
 
 ``` r
 library(openalexR)
-#> Thank you for using openalexR!
-#> To acknowledge our work, please cite the package by calling `citation("openalexR")`.
-#> To suppress this message, add `openalexR.message = suppressed` to your .Renviron file.
 
 oa_sustainable <- oa_fetch(entity = "works",
          output = "dataframe",
          display_name.search = 'Sustainable Business Models',
          cited_by_count = ">10",
          verbose = T) ## takes around 20 seconds with my internet connection
-#> Requesting url: https://api.openalex.org/works?filter=display_name.search%3ASustainable%20Business%20Models%2Ccited_by_count%3A%3E10
-#> Getting 5 pages of results with a total of 896 records...
 
 oa_edges <- oa_sustainable %>% 
   select(id, referenced_works) %>% 
@@ -557,17 +552,12 @@ oa_g <- oa_edges %>%
                         vertices = oa_sustainable %>% 
                           mutate(id = str_remove_all(id,
                                                      "https\\:\\/\\/openalex\\.org\\/")) %>% 
-                          select(id, title, publication_year, so, cited_by_count)) %>% 
+                          select(id, title, publication_year, cited_by_count)) %>% 
   simplify()
 
 ## leave biggest component only
 
 components <- igraph::clusters(oa_g, mode="weak")
-#> Warning: `clusters()` was deprecated in igraph 2.0.0.
-#> ℹ Please use `components()` instead.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where
-#> this warning was generated.
 biggest_cluster_id <- which.max(components$csize)
 
 # subgraph
@@ -596,11 +586,6 @@ We start by computing the very basic indicators:
 diameter(oa_g.biggest) ## 8
 #> [1] 8
 average.path.length(oa_g.biggest) ## 2.63
-#> Warning: `average.path.length()` was deprecated in igraph 2.0.0.
-#> ℹ Please use `mean_distance()` instead.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where
-#> this warning was generated.
 #> [1] 2.629412
 edge_density(oa_g.biggest %>% 
                as_undirected()) ## 0.02
@@ -677,18 +662,16 @@ To dive into the obtained clusters, we can group some attributes of the articles
   summarise(n = n(),
             share.core = round(mean(core),2),
             mean.age = mean(publication_year, na.rm = T))
-#> # A tibble: 9 × 4
+#> # A tibble: 7 × 4
 #>   cl1            n share.core mean.age
 #>   <membrshp> <int>      <dbl>    <dbl>
-#> 1 1            210       0.17    2019.
-#> 2 2            130       0.06    2020.
-#> 3 3            240       0.24    2018.
-#> 4 4             69       0.07    2019.
-#> 5 5             31       0.06    2018.
+#> 1 1            219       0.12    2019.
+#> 2 2            265       0.27    2019.
+#> 3 3            120       0.06    2019.
+#> 4 4             69       0.04    2020.
+#> 5 5             11       0       2020.
 #> 6 6              4       0       2019 
-#> 7 7              2       0       2018.
-#> 8 8              2       0       2021 
-#> 9 9             11       0       2014.
+#> 7 7             11       0       2014.
 
 #(oa_g.biggest %>% 
 #  asDF())$vertex %>% 
